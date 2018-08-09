@@ -28,6 +28,7 @@ import { MyImpactPageContainer } from './components/myimpact';
 import { GroupPageContainer, GroupCallPageContainer } from './components/groups';
 import './components/bundle.css';
 import { Auth0CallbackContainer } from './components/shared';
+import LeadersPageContainer from './components/myimpact/LeadersPageContainer';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
@@ -64,6 +65,7 @@ ReactDOM.render(
           <Route path="/issue/:issueid" exact={true} component={CallPageContainer} />
           <Route path="/done/:id" exact={true} component={DonePageContainer} />
           <Route path="/impact" exact={true} component={MyImpactPageContainer} />
+          <Route path="/leaders" exact={true} component={LeadersPageContainer} />
           <Route path="/more" exact={true} component={MoreIssuesContainer} />
           <Route path="/team/:groupid" exact={true} component={GroupPageContainer} />
           <Route path="/team/:groupid/:issueid" exact={true} component={GroupCallPageContainer} />

@@ -54,15 +54,18 @@ class HeaderImpl extends React.Component<Props, State> {
             <img src="/img/5calls-logo-small.png" alt="5 Calls" />
           </Link>
           {/* keep this around for teams / campaigns, but don't show for now */}
-          {/* <ul>
-            <li><Link className={props.postcards ? '' : 'active'} to="/">Calls</Link></li>
-            <li><Link className={props.postcards ? 'active' : ''} to="/postcards">Postcards</Link></li>
-          </ul> */}
-          <CustomLogin
-            auth0Config={Auth0Config}
-            userProfile={profile}
-            logoutHandler={this.logout}
-          />
+          <div>
+            <CustomLogin
+              auth0Config={Auth0Config}
+              userProfile={profile}
+              logoutHandler={this.logout}
+            />
+          <ul>
+              <li><Link className={true ? '' : 'active'} to="/">Home</Link></li>
+              <li><Link className={true ? 'active' : ''} to="/leaders">Top Callers</Link></li>
+              {/* <li><Link className={true ? 'active' : ''} to="/reps">Top Reps</Link></li> */}
+            </ul>
+          </div>
         </div>
         {!this.props.hideDonation && <DonationContainer />}
       </header>

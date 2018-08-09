@@ -34,6 +34,73 @@
   @include bp(medium) {
     margin: 0 24px 24px;
   }
+
+  section.loading {
+    margin: 20px 20px;
+    padding: 14px 25px;
+    background-color: $grey;
+    border-radius: 15px;
+
+    h2 {
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  h1 {
+    span {
+      margin-left: 10px;
+      font-size: 14px;
+    }
+  }
+}
+
+.userList {
+  display: grid;
+  grid-template-columns: 50%;
+  grid-column-gap: 20px;
+
+  &__left {
+    grid-column: 1;
+  }
+  &__right {
+    grid-column: 2;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 20px;
+    list-style: none;
+  }
+
+  li {
+    .userList__photo {
+      float: left;
+      position: relative;
+      margin-right: 10px;
+  
+      img {
+        width: 60px;
+        border-radius: 30px;
+      }
+      span {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+        font-size: 28px;
+      }
+    }
+
+    h3 {
+      margin: 0 0 4px 0;
+      padding-top: 4px;
+      font-size: 22px;
+      font-family: $font-sans-normal;
+    }
+  }
 }
 
 .logo__header {
@@ -56,6 +123,7 @@
     }
 
     ul {
+      float: right;
       list-style: none;
       margin: 5px 0 0 0;
 
