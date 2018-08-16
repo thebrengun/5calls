@@ -60,7 +60,7 @@ class HeaderImpl extends React.Component<Props, State> {
               userProfile={profile}
               logoutHandler={this.logout}
             />
-          <ul>
+            <ul>
               <li><Link className={true ? '' : 'active'} to="/">Home</Link></li>
               <li><Link className={true ? 'active' : ''} to="/leaders">Top Callers</Link></li>
               {/* <li><Link className={true ? 'active' : ''} to="/reps">Top Reps</Link></li> */}
