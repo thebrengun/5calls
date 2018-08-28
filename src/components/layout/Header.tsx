@@ -7,6 +7,7 @@ import { store } from '../../redux/store';
 import { UserState, UserProfile } from '../../redux/userState/reducer';
 import { clearProfileActionCreator } from '../../redux/userState/action';
 import { Auth0Config } from '../../common/constants';
+import { DonationContainer } from '../donation';
 
 interface Props {
   readonly postcards?: boolean;
@@ -63,7 +64,7 @@ class HeaderImpl extends React.Component<Props, State> {
             logoutHandler={this.logout}
           />
         </div>
-        {/* <DonationContainer /> */}
+        {!this.props.hideDonation && <DonationContainer />}
       </header>
     );
   }

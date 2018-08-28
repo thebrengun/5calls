@@ -14,24 +14,26 @@ export class Donation extends React.Component<Props, State> {
     return (
       <div className="logo__header__donate">
         <div className="layout">
-          <p className="logo__header__donatetext">
-            <a href={Constants.DONATE_URL} target="_blank">5 Calls is powered by donations from members like you</a>
-          </p>
-          <div className="logo__header__donatebutton">
-            <a href={`${Constants.DONATE_URL}?amount=10`} target="_blank">$10</a>
-            <p>Supports 200 calls to Congress</p>
-          </div>
-          <div className="logo__header__donatebutton">
-            <a href={`${Constants.DONATE_URL}?amount=15`} target="_blank">$15</a>
-            <p>Supports outreach to new activists</p>
-          </div>
-          <div className="logo__header__donatebutton">
-            <a href={`${Constants.DONATE_URL}?amount=25`} target="_blank">$25</a>
-            <p>Support issue research and writeups</p>
-          </div>
-          <div className="logo__header__donatebutton">
-            <a href={`${Constants.DONATE_URL}?amount=100`} target="_blank">$100</a>
-            <p>Keeps the server running for a month</p>
+          <div className="logo__header__donatejustify">
+            <p className="logo__header__donatetext">
+              Get Involved:
+            </p>
+            <div className="logo__header__donatebutton">
+              <a href={`${Constants.WRITER_APPLY_URL}`} target="_blank">Apply</a>
+              <p>Research and<br/> Write Topics</p>
+            </div>
+            <div className="logo__header__donatebutton">
+              <a href={`${Constants.CODE_PROJECT_URL}`} target="_blank">Projects</a>
+              <p>Contribute Design<br/> or Code</p>
+            </div>
+            <div className="logo__header__donatebutton">
+              <a href={`${Constants.DONATE_URL}?amount=25`} target="_blank">$10</a>
+              <p>Donate to Support<br/> 5 Calls</p>
+            </div>
+            {/* <div className="logo__header__donatebutton">
+              <a href={`${Constants.DONATE_URL}?amount=100`} target="_blank">$100</a>
+              <p>Keeps the server running for a month</p>
+            </div> */}
           </div>
         </div>
       </div>

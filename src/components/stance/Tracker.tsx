@@ -1,17 +1,18 @@
 import * as React from 'react';
 
 interface Props {
+  readonly includeList: boolean;
 }
 
-let nameMap = {
+const nameMap = {
   'AK-DanSullivan': { 'name': 'Dan Sullivan (R-AK)', 'party': 'R', 'state': 'AK' },
   'AK-LisaMurkowski': { 'name': 'Lisa Murkowski (R-AK)', 'party': 'R', 'state': 'AK' },
-  'AL-LutherStrange': { 'name': 'Luther Strange (R-AL)', 'party': 'R', 'state': 'AL' },
+  'AL-DougJones': { 'name': 'Doug Jones (D-AL)', 'party': 'D', 'state': 'AL' },
   'AL-RichardCShelby': { 'name': 'Richard Shelby (R-AL)', 'party': 'R', 'state': 'AL' },
   'AR-JohnBoozman': { 'name': 'John Boozman (R-AR)', 'party': 'R', 'state': 'AR' },
   'AR-TomCotton': { 'name': 'Tom Cotton (R-AR)', 'party': 'R', 'state': 'AR' },
   'AZ-JeffFlake': { 'name': 'Jeff Flake (R-AZ)', 'party': 'R', 'state': 'AZ' },
-  'AZ-JohnMcCain': { 'name': 'John McCain (not voting)', 'party': 'R', 'state': 'AZ' },
+  // 'AZ-JohnMcCain': { 'name': 'John McCain (not voting)', 'party': 'R', 'state': 'AZ' },
   'CA-DianneFeinstein': { 'name': 'Dianne Feinstein (D-CA)', 'party': 'D', 'state': 'CA' },
   'CA-KamalaDHarris': { 'name': 'Kamala Harris (D-CA)', 'party': 'D', 'state': 'CA' },
   'CO-CoryGardner': { 'name': 'Cory Gardner (R-CO)', 'party': 'R', 'state': 'CO' },
@@ -45,7 +46,7 @@ let nameMap = {
   'MD-BenjaminLCardin': { 'name': 'Ben Cardin (D-MD)', 'party': 'D', 'state': 'MD' },
   'MD-ChrisVanHollen': { 'name': 'Chris Van Hollen (D-MD)', 'party': 'D', 'state': 'MD' },
   'ME-AngusSKingJr': { 'name': 'Angus King (I-ME)', 'party': 'I', 'state': 'ME' },
-  'ME-SusanMCollins': { 'name': 'Susan Collins (R-ME)', 'party': 'R', 'state': 'ME' },
+  'ME-SusanCollins': { 'name': 'Susan Collins (R-ME)', 'party': 'R', 'state': 'ME' },
   'MI-DebbieStabenow': { 'name': 'Debbie Stabenow (D-MI)', 'party': 'D', 'state': 'MI' },
   'MI-GaryCPeters': { 'name': 'Gary Peters (D-MI)', 'party': 'D', 'state': 'MI' },
   'MN-AlFranken': { 'name': 'Al Franken (D-MN)', 'party': 'D', 'state': 'MN' },
@@ -100,7 +101,7 @@ let nameMap = {
   'WA-PattyMurray': { 'name': 'Patty Murray (D-WA)', 'party': 'D', 'state': 'WA' },
   'WI-RonJohnson': { 'name': 'Ron Johnson (R-WI)', 'party': 'R', 'state': 'WI' },
   'WI-TammyBaldwin': { 'name': 'Tammy Baldwin (D-WI)', 'party': 'D', 'state': 'WI' },
-  'WV-JoeManchinIII': { 'name': 'Joe Manchin (D-WV)', 'party': 'D', 'state': 'WV' },
+  'WV-JoeManchin': { 'name': 'Joe Manchin (D-WV)', 'party': 'D', 'state': 'WV' },
   'WV-ShelleyMooreCapito': { 'name': 'Shelley Moore Capito (R-WV)', 'party': 'R', 'state': 'WV' },
   'WY-JohnBarrasso': { 'name': 'John Barrasso (R-WY)', 'party': 'R', 'state': 'WY' },
   'WY-MichaelBEnzi': { 'name': 'Mike Enzi (R-WY)', 'party': 'R', 'state': 'WY' }
@@ -123,23 +124,23 @@ function sortByParty(a: string, b: string) {
   return 0;
 }
 
-let noReps: string[] = [];
-let noVotes: string[] = noReps.sort(sortByParty);
+const noReps: string[] = [];
+const noVotes: string[] = noReps.sort(sortByParty);
 
-let yesReps: string[] = [];
-for (let senatorName in nameMap) {
+const yesReps: string[] = [];
+for (const senatorName in nameMap) {
   if (nameMap[senatorName].party === 'R') {
     yesReps.push(senatorName);
   }
 }
-let yesVotes: string[] = yesReps.sort(sortByParty);
+const yesVotes: string[] = yesReps.sort(sortByParty);
 
-let unknownReps: string[] = [];
-let unknownVotes: string[] = unknownReps.sort(sortByParty);
+const unknownReps: string[] = [];
+const unknownVotes: string[] = unknownReps.sort(sortByParty);
 
-let definitelyNo: string[] = [
+const definitelyNo: string[] = [
 ];
-for (let senatorName in nameMap) {
+for (const senatorName in nameMap) {
   if (nameMap[senatorName].party !== 'R') {
     definitelyNo.push(senatorName);
   }
@@ -160,7 +161,7 @@ definitelyNo.forEach((senator) => {
   }
 });
 
-let definitelyYes = [
+const definitelyYes: string[] = [
 
 ];
 definitelyYes.forEach((senator) => {
@@ -178,8 +179,16 @@ definitelyYes.forEach((senator) => {
   }
 });
 
-let definitelyUnknown = [
-  'AZ-JohnMcCain',
+const definitelyUnknown = [
+  'AL-DougJones',
+  'IN-JoeDonnelly',
+  'ND-HeidiHeitkamp',
+  'WV-JoeManchin',
+  'AK-LisaMurkowski',
+  'AZ-JeffFlake',
+  'ME-SusanCollins',
+  'MO-ClaireMcCaskill',
+  'MT-JonTester',
 ];
 definitelyUnknown.forEach((senator) => {
   // add to hard list
@@ -199,14 +208,15 @@ definitelyUnknown.forEach((senator) => {
 export const Tracker: React.StatelessComponent<Props> = (props: Props) => {
   return (
     <div className="tracker">
-      <h3>Tax Scam Tracker</h3>
-      <h3>Senate Conference Committee</h3>
-      <p className="tracker__required">50 Yes votes needed to pass</p>
+      <h3>Kavanaugh Confirmation Tracker</h3>
+      <p className="tracker__required">50 Yes votes needed to confirm</p>
       <div className="tracker__votes">
-        <div className="tracker__votes__no" style={{width: `${noVotes.length}%`}}>No</div>
-        <div className="tracker__votes__yes" style={{width: `${yesVotes.length}%`}}>Yes</div>
+        <div className="tracker__votes__no" style={{width: `${noVotes.length}%`}}>Opposes</div>
+        <div className="tracker__votes__yes" style={{width: `${yesVotes.length}%`}}>Supports</div>
         <div className="tracker__votes__pass"/>
       </div>
+      {/* <h4>Help us track Senator positions by calling and reporting results</h4> */}
+      { props.includeList &&
       <div className="tracker__lists">
         <ul className="tracker__lists__no">
           <li className="header">No Votes {noVotes.length}</li>
@@ -227,6 +237,7 @@ export const Tracker: React.StatelessComponent<Props> = (props: Props) => {
           )}
         </ul>
       </div>
+      }
     </div>
   );
 };
