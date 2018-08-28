@@ -17,7 +17,7 @@ export const Why5calls: React.StatelessComponent<Props> = (props: Props) => (
       <h1 className="hypothesis__title">{props.t('hypothesis.title')}</h1>
       <h2 className="hypothesis__subtitle">
         {/*tslint:disable-next-line:max-line-length*/}
-        5 Calls is the easiest and most effective way for citizens to make an impact in national and local politics
+        <strong>5 Calls</strong> is the easiest and most effective way for citizens to make an impact in national and local politics
       </h2>
     </header>
     <div className="hypothesis__text">

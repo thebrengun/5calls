@@ -20,15 +20,15 @@ export class Donation extends React.Component<Props, State> {
             </p>
             <div className="logo__header__donatebutton">
               <a href={`${Constants.WRITER_APPLY_URL}`} target="_blank">Apply</a>
-              <p>Research and<br/> Write Topics</p>
+              <p>Research and Write Topics</p>
             </div>
             <div className="logo__header__donatebutton">
               <a href={`${Constants.CODE_PROJECT_URL}`} target="_blank">Projects</a>
-              <p>Contribute Design<br/> or Code</p>
+              <p>Contribute Design or Code</p>
             </div>
             <div className="logo__header__donatebutton">
               <a href={`${Constants.DONATE_URL}?amount=25`} target="_blank">$10</a>
-              <p>Donate to Support<br/> 5 Calls</p>
+              <p>Donate to Support 5 Calls</p>
             </div>
             {/* <div className="logo__header__donatebutton">
               <a href={`${Constants.DONATE_URL}?amount=100`} target="_blank">$100</a>

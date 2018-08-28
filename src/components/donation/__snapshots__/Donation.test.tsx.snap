@@ -7,67 +7,53 @@ exports[`should render Donation component properly 1`] = `
   <div
     className="layout"
   >
-    <p
-      className="logo__header__donatetext"
-    >
-      <a
-        href="https://secure.actblue.com/donate/5calls-donate"
-        target="_blank"
-      >
-        5 Calls is powered by donations from members like you
-      </a>
-    </p>
     <div
-      className="logo__header__donatebutton"
+      className="logo__header__donatejustify"
     >
-      <a
-        href="https://secure.actblue.com/donate/5calls-donate?amount=10"
-        target="_blank"
+      <p
+        className="logo__header__donatetext"
       >
-        $10
-      </a>
-      <p>
-        Supports 200 calls to Congress
+        Get Involved:
       </p>
-    </div>
-    <div
-      className="logo__header__donatebutton"
-    >
-      <a
-        href="https://secure.actblue.com/donate/5calls-donate?amount=15"
-        target="_blank"
+      <div
+        className="logo__header__donatebutton"
       >
-        $15
-      </a>
-      <p>
-        Supports outreach to new activists
-      </p>
-    </div>
-    <div
-      className="logo__header__donatebutton"
-    >
-      <a
-        href="https://secure.actblue.com/donate/5calls-donate?amount=25"
-        target="_blank"
+        <a
+          href="https://airtable.com/shrJBbpixnJ09iVb3"
+          target="_blank"
+        >
+          Apply
+        </a>
+        <p>
+          Research and Write Topics
+        </p>
+      </div>
+      <div
+        className="logo__header__donatebutton"
       >
-        $25
-      </a>
-      <p>
-        Support issue research and writeups
-      </p>
-    </div>
-    <div
-      className="logo__header__donatebutton"
-    >
-      <a
-        href="https://secure.actblue.com/donate/5calls-donate?amount=100"
-        target="_blank"
+        <a
+          href="https://github.com/5calls/5calls/wiki/Getting-Involved-with-5-Calls-Development"
+          target="_blank"
+        >
+          Projects
+        </a>
+        <p>
+          Contribute Design or Code
+        </p>
+      </div>
+      <div
+        className="logo__header__donatebutton"
       >
-        $100
-      </a>
-      <p>
-        Keeps the server running for a month
-      </p>
+        <a
+          href="https://secure.actblue.com/donate/5calls-donate?amount=25"
+          target="_blank"
+        >
+          $10
+        </a>
+        <p>
+          Donate to Support 5 Calls
+        </p>
+      </div>
     </div>
   </div>
 </div>

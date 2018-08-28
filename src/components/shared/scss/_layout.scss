@@ -174,20 +174,24 @@
 
   }
 
+  &__donatejustify {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    @include bp(medium) {
+      display: inline-block;
+      // justify-content: inherit;
+    }
+  }
+
   &__donatebutton {
     width: 230px;
     margin-right: 10px;
 
     @include bp(medium) {
-      max-width: 100%;
-      margin: 0 20px;
-    }
-
-    @include bp(small) {
-      float: left;
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 8px;
+      width: 90%;
+      margin: 0 5%;
     }
 
     a {
@@ -206,31 +210,12 @@
       @include bp(medium) {
         width: 100%;
       }
-
-      @include bp(small) {
-        float: right;
-        width: 30%;
-        margin: 6px 25px 0 0;
-        border: 1px solid $blue;
-        border-radius: 5px;
-        padding: 6px 0;
-      }
-
     }
 
     p {
       margin: 5px 0 0 0;
       color: #fff;
       font-size: 14px;
-
-      @include bp(small) {
-        display: inline-block;
-        width: 60%;
-        height: 100%;
-        text-align: right;
-        font-size: $font-small;
-        line-height: 1.0em;
-      }
     }
 
     &:after {
@@ -246,12 +231,6 @@
     }
   }
 
-  &__donatejustify {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
   &__donatetext {
     // width: 250px;
     line-height: inherit;
@@ -263,12 +242,6 @@
     @include bp(medium) {
       width: 100%;
       max-width: inherit;
-    }
-
-    @include bp(small) {
-      width: 100%;
-      text-align: center;
-      margin: 5px auto 4px auto;
     }
 
     a {
