@@ -49,7 +49,7 @@ const nameMap = {
   'ME-SusanCollins': { 'name': 'Susan Collins (R-ME)', 'party': 'R', 'state': 'ME' },
   'MI-DebbieStabenow': { 'name': 'Debbie Stabenow (D-MI)', 'party': 'D', 'state': 'MI' },
   'MI-GaryCPeters': { 'name': 'Gary Peters (D-MI)', 'party': 'D', 'state': 'MI' },
-  'MN-AlFranken': { 'name': 'Al Franken (D-MN)', 'party': 'D', 'state': 'MN' },
+  'MN-TinaSmith': { 'name': 'Tina Smith (D-MN)', 'party': 'D', 'state': 'MN' },
   'MN-AmyKlobuchar': { 'name': 'Amy Klobuchar (D-MN)', 'party': 'D', 'state': 'MN' },
   'MO-ClaireMcCaskill': { 'name': 'Claire McCaskill (D-MO)', 'party': 'D', 'state': 'MO' },
   'MO-RoyBlunt': { 'name': 'Roy Blunt (R-MO)', 'party': 'R', 'state': 'MO' },
