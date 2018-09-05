@@ -7,8 +7,8 @@ import { Tracker } from '../stance/Tracker';
 // import * as Constants from '../../common/constants';
 
 interface Props {
-  readonly totalCount: number;
-  readonly t: TranslationFunction;
+  totalCount: number;
+  t: TranslationFunction;
 }
 
 export const Why5calls: React.StatelessComponent<Props> = (props: Props) => (

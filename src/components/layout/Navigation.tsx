@@ -4,7 +4,7 @@ import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 
 interface Props {
-  readonly t: TranslationFunction;
+  t: TranslationFunction;
 }
 
 const Navigation: React.StatelessComponent<Props> = (props: Props) => {

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { RouteComponentProps } from 'react-router-dom';
 import { Layout } from '../layout';
 import {
@@ -30,7 +29,6 @@ class MoreIssuesPage extends React.Component<Props> {
               activeIssues={state.issues}
               inactiveIssues={state.inactiveIssues}
               completedIssueIds={this.props.completedIssueIds}
-              t={i18n.t}
               currentIssue={this.props.currentIssue}
             />
           </main>

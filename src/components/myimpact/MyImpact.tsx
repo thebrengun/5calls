@@ -1,7 +1,7 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
+import i18n from '../../services/i18n';
 import Pluralize from 'react-pluralize';
 
 import { CallCount } from '../shared';
@@ -12,9 +12,9 @@ import { UserState } from '../../redux/userState';
 import { remoteStateContext } from '../../contexts';
 
 interface Props {
-  readonly currentUser?: UserState;
-  readonly userStats: UserStatsState;
-  readonly t: TranslationFunction;
+  t: TranslationFunction;
+  currentUser?: UserState;
+  userStats: UserStatsState;
 }
 
 interface State {
@@ -69,10 +69,10 @@ export class MyImpact extends React.Component<Props, State> {
 
     return (
     <section className="impact">
-      <h1 className="impact__title">{this.props.t('impact.title')}</h1>
+      <h1 className="impact__title">{i18n.t('impact.title')}</h1>
       {myTotalCalls === 0 &&
         <div>
-          <h2 className="impact_total">{this.props.t('impact.noCallsYet')}</h2>
+          <h2 className="impact_total">{i18n.t('impact.noCallsYet')}</h2>
           { this.props.currentUser && this.props.currentUser.idToken === undefined &&
             <p>Sign in to save your calls across devices, and track your weekly call streaks!</p>
           }
@@ -98,7 +98,7 @@ export class MyImpact extends React.Component<Props, State> {
             <p>Sign in to save your calls across devices, and track your weekly call streaks!</p>
           }
           <div className="impact_result">
-            {this.props.t('impact.callSummaryText', callSummaryParams)}
+            {i18n.t('impact.callSummaryText', callSummaryParams)}
           </div>
         </div>
       }
@@ -107,7 +107,6 @@ export class MyImpact extends React.Component<Props, State> {
         { remoteData =>
           <CallCount
             totalCount={remoteData.callTotal}
-            t={i18n.t}
           />
         }
         </remoteStateContext.Consumer>

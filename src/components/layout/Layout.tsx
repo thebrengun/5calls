@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 
-import i18n from '../../services/i18n';
 import { Issue, Group } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
@@ -68,9 +67,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
         </main>
       </div>
       {props.extraComponent}
-      <Footer
-        t={i18n.t}
-      />
+      <Footer/>
     </div>
   }
   </groupStateContext.Consumer>

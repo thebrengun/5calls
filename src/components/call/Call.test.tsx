@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import i18n from '../../services/i18n';
 import { Call } from './index';
 import { Issue } from '../../common/model';
 import { CallState } from '../../redux/callState';
@@ -17,7 +16,6 @@ test('Call component should be rendered if passed a valid object', () => {
     <Call
       issue={issue}
       callState={callState}
-      t={i18n.t}
     />);
   expect(component).toMatchSnapshot();
 });

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import i18n from '../../services/i18n';
-import { TranslationFunction } from 'i18next';
 import * as ReactMarkdown from 'react-markdown';
 
 import { Issue, VoterContact, Group } from '../../common/model';
@@ -15,9 +14,8 @@ import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
-  readonly issue: Issue;
-  readonly currentGroup?: Group;
-  readonly t: TranslationFunction;
+  issue: Issue;
+  currentGroup?: Group;
 }
 
 export interface State {
@@ -88,7 +86,7 @@ export default class FetchCall extends React.Component<Props, State> {
         <div>
           <div className="call__contact" id="contact">
             {/* <div className="call__contact__image"><img alt="" src="" /></div> */}
-            <h3 className="call__contact__type">{this.props.t('contact.callThisOffice')}</h3>
+            <h3 className="call__contact__type">{i18n.t('contact.callThisOffice')}</h3>
             <p className="call__contact__name">
               {this.state.currentContact.name} <span>from</span> {this.state.currentContact.location}
             </p>
@@ -134,7 +132,6 @@ export default class FetchCall extends React.Component<Props, State> {
           <CallHeaderTranslatable
             invalidAddress={location.invalidAddress}
             currentIssue={this.state.issue}
-            t={i18n.t}
           />
           {this.contactArea()}
         </section>

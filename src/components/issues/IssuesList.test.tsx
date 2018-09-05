@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import i18n from '../../services/i18n';
 import { IssuesList } from './index';
 import { Issue } from '../../common/model';
 
@@ -13,7 +12,6 @@ test('should show IssuesListItem elements', () => {
     <IssuesList
       issues={issues}
       completedIssueIds={[]}
-      t={i18n.t}
     />
   );
   const items = component.find('IssuesListItem');
@@ -26,7 +24,6 @@ test('should show no IssueListItem elements if there are no issues to show', () 
     <IssuesList
       issues={issues}
       completedIssueIds={[]}
-      t={i18n.t}
     />
   );
   const node = component.find('ul').find('IssuesListItem');

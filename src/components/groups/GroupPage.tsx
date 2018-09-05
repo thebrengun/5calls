@@ -6,7 +6,6 @@ import {
 import * as ReactMarkdown from 'react-markdown';
 import { isEqual } from 'lodash';
 
-import i18n from '../../services/i18n';
 import { Layout } from '../layout';
 import {
   Group,
@@ -199,7 +198,6 @@ class GroupPageView extends React.Component<Props, State> {
             <CallCount
               totalCount={group ? group.totalCalls : 0}
               minimal={true}
-              t={i18n.t}
             />
           </span>
         );
