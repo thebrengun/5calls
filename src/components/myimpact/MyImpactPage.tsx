@@ -1,25 +1,31 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
 import { MyImpactTranslatable } from './index';
-import { LayoutContainer } from '../layout';
-import { UserStatsState } from '../../redux/userStats';
-import { UserState } from '../../redux/userState';
+import { Layout } from '../layout';
+import {
+  userStateContext,
+  userStatsContext,
+} from '../../contexts';
 
 interface Props {
-  readonly currentUser?: UserState;
-  readonly userStats: UserStatsState;
-  readonly totalCount: number;
 }
 
 const MyImpactPage: React.StatelessComponent<Props> = (props: Props) => (
-  <LayoutContainer>
-    <MyImpactTranslatable
-      currentUser={props.currentUser}
-      userStats={props.userStats}
-      totalCount={props.totalCount}
-      t={i18n.t}
-    />
-  </LayoutContainer>
+  <Layout>
+    <userStateContext.Consumer>
+    { user =>
+      <userStatsContext.Consumer>
+      { stats =>
+        <MyImpactTranslatable
+          currentUser={user}
+          userStats={stats}
+          t={i18n.t}
+        />
+      }
+      </userStatsContext.Consumer>
+    }
+    </userStateContext.Consumer>
+  </Layout>
 );
 
 export default MyImpactPage;

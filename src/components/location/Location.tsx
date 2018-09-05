@@ -3,11 +3,14 @@ import { LocationState } from '../../redux/location/reducer';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { LocationUiState } from '../../common/model';
+import {
+  newLocationLookup,
+  clearAddress,
+} from '../../redux/location';
+import { store } from '../../redux/store';
 
 interface Props {
   readonly locationState: LocationState;
-  readonly setLocation: (location: string) => void;
-  readonly clearLocation: () => void;
   readonly t: TranslationFunction;
 }
 
@@ -87,7 +90,7 @@ export class Location extends React.Component<Props, State> {
       case LocationUiState.LOCATION_FOUND:
         const enterLocation = (e) => {
           e.preventDefault();
-          this.props.clearLocation();
+          store.dispatch(clearAddress());
         };
         widget = <div><button onClick={enterLocation}>{this.props.t('location.changeLocation')}</button></div>;
         break;
@@ -103,10 +106,10 @@ export class Location extends React.Component<Props, State> {
 
           if (newLocation === '') {
             // if the user hits "Go" with no location, clear what they had and refresh to try the default again
-            this.props.clearLocation();
+            store.dispatch(clearAddress());
             window.location.reload();
           } else {
-            this.props.setLocation(newLocation);
+            newLocationLookup(newLocation);
           }
         };
         const clearTextBox = (e) => { e.target.value = ''; };

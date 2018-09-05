@@ -1,277 +1,280 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
-import { RouteComponentProps } from 'react-router-dom';
+import { isEqual } from 'lodash';
 import { Helmet } from 'react-helmet';
+import {
+  withRouter,
+  RouteComponentProps,
+} from 'react-router';
 
-import { CallTranslatable, FetchCall } from './index';
-import { LayoutContainer } from '../layout';
-import { Issue, Group } from '../../common/model';
-import { CallState, OutcomeData } from '../../redux/callState';
-import { LocationState } from '../../redux/location/reducer';
-import { GroupDisclaimer } from '../groups/GroupPage';
-import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import * as Constants from '../../common/constants';
 
-/*
-  This is the top level View component in the CallPage Component Hierarchy.  It is the
-    child of the Redux container.  Therefore, its "Props" property must match the
-    merged props that were provided to the connect() function in the "HomePageContainer".
+import { getIssue } from '../shared/utils';
 
-    Note the "{id: string}" added as a generic type parameter to RouteComponentProps.
-    If you look at the Type Definition F12(VSCode) for RouteComponentProps, you'll see this:
+import { CallTranslatable, FetchCall } from './index';
+import { Layout } from '../layout';
+import { Issue, Group } from '../../common/model';
+import { GroupDisclaimer } from '../groups/GroupPage';
 
-    export interface RouteComponentProps<P> {
-      match: match<P>;
-      location: H.Location;
-      history: H.History;
-    }
+import {
+  CallState,
+  selectIssueActionCreator,
+} from '../../redux/callState';
+import { queueUntilRehydration } from '../../redux/rehydrationUtil';
+import {
+  getIssuesIfNeeded,
+  RemoteDataState,
+} from '../../redux/remoteData';
+import { store } from '../../redux/store';
+import { cacheGroup } from '../../redux/cache';
+import { GroupState } from '../../redux/group';
 
-    export interface match<P> {
-      params: P;
-      isExact: boolean;
-      path: string;
-      url: string;
-    }
+import {
+  remoteStateContext,
+  callStateContext,
+  groupStateContext,
+} from '../../contexts';
 
-    This means that the "P" is a generic parameter into that is passed into the match object and then
-    defines the "params" object type.  This allows the "params" object to be whatever we have defined
-    it in our route.  In this route "/call/:id" (as well as the "/done/:id" route), we've defined
-    our params to have simply one key: "id".
-*/
-
-// feels a bit smelly to do <any> here but the route could either be normal { id } or group { groupid, issueid }
-// but we don't actually use this below, we just need it for types, so...?
-// tslint:disable-next-line:no-any
-interface RouteProps extends RouteComponentProps<{ groupid: string, issueid: string }> { }
-
-interface Props extends RouteProps {
-  readonly issues: Issue[];
-  readonly currentIssue: Issue;
-  readonly currentGroup?: Group;
-  readonly callState: CallState;
-  readonly locationState: LocationState;
-  readonly onSubmitOutcome: (data: OutcomeData) => Function;
-  readonly onSelectIssue: (issueId: string) => Function;
-  readonly onGetIssuesIfNeeded: () => Function;
-  readonly clearLocation: () => void;
-  readonly cacheGroup: (group: Group) => Function;
-  readonly hasBeenCached: boolean;
+interface RouteProps {
+  readonly groupid: string;
+  readonly issueid: string;
 }
+
+// tslint:disable-next-line:no-bitwise
+type Props = RouteComponentProps<RouteProps> & {
+  remoteState: RemoteDataState;
+  callState: CallState;
+  groupState: GroupState;
+};
 
 export interface State {
   currentIssue: Issue;
-  callState: CallState;
+  currentIssueId: string;
+  currentGroup: Group | undefined;
   hasBeenCached: boolean;
 }
 
-/*
-  This is a StatelessComponent meaning that it is just a function. The props are passed in as
-  a property.  More complicated components will be instantiated as a class and will often
-  have "local" state.  Props for them will be an instance property.
-
-  Notice that we are just passing all of the props that we pull off the Redux Store through
-  this component to child components
-
-  When the props.onSelectIssue function is called by some component that has access to it
-  down this component hierarchy, it will simply be passed up this tree and end up calling the
-  dispatch method on the store corresponding to that method(as defined in the top-level redux container).
-*/
-
-class CallPage extends React.Component<Props, State> {
+class CallPageView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    // set initial state
+
     this.state = this.setStateFromProps(props);
-
-    this.getView = this.getView.bind(this);
   }
 
-  setStateFromProps(props: Props): State {
+  setStateFromProps(props: Props) {
+    let currentIssue = this.getCurrentIssue(props.remoteState);
+    let currentGroup = this.getCurrentGroup(props.groupState);
+
     return {
-      currentIssue: props.currentIssue,
-      callState: props.callState,
-      hasBeenCached: props.hasBeenCached,
+      currentIssue: currentIssue,
+      currentIssueId: currentIssue.id,
+      currentGroup: currentGroup,
+      hasBeenCached: false,
     };
-  }
-
-  componentWillReceiveProps(newProps: Props) {
-    if (newProps.hasBeenCached) {
-      this.setState({...this.state, hasBeenCached: true });
-    }
-    // in the case that we have come here directly by the url(not first to home page)
-    // the issues won't be loaded when first rendered.
-    // On the second render, we'll have the issues and the current issue will have been identified
-    // Here we set it on the redux store(note that if we've already set it in local state, in this component)
-    // we don't want to set it on the redux store again because that will cause a re-render loop.
-    // ALSO
-    // if we navigate backwards or reload the page, the currentissueid will be set, but it will be incorrect,
-    // so set it if it's wrong as well
-    if ((!this.props.callState.currentIssueId && newProps.currentIssue)
-       || (newProps.currentIssue && this.props.callState.currentIssueId !== newProps.currentIssue.id)) {
-      this.props.onSelectIssue(newProps.currentIssue.id);
-    }
-
-    // if group has changed, then reset the hasBeenCached flag
-    if (this.props.currentGroup
-      && newProps.currentGroup &&
-      this.props.currentGroup.groupID !== newProps.currentGroup.groupID) {
-        this.setState({...this.state, hasBeenCached: false});
-    }
-
-    if (!this.props.issues) {
-      queueUntilRehydration(() => {
-        this.props.onGetIssuesIfNeeded();
-      });
-    }
-
-    if (!this.state.hasBeenCached && newProps.currentGroup) {
-      // cache group and assigned it to currentGroup
-      this.setState({...this.state, hasBeenCached: true});
-      // cache group and assigned it to currentGroup
-      queueUntilRehydration(() => {
-        let group = newProps.currentGroup as Group;
-        this.props.cacheGroup(group);
-      });
-    }
-
   }
 
   componentDidMount() {
     // the user has clicked on an issue from the sidebar
-    if (!this.props.callState.currentIssueId && this.props.currentIssue) {
-      this.props.onSelectIssue(this.props.currentIssue.id);
+    if (!this.state.currentIssueId && this.state.currentIssue) {
+      selectIssueActionCreator(this.state.currentIssue.id);
+    }
+    this.determineCachedState(this.props.groupState);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.remoteState.issues) {
+      if (!isEqual(this.props, prevProps)) {
+        const curIssue = this.getCurrentIssue(this.props.remoteState);
+        this.setState({
+          ...this.state,
+          currentIssue: curIssue,
+          currentIssueId: curIssue.id,
+        });
+      }
     }
   }
 
-  getView() {
-    // hey this is a mess now, refactor needed
-    const currentGroup = this.props.currentGroup ? this.props.currentGroup : undefined;
+  getCurrentIssue = (remoteState: RemoteDataState) => {
+    let currIssue = new Issue();
+    const path = this.props.location.pathname.split('/');
+    let issueid = '';
+    if (path.length > 2) {
+      issueid = path[path.length - 1];
+    }
+    if (path) {
+      if (!this.state || this.state.currentIssueId !== issueid) {
+        store.dispatch(selectIssueActionCreator(issueid));
+        currIssue = getIssue(remoteState, issueid);
+      }
+    } else {
+      currIssue = getIssue(remoteState, this.state.currentIssueId);
+    }
+
+    return currIssue;
+  }
+
+  getCurrentGroup = (groupState: GroupState) => {
+    return groupState.currentGroup ? groupState.currentGroup : undefined;
+  }
+
+  determineCachedState = (groupState: GroupState) => {
+    let hasBeenCached = false;
+
+    if (this.state.currentGroup && groupState.currentGroup) {
+      hasBeenCached = this.state.currentGroup.groupID === groupState.currentGroup.groupID;
+    }
+    this.setState({ hasBeenCached: hasBeenCached });
+
+    if (!hasBeenCached) {
+      queueUntilRehydration(() => {
+        if (groupState.currentGroup) {
+          let group = groupState.currentGroup as Group;
+          cacheGroup(group.groupID);
+        }
+      });
+    }
+  }
+
+  getView = () => {
+  //
+    // get the current group and groupImage
     let groupImage = '/img/5calls-stars.png';
-    if (currentGroup && currentGroup.photoURL) {
-      groupImage = currentGroup.photoURL;
+    if (this.state.currentGroup && this.state.currentGroup.photoURL) {
+      groupImage = this.state.currentGroup.photoURL;
+    }
+
+    if (!this.props.remoteState.issues) {
+      queueUntilRehydration(() => {
+        getIssuesIfNeeded();
+      });
     }
 
     let extraComponent;
-    if (currentGroup) {
+    if (this.state.currentGroup) {
       extraComponent = <GroupDisclaimer/>;
     }
 
-    let pageTitle = '5 Calls: Make your voice heard';
-    if (this.props.currentIssue) {
-      if (currentGroup) {
-        pageTitle = `${this.props.currentIssue.name} - ${currentGroup.name}: 5 Calls`;
+    let pageTitle = Constants.PAGETITLE;
+    if (this.state.currentIssue) {
+      if (this.state.currentGroup) {
+        pageTitle = `${this.state.currentIssue.name} - ${this.state.currentGroup.name}: 5 Calls`;
       } else {
-        pageTitle = `${this.props.currentIssue.name}: 5 Calls`;
+        pageTitle = `${this.state.currentIssue.name}: 5 Calls`;
       }
     }
 
     let canonicalURL: string | undefined = undefined;
-    if (this.props.currentIssue) {
-      let slug = this.props.currentIssue.slug;
+    if (this.state.currentIssue) {
+      let slug = this.state.currentIssue.slug;
       if (slug === '' || slug === undefined) {
-        slug = this.props.currentIssue.id;
+        slug = this.state.currentIssue.id;
       }
 
-      if (this.props.currentGroup) {
-        canonicalURL = Constants.APP_URL + '/team/' + this.props.currentGroup.groupID + '/' + slug;
+      if (this.props.groupState.currentGroup) {
+        canonicalURL = Constants.APP_URL + '/team/' + this.props.groupState.currentGroup.groupID + '/' + slug;
       } else {
         canonicalURL = Constants.APP_URL + '/issues/' + slug;
       }
     }
 
-    if (this.props.currentIssue &&
-        this.props.currentIssue.contactType &&
-        this.props.currentIssue.contactType === 'FETCH') {
+    if (this.state.currentIssue &&
+        this.state.currentIssue.contactType &&
+        this.state.currentIssue.contactType === 'FETCH') {
         return (
-        <LayoutContainer
-          issues={this.props.issues}
-          issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroup={currentGroup}
+        <Layout
           extraComponent={extraComponent}
         >
           <Helmet>
             <title>{pageTitle}</title>
             {canonicalURL && <link rel="canonical" href={canonicalURL} />}
           </Helmet>
-          { currentGroup ?
+          { this.state.currentGroup ?
           <div className="page__group">
             <div className="page__header">
-              <div className="page__header__image"><img alt={currentGroup.name} src={groupImage}/></div>
-              <h1 className="page__title">{currentGroup.name}</h1>
-              <h2 className="page__subtitle">{currentGroup.subtitle}&nbsp;</h2>
+              <div className="page__header__image"><img alt={this.state.currentGroup.name} src={groupImage}/></div>
+              <h1 className="page__title">{this.state.currentGroup.name}</h1>
+              <h2 className="page__subtitle">{this.state.currentGroup.subtitle}&nbsp;</h2>
             </div>
             <FetchCall
-              issue={this.props.currentIssue}
-              currentGroup={currentGroup}
-              callState={this.props.callState}
-              locationState={this.props.locationState}
-              clearLocation={this.props.clearLocation}
-              onSubmitOutcome={this.props.onSubmitOutcome}
+              issue={this.state.currentIssue}
+              currentGroup={this.state.currentGroup}
               t={i18n.t}
             />
           </div>
           :
           <FetchCall
-            issue={this.props.currentIssue}
-            currentGroup={currentGroup}
-            callState={this.props.callState}
-            locationState={this.props.locationState}
-            clearLocation={this.props.clearLocation}
-            onSubmitOutcome={this.props.onSubmitOutcome}
+            issue={this.state.currentIssue}
+            currentGroup={this.state.currentGroup}
             t={i18n.t}
           />
           }
-        </LayoutContainer>
+        </Layout>
       );
     } else {
       return (
-        <LayoutContainer
-          issues={this.props.issues}
-          issueId={this.props.currentIssue ? this.props.currentIssue.id : undefined}
-          currentGroup={currentGroup}
+        <Layout
           extraComponent={extraComponent}
         >
           <Helmet>
             <title>{pageTitle}</title>
             {canonicalURL && <link rel="canonical" href={canonicalURL} />}
           </Helmet>
-          { currentGroup ?
+          { this.state.currentGroup ?
           <div className="page__group">
             <div className="page__header">
-              <div className="page__header__image"><img alt={currentGroup.name} src={groupImage}/></div>
-              <h1 className="page__title">{currentGroup.name}</h1>
-              <h2 className="page__subtitle">{currentGroup.subtitle}&nbsp;</h2>
+              <div className="page__header__image"><img alt={this.state.currentGroup.name} src={groupImage}/></div>
+              <h1 className="page__title">{this.state.currentGroup.name}</h1>
+              <h2 className="page__subtitle">{this.state.currentGroup.subtitle}&nbsp;</h2>
             </div>
             <CallTranslatable
-              issue={this.props.currentIssue}
+              issue={this.state.currentIssue}
               callState={this.props.callState}
-              locationState={this.props.locationState}
-              clearLocation={this.props.clearLocation}
-              onSubmitOutcome={this.props.onSubmitOutcome}
               t={i18n.t}
             />
           </div>
           :
           <CallTranslatable
-            issue={this.props.currentIssue}
+            issue={this.state.currentIssue}
             callState={this.props.callState}
-            locationState={this.props.locationState}
-            clearLocation={this.props.clearLocation}
-            onSubmitOutcome={this.props.onSubmitOutcome}
             t={i18n.t}
           />
           }
-        </LayoutContainer>
+        </Layout>
       );
     }
   }
 
   render() {
     return (
-      <div>
+      <>
         {this.getView()}
-      </div>
+      </>
     );
   }
 }
-export default CallPage;
+
+export const CallPageWithRouter = withRouter(CallPageView);
+
+export default class CallPage extends React.Component {
+  render() {
+    return (
+      <remoteStateContext.Consumer>
+      { remoteState =>
+        <callStateContext.Consumer>
+        { callState =>
+          <groupStateContext.Consumer>
+          { groupState =>
+            <CallPageWithRouter
+              remoteState={remoteState}
+              callState={callState}
+              groupState={groupState}
+            />
+          }
+          </groupStateContext.Consumer>
+          }
+        </callStateContext.Consumer>
+      }
+      </remoteStateContext.Consumer>
+    );
+  }
+}

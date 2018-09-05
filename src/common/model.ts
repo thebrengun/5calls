@@ -1,5 +1,6 @@
+import { GroupState } from '../redux/group/reducer';
 
-export interface Issue {
+export class Issue {
   id: string;
   name: string;
   reason: string;
@@ -13,20 +14,21 @@ export interface Issue {
   link: string;
   linkTitle: string;
   slug: string;
-}
 
-export const DefaultIssue: Issue = {
-  id: '',
-  name: '',
-  reason: '',
-  script: '',
-  categories: [],
-  inactive: false,
-  outcomeModels: [],
-  link: '',
-  linkTitle: '',
-  slug: '',
-};
+  constructor() {
+    this.id = '';
+    this.name = '';
+    this.reason = '';
+    this.script = '';
+    this.categories = [];
+    this.inactive = false;
+    this.outcomeModels = [];
+    this.link = '';
+    this.linkTitle = '';
+    this.slug = '';
+  }
+
+}
 
 export interface Outcome {
   label: string;
@@ -77,7 +79,7 @@ export interface UserStat {
   unavailableCount: number;
 }
 
-export interface Group {
+export class Group {
   // id: number;
   groupID: string;
   name: string;
@@ -87,6 +89,25 @@ export interface Group {
   photoURL: string;
   customCalls: boolean;
   subscribed: boolean;
+
+  constructor(groupId: string) {
+    this.groupID = groupId;
+    this.name = '';
+    this.subtitle = '';
+    this.description = '';
+    this.totalCalls = 0;
+    this.photoURL = '';
+    this.customCalls = false;
+    this.subscribed = false;
+  }
+
+  static from(groupState: GroupState) {
+    if (groupState.currentGroup) {
+      return groupState.currentGroup;
+    }
+
+    return getDefaultGroup('');
+  }
 }
 
 /**
@@ -189,10 +210,10 @@ export interface DonationGoal {
 }
 
 export interface Donations {
-    count: number; // number of donors
-    amount: number; // total collected (api===amount)
-    total: number; // goal (api===total)
-    kind: string; // denomincation (dollars)
+  count: number; // number of donors
+  amount: number; // total collected (api===amount)
+  total: number; // goal (api===total)
+  kind: string; // denomincation (dollars)
 }
 
 export interface OutcomeButton {

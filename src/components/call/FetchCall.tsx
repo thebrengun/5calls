@@ -6,20 +6,18 @@ import * as ReactMarkdown from 'react-markdown';
 
 import { Issue, VoterContact, Group } from '../../common/model';
 import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
-import { CallState, OutcomeData } from '../../redux/callState';
-import { LocationState } from '../../redux/location/reducer';
+import {
+  submitOutcome,
+} from '../../redux/callState';
 import { getNextContact } from '../../services/apiServices';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
+import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   readonly issue: Issue;
   readonly currentGroup?: Group;
-  readonly callState: CallState;
-  readonly locationState: LocationState;
   readonly t: TranslationFunction;
-  readonly clearLocation: () => void;
-  readonly onSubmitOutcome: (data: OutcomeData) => Function;
 }
 
 export interface State {
@@ -31,13 +29,14 @@ export interface State {
 export default class FetchCall extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    // set initial state
     this.state = this.setStateFromProps(props);
+
+    // tslint:disable-next-line:no-console
+    console.log('Issue: ', props.issue);
   }
 
   setStateFromProps(props: Props): State {
     return {
-      // currentContact: currentContact,
       checkedForContact: false,
       issue: props.issue
     };
@@ -67,7 +66,7 @@ export default class FetchCall extends React.Component<Props, State> {
   }
 
   nextContact(outcome: string) {
-    this.props.onSubmitOutcome({
+    submitOutcome({
       outcome: outcome,
       numberContactsLeft: 0,
       issueId: this.props.issue.id,
@@ -129,14 +128,18 @@ export default class FetchCall extends React.Component<Props, State> {
 
   render() {
     return (
-      <section className="call voter">
-        <CallHeaderTranslatable
-          invalidAddress={this.props.locationState.invalidAddress}
-          currentIssue={this.state.issue}
-          t={i18n.t}
-        />
-        {this.contactArea()}
-      </section>
+      <locationStateContext.Consumer>
+      { location =>
+        <section className="call voter">
+          <CallHeaderTranslatable
+            invalidAddress={location.invalidAddress}
+            currentIssue={this.state.issue}
+            t={i18n.t}
+          />
+          {this.contactArea()}
+        </section>
+      }
+    </locationStateContext.Consumer>
     );
   }
 }

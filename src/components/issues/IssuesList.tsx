@@ -12,7 +12,6 @@ interface Props {
   readonly currentGroup?: Group;
   readonly completedIssueIds: string[];
   readonly t: TranslationFunction;
-  readonly onSelectIssue: (issueId: string) => void;
 }
 
 export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
@@ -36,7 +35,7 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
   };
 
   const listItems = () => {
-    if (props.currentGroup && props.issues.length === 0) {
+    if (props.currentGroup && props.issues && props.issues.length === 0) {
       return <li><a className="issues__footer-link"><span>Getting your team calls...</span></a></li>;
     } else if (props.issues && props.issues.map) {
       return props.issues.map(issue =>
@@ -50,7 +49,6 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
           }
           isIssueActive={currentIssueId === issue.id}
           currentGroup={props.currentGroup}
-          onSelectIssue={props.onSelectIssue}
         />
       ));
     } else {

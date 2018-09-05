@@ -73,9 +73,16 @@ class HeaderImpl extends React.Component<Props, State> {
   }
 
   render() {
-    let profile: UserProfile | undefined;
-    if (this.props.currentUser !== undefined) {
+    let profile: UserProfile;
+    if (this.props.currentUser !== undefined && this.props.currentUser.profile !== undefined) {
       profile = this.props.currentUser.profile;
+    } else {
+      profile = {
+        name: '',
+        sub: '',
+        exp: 0,
+        picture: ''
+      };
     }
 
     return (

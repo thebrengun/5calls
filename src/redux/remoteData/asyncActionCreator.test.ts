@@ -4,7 +4,7 @@ import * as moxios from 'moxios';
 import { RemoteDataActionType } from './action';
 import { fetchCallCount, fetchAllIssues, fetchLocationByIP } from './index';
 import { ApplicationState } from './../root';
-import { ApiData, DefaultIssue, IpInfoData, LocationFetchType, LocationUiState } from './../../common/model';
+import { ApiData, Issue, IpInfoData, LocationFetchType, LocationUiState } from './../../common/model';
 import * as Constants from '../../common/constants';
 
 const middlewares = [thunk];
@@ -46,7 +46,7 @@ test('getApiData() action creator functions correctly', () => {
 });
 
 const getApiDataResponse = (address, issueName): ApiData => {
-  const mockIssue = Object.assign({}, DefaultIssue, {name: issueName});
+  const mockIssue = Object.assign({}, new Issue(), {name: issueName});
 
   const mockResponse: ApiData = {
     splitDistrict: false,

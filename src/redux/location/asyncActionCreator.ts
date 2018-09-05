@@ -7,7 +7,8 @@ import { fetchGroupIssues } from '../remoteData/asyncActionCreator';
 
 export function setAddress(address: string) {
   return (dispatch: Dispatch<ApplicationState>) => {
-    return dispatch(fetchAllIssues(address))
+    // tslint:disable-next-line:no-any
+    return dispatch<any>(fetchAllIssues(address))
       .then(() => {
         dispatch(setLocation(address));
       });
@@ -17,7 +18,8 @@ export function setAddress(address: string) {
 export function newLocationLookup(location: string, group?: Group) {
   return (dispatch: Dispatch<ApplicationState>) => {
     if (group) {
-      return dispatch(fetchGroupIssues(group.groupID, location))
+      // tslint:disable-next-line:no-any
+      return dispatch<any>(fetchGroupIssues(group.groupID, location))
       .then(() => {
         dispatch(setUiState(LocationUiState.LOCATION_FOUND));
       })
@@ -25,7 +27,8 @@ export function newLocationLookup(location: string, group?: Group) {
         dispatch(setUiState(LocationUiState.LOCATION_ERROR));
       });
     } else {
-      return dispatch(fetchAllIssues(location))
+      // tslint:disable-next-line:no-any
+      return dispatch<any>(fetchAllIssues(location))
       .then(() => {
         dispatch(setUiState(LocationUiState.LOCATION_FOUND));
       })

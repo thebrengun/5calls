@@ -20,7 +20,8 @@ export class Auth0CallbackContainer extends React.Component<Props, State> {
 
     // check for unuploaded stats
     queueUntilRehydration(() => {
-      store.dispatch(uploadStatsIfNeeded());
+      // tslint:disable-next-line:no-any
+      store.dispatch<any>(uploadStatsIfNeeded());
     });
 
     return Promise.resolve(authResponse);
