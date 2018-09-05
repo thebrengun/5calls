@@ -1,4 +1,3 @@
-import { } from './NoContact';
 import * as React from 'react';
 import i18n from '../../services/i18n';
 import { TranslationFunction } from 'i18next';
@@ -6,17 +5,14 @@ import { translate } from 'react-i18next';
 import { Issue, Contact } from '../../common/model';
 import { CallHeaderTranslatable, ContactDetails, Outcomes,
   ScriptTranslatable, NoContactSplitDistrict, IssueLink } from './index';
-import { CallState, OutcomeData } from '../../redux/callState';
-import { LocationState } from '../../redux/location/reducer';
+import { CallState } from '../../redux/callState';
+import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   readonly issue: Issue;
   readonly callState: CallState;
-  readonly locationState: LocationState;
   readonly t: TranslationFunction;
-  readonly clearLocation: () => void;
-  readonly onSubmitOutcome: (data: OutcomeData) => Function;
 }
 
 export interface State {
@@ -114,50 +110,52 @@ export class Call extends React.Component<Props, State> {
 
   render() {
     return (
-      <section className="call">
-        <CallHeaderTranslatable
-          invalidAddress={this.props.locationState.invalidAddress}
-          currentIssue={this.state.issue}
-          t={i18n.t}
-        />
-        {this.missingContacts(this.props.issue) ?
-        <NoContactSplitDistrict
-          splitDistrict={this.props.locationState.splitDistrict}
-          clearLocation={this.props.clearLocation}
-          t={i18n.t}
-        /> :
-        <ContactDetails
-          currentIssue={this.state.issue}
-          contactIndex={this.state.currentContactIndex}
-          t={i18n.t}
-        />}
-        <IssueLink
-          issue={this.state.issue}
-        />
-        <ScriptTranslatable
-          issue={this.state.issue}
-          contactIndex={this.state.currentContactIndex}
-          locationState={this.props.locationState}
-          t={i18n.t}
-        />
-        { this.missingContacts(this.props.issue) || (
-         this.props.issue && 
-         (this.props.issue.contacts && this.props.issue.contacts.length === 0)) ? <span/> :
-        <Outcomes
-          currentIssue={this.state.issue}
-          numberContactsLeft={this.state.numberContactsLeft}
-          currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-          onSubmitOutcome={this.props.onSubmitOutcome}
-          t={i18n.t}
-        />}
-        {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
-        { this.missingContacts(this.props.issue) ? <span/> :
-        this.state.numberContactsLeft > 0 ?
-          <h3 aria-live="polite" className="call__contacts__left" >
-            {this.props.t('outcomes.contactsLeft', { contactsRemaining: this.state.numberContactsLeft })}
-          </h3> : ''
-        }
-      </section>
+      <locationStateContext.Consumer>
+      { locationState =>
+        <section className="call">
+          <CallHeaderTranslatable
+            invalidAddress={locationState.invalidAddress}
+            currentIssue={this.state.issue}
+            t={i18n.t}
+          />
+          {this.missingContacts(this.props.issue) ?
+          <NoContactSplitDistrict
+            splitDistrict={locationState.splitDistrict}
+            t={i18n.t}
+          /> :
+          <ContactDetails
+            currentIssue={this.state.issue}
+            contactIndex={this.state.currentContactIndex}
+            t={i18n.t}
+          />}
+          <IssueLink
+            issue={this.state.issue}
+          />
+          <ScriptTranslatable
+            issue={this.state.issue}
+            contactIndex={this.state.currentContactIndex}
+            locationState={locationState}
+            t={i18n.t}
+          />
+          { this.missingContacts(this.props.issue) || (
+           this.props.issue &&
+           (this.props.issue.contacts && this.props.issue.contacts.length === 0)) ? <span/> :
+          <Outcomes
+            currentIssue={this.state.issue}
+            numberContactsLeft={this.state.numberContactsLeft}
+            currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
+            t={i18n.t}
+          />}
+          {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
+          { this.missingContacts(this.props.issue) ? <span/> :
+          this.state.numberContactsLeft > 0 ?
+            <h3 aria-live="polite" className="call__contacts__left" >
+              {this.props.t('outcomes.contactsLeft', { contactsRemaining: this.state.numberContactsLeft })}
+            </h3> : ''
+          }
+        </section>
+      }
+      </locationStateContext.Consumer>
     );
   }
 }

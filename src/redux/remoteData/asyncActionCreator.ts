@@ -51,7 +51,8 @@ export const getIssuesIfNeeded = () => {
       const loc = state.locationState.address;
       if (loc) {
         // console.log('Using cached address');
-        dispatch(fetchAllIssues(loc))
+        // tslint:disable-next-line:no-any
+        dispatch<any>(fetchAllIssues(loc))
         .then(() => {
           setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
         });
@@ -71,7 +72,8 @@ export const getGroupIssuesIfNeeded = (groupid: string) => {
         state.remoteDataState.currentGroupId !== groupid) {
       const loc = state.locationState.address;
       if (loc) {
-        dispatch(fetchGroupIssues(groupid, loc));
+        // tslint:disable-next-line:no-any
+        dispatch<any>(fetchGroupIssues(groupid, loc));
       }
     }
   };
@@ -168,16 +170,19 @@ export const fetchLocationByIP = () => {
         .then((response: IpInfoData) => {
           dispatch(setLocationFetchType(LocationFetchType.IP_INFO));
           const location = response.loc;
-          dispatch(fetchAllIssues(location))
+          // tslint:disable-next-line:no-any
+          dispatch<any>(fetchAllIssues(location))
           .then(() => {
-            dispatch(setUiState(LocationUiState.LOCATION_FOUND));
+            // tslint:disable-next-line:no-any
+            dispatch<any>(setUiState(LocationUiState.LOCATION_FOUND));
           });
           // TODO: dispatch an error message
         }).catch((error) => {
           // tslint:disable-next-line:no-console
           console.error(`fetchLocationByIP error: ${error.message}`, error);
           // set location to empty string to trigger location error
-          dispatch(fetchAllIssues(''));
+          // tslint:disable-next-line:no-any
+          dispatch<any>(fetchAllIssues(''));
         });
     // }
   };
@@ -196,8 +201,8 @@ export const fetchBrowserGeolocation = () => {
     const fetchType = state.locationState.locationFetchType;
     // const useGeolocation = state.locationState.useGeolocation || null;
 
-    // tslint:disable-next-line:no-shadowed-variable
-    setTimeoutHandle = setTimeout(() => dispatch(fetchLocationByIP()), GEOLOCATION_TIMEOUT + 1000);
+    // tslint:disable-next-line:no-shadowed-variable no-any
+    setTimeoutHandle = setTimeout(() => dispatch<any>(fetchLocationByIP()), GEOLOCATION_TIMEOUT + 1000);
     // fetchType will be undefined at first
     if (fetchType === undefined || fetchType === LocationFetchType.BROWSER_GEOLOCATION) {
       getBrowserGeolocation()
@@ -205,19 +210,23 @@ export const fetchBrowserGeolocation = () => {
           if (location.latitude && location.longitude) {
             dispatch(setLocationFetchType(LocationFetchType.BROWSER_GEOLOCATION));
             const loc = `${location.latitude},${location.longitude}`;
-            dispatch(fetchAllIssues(loc));
+            // tslint:disable-next-line:no-any
+            dispatch<any>(fetchAllIssues(loc));
             clearTimeout(setTimeoutHandle);
           } else {
-            dispatch(fetchLocationByIP());
+            // tslint:disable-next-line:no-any
+            dispatch<any>(fetchLocationByIP());
           }
         })
         .catch(e => {
           // tslint:disable-next-line:no-console
           console.error('Problem getting browser geolocation', e);
-          dispatch(fetchLocationByIP());
+          // tslint:disable-next-line:no-any
+          dispatch<any>(fetchLocationByIP());
         });
     } else {
-      dispatch(fetchLocationByIP());
+      // tslint:disable-next-line:no-any
+      dispatch<any>(fetchLocationByIP());
     }
   };
 };
@@ -323,13 +332,16 @@ export const startup = () => {
     const loc = state.locationState.address;
 
     if (loc) {
-      dispatch(fetchAllIssues(loc))
+      // tslint:disable-next-line:no-any
+      dispatch<any>(fetchAllIssues(loc))
       .then(() => {
         setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
       });
     } else {
-      dispatch(fetchBrowserGeolocation());
+      // tslint:disable-next-line:no-any
+      dispatch<any>(fetchBrowserGeolocation());
     }
-    dispatch(fetchCallCount());
+    // tslint:disable-next-line:no-any
+    dispatch<any>(fetchCallCount());
   };
 };

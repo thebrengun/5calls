@@ -9,11 +9,11 @@ import { UserStatsState } from '../../redux/userStats';
 import { RemoteUserStats, getUserStats } from '../../services/apiServices';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 import { UserState } from '../../redux/userState';
+import { remoteStateContext } from '../../contexts';
 
 interface Props {
   readonly currentUser?: UserState;
   readonly userStats: UserStatsState;
-  readonly totalCount: number;
   readonly t: TranslationFunction;
 }
 
@@ -45,7 +45,7 @@ export class MyImpact extends React.Component<Props, State> {
           console.error('error getting user stats', error);
         });
       }
-    });  
+    });
   }
 
   render() {
@@ -103,10 +103,14 @@ export class MyImpact extends React.Component<Props, State> {
         </div>
       }
 
-      <CallCount
-        totalCount={this.props.totalCount}
-        t={i18n.t}
-      />
+        <remoteStateContext.Consumer>
+        { remoteData =>
+          <CallCount
+            totalCount={remoteData.callTotal}
+            t={i18n.t}
+          />
+        }
+        </remoteStateContext.Consumer>
       </section>
     );
   }

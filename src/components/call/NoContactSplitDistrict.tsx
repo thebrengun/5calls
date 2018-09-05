@@ -2,17 +2,18 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
+import { clearAddress } from '../../redux/location';
+import { store } from '../../redux/store';
 
 interface Props {
   readonly splitDistrict: boolean;
-  readonly clearLocation: () => void;
   readonly t: TranslationFunction;
 }
 
 class NoContactSplitDistrict extends React.PureComponent<Props> {
 
   focusTextInput = (e) => {
-    this.props.clearLocation();
+    store.dispatch(clearAddress());
     window.scroll(1, 1);
   }
 

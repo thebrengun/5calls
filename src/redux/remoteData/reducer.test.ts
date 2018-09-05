@@ -1,4 +1,4 @@
-import { DefaultIssue } from './../../common/model';
+import { Issue } from './../../common/model';
 import { RemoteDataState, remoteDataReducer, IssuesAction,
   CallCountAction, ApiErrorAction, RemoteDataActionType } from './index';
 
@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 test('Remote Data reducer processes GET_ISSUES action correctly', () => {
-  const issues = [DefaultIssue, DefaultIssue];
+  const issues = [ new Issue(), new Issue()];
   const state: RemoteDataState =
     Object.assign({}, defaultState, issues);
   const action: IssuesAction = {

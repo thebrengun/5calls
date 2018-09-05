@@ -58,7 +58,7 @@ export const formatNumber = (unformattedNumber: number | string) => {
   }
 };
 
-export const getIssue = (remoteDataState: RemoteDataState, issueId: string): Issue | undefined => {
+export const getIssue = (remoteDataState: RemoteDataState, issueId: string): Issue => {
   if (remoteDataState.issues) {
     const currentActiveIssue = find(remoteDataState.issues, (i => i.id === issueId || i.slug === issueId));
     if (currentActiveIssue) {
@@ -82,5 +82,5 @@ export const getIssue = (remoteDataState: RemoteDataState, issueId: string): Iss
     }
   }
 
-  return undefined;
+  return new Issue();
 };

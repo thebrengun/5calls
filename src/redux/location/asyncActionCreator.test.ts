@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 const configureStore = require('redux-mock-store');
 import * as moxios from 'moxios';
 import { ApplicationState } from './../root';
-import { ApiData, DefaultIssue, LocationUiState, LocationFetchType } from './../../common/model';
+import { ApiData, Issue, LocationUiState, LocationFetchType } from './../../common/model';
 import { setAddress, LocationActionType } from './index';
 import * as Constants from '../../common/constants';
 
@@ -19,8 +19,7 @@ afterEach(() => {
 
 test('Expect setAddress() action creator to dispatch correctly', () => {
   const address = 'New Gloucester, ME';
-  const mockIssue = DefaultIssue;
-  const apiData: ApiData = {
+  const mockIssue = new Issue(); const apiData: ApiData = {
     splitDistrict: false,
     invalidAddress: false,
     normalizedLocation: address,
