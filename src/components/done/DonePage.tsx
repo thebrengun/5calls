@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { isEqual } from 'lodash';
-import i18n from '../../services/i18n';
 import { DoneTranslatable } from './index';
 import { Layout } from '../layout';
 import { Issue } from '../../common/model';
@@ -78,7 +77,6 @@ class DonePageView extends React.Component<Props, State> {
             <DoneTranslatable
               currentIssue={this.state.currentIssue}
               totalCount={this.state.totalCount}
-              t={i18n.t}
             />
           }
         </Layout>

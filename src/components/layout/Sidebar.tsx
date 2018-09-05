@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { Issue, Group } from '../../common/model';
 import { IssuesListTranslatable } from '../issues';
 
@@ -17,7 +16,6 @@ const Sidebar: React.StatelessComponent<Props> = (props: Props) => {
       currentIssue={props.currentIssue}
       currentGroup={props.currentGroup}
       completedIssueIds={props.completedIssueIds}
-      t={i18n.t}
     />
   );
 };

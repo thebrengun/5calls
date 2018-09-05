@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { MyImpactTranslatable } from './index';
 import { Layout } from '../layout';
 import {
@@ -19,7 +18,6 @@ const MyImpactPage: React.StatelessComponent<Props> = (props: Props) => (
         <MyImpactTranslatable
           currentUser={user}
           userStats={stats}
-          t={i18n.t}
         />
       }
       </userStatsContext.Consumer>

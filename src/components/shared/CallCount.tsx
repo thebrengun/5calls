@@ -4,10 +4,9 @@ import { translate } from 'react-i18next';
 import { formatNumber } from '../shared/utils';
 
 export interface Props {
-  readonly totalCount: number;
-  // readonly large: boolean;
-  readonly minimal?: boolean;
-  readonly t: TranslationFunction;
+  totalCount: number;
+  minimal?: boolean;
+  t: TranslationFunction;
 }
 
 export const CallCount: React.StatelessComponent<Props> = (props: Props) => {
@@ -44,7 +43,7 @@ export const CallCount: React.StatelessComponent<Props> = (props: Props) => {
   }
 
   const pctDone = (props.totalCount / callGoal) * 100;
-  const pctStyle = {width: `${pctDone}%`};    
+  const pctStyle = {width: `${pctDone}%`};
 
   const callText = props.minimal ?
     `${formatNumber(props.totalCount)} Calls`

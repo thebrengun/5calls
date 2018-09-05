@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { find } from 'lodash';
 
-import i18n from '../services/i18n';
 import { LocationState } from '../redux/location/reducer';
 import { newLocationLookup, clearAddress } from '../redux/location';
 import { CallState } from '../redux/callState/reducer';
@@ -55,9 +54,7 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
           <p>Looks like you visited a page that doesn't exist. Pick one of the issues on the sidebar or <Link to="/">go back to the homepage</Link>.</p>
         </main>
       </div>
-      <Footer
-        t={i18n.t}
-      />
+      <Footer/>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
 import { Helmet } from 'react-helmet';
 import {
@@ -198,14 +197,12 @@ class CallPageView extends React.Component<Props, State> {
             <FetchCall
               issue={this.state.currentIssue}
               currentGroup={this.state.currentGroup}
-              t={i18n.t}
             />
           </div>
           :
           <FetchCall
             issue={this.state.currentIssue}
             currentGroup={this.state.currentGroup}
-            t={i18n.t}
           />
           }
         </Layout>
@@ -229,14 +226,12 @@ class CallPageView extends React.Component<Props, State> {
             <CallTranslatable
               issue={this.state.currentIssue}
               callState={this.props.callState}
-              t={i18n.t}
             />
           </div>
           :
           <CallTranslatable
             issue={this.state.currentIssue}
             callState={this.props.callState}
-            t={i18n.t}
           />
           }
         </Layout>

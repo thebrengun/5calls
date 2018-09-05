@@ -28,7 +28,6 @@ const SidebarHeader: React.StatelessComponent<Props> = (props: Props) => {
         { locationState =>
           <LocationTranslatable
             locationState={locationState}
-            t={i18n.t}
           />
         }
         </locationStateContext.Consumer>

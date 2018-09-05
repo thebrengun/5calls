@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { RouteComponentProps } from 'react-router-dom';
 import { Why5callsTranslatable, HomeExtras } from './index';
 import { Layout } from '../layout';
@@ -24,7 +23,6 @@ export const HomePage: React.StatelessComponent<Props> = (props: Props) => (
     >
       <Why5callsTranslatable
         totalCount={state.callTotal}
-        t={i18n.t}
       />
     </Layout>
   }

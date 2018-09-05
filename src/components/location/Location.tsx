@@ -10,8 +10,8 @@ import {
 import { store } from '../../redux/store';
 
 interface Props {
-  readonly locationState: LocationState;
-  readonly t: TranslationFunction;
+  t: TranslationFunction;
+  locationState: LocationState;
 }
 
 // this will be needed

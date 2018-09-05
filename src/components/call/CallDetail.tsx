@@ -1,5 +1,4 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { Issue } from '../../common/model';
 import { ContactDetails } from './index';
 
@@ -12,7 +11,6 @@ const CallDetail: React.StatelessComponent<Props> = (props: Props) => (
     <ContactDetails
       currentIssue={props.currentIssue}
       contactIndex={0}
-      t={i18n.t}
     />
   </div>
 

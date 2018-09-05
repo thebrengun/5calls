@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
-import { LayoutContainer } from '../layout';
+import { Layout } from '../layout';
 import { UserState, UserProfile } from '../../redux/userState';
 import { getProfileInfo, UserCallDetails } from '../../redux/remoteData/asyncActionCreator';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
@@ -179,9 +179,9 @@ class ProfilePage extends React.Component<Props, State> {
 
   render() {
     return (
-      <LayoutContainer>
+      <Layout>
         {this.pageContent()}
-      </LayoutContainer>
+      </Layout>
     );
   }
 }
