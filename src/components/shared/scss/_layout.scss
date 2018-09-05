@@ -34,6 +34,29 @@
   @include bp(medium) {
     margin: 0 24px 24px;
   }
+
+  section.loading {
+    margin: 20px 20px;
+    padding: 14px 25px;
+    background-color: $grey;
+    border-radius: 15px;
+    color: #000;
+
+    h2 {
+      margin: 0 0 4px 0;
+      font-size: 22px;
+      font-family: $font-sans-normal;
+
+      a {
+        color: $blue;
+        text-decoration: underline;
+      }
+    }
+
+    p {
+      margin: 0;
+    }
+  }
 }
 
 .logo__header {
