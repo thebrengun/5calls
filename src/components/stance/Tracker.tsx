@@ -188,7 +188,6 @@ const definitelyUnknown = [
   'AZ-JeffFlake',
   'ME-SusanCollins',
   'MO-ClaireMcCaskill',
-  'MT-JonTester',
 ];
 definitelyUnknown.forEach((senator) => {
   // add to hard list
