@@ -1,5 +1,6 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
+import { isEqual } from 'lodash';
 import { translate } from 'react-i18next';
 import { Issue, Contact } from '../../common/model';
 import { CallHeaderTranslatable, ContactDetails, Outcomes,
@@ -35,9 +36,10 @@ export class Call extends React.Component<Props, State> {
    * @returns {State}
    */
   setStateFromProps(props: Props): State {
+
     let currentContactIndex = 0;
-    if (props.issue && props.callState.contactIndexes && props.callState.contactIndexes[props.issue.id]) {
-      currentContactIndex = props.callState.contactIndexes[props.issue.id];
+    if (props.issue && props.callState.contactIndexes && props.callState.contactIndexes[props.issue.slug]) {
+      currentContactIndex = props.callState.contactIndexes[props.issue.slug];
     }
 
     const currentContact = (props.issue && props.issue.contacts
@@ -55,8 +57,11 @@ export class Call extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(newProps: Props) {
-    this.setState(this.setStateFromProps(newProps));
+  componentDidUpdate(prevProps: Props) {
+
+    if (!isEqual(prevProps, this.props)) {
+      this.setState(this.setStateFromProps(this.props));
+    }
   }
 
   // this should obviously be somewhere on issue but as an interface and not a class I don't know where...
