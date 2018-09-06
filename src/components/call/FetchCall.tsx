@@ -28,9 +28,6 @@ export default class FetchCall extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = this.setStateFromProps(props);
-
-    // tslint:disable-next-line:no-console
-    console.log('Issue: ', props.issue);
   }
 
   setStateFromProps(props: Props): State {

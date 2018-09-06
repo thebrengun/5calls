@@ -5,7 +5,7 @@ import { translate } from 'react-i18next';
 import {
   submitOutcome,
 } from '../../redux/callState';
-// import { store } from '../../redux/store';
+import { store } from '../../redux/store';
 import { Issue } from '../../common/model';
 
 interface Props { readonly currentIssue: Issue; readonly currentContactId: string;
@@ -25,13 +25,16 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
     */
     e.currentTarget.blur();
 
-    submitOutcome(
-      {
-        outcome: outcome,
-        numberContactsLeft: this.props.numberContactsLeft,
-        issueId: this.props.currentIssue.id,
-        contactId: this.props.currentContactId,
-      }
+    // tslint:disable-next-line:no-any
+    store.dispatch<any>(
+      submitOutcome(
+        {
+          outcome: outcome,
+          numberContactsLeft: this.props.numberContactsLeft,
+          issueId: this.props.currentIssue.id,
+          contactId: this.props.currentContactId,
+        }
+      )
     );
 
     // navigate to /done when finished
