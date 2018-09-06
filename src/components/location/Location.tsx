@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { isEqual } from 'lodash';
 import { LocationState } from '../../redux/location/reducer';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
@@ -30,8 +31,10 @@ export class Location extends React.Component<Props, State> {
     this.state = this.setStateFromProps(props);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.setState(this.setStateFromProps(nextProps));
+  componentDidUpdate(prevProps: Props) {
+    if (!isEqual(prevProps, this.props)) {
+      this.setState(this.setStateFromProps(this.props));
+    }
   }
 
   componentDidMount() {
@@ -109,7 +112,8 @@ export class Location extends React.Component<Props, State> {
             store.dispatch(clearAddress());
             window.location.reload();
           } else {
-            newLocationLookup(newLocation);
+            // tslint:disable-next-line:no-any
+            store.dispatch<any>(newLocationLookup(newLocation));
           }
         };
         const clearTextBox = (e) => { e.target.value = ''; };
