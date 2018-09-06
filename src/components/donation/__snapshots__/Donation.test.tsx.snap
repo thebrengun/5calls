@@ -19,13 +19,13 @@ exports[`should render Donation component properly 1`] = `
         className="logo__header__donatebutton"
       >
         <a
-          href="https://airtable.com/shrJBbpixnJ09iVb3"
+          href="https://airtable.com/shrSFvr3AlMKRRssx"
           target="_blank"
         >
-          Apply
+          Contact Us
         </a>
         <p>
-          Research and Write Topics
+          Get Your Own 5 Calls Page
         </p>
       </div>
       <div

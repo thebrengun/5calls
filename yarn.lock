@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@5calls/react-components@^0.0.11":
+"@5calls/react-components@0.0.11":
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/@5calls/react-components/-/react-components-0.0.11.tgz#78e7f1544967758af6c6daf5e0973fba15ca493a"
   dependencies:
