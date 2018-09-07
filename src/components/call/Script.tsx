@@ -8,8 +8,7 @@ import { LocationState } from '../../redux/location/reducer';
 interface Props {
   readonly issue: Issue;
   readonly contactIndex: number;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
   readonly locationState: LocationState;
 }
 

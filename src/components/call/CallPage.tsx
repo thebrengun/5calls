@@ -47,7 +47,7 @@ type Props = RouteComponentProps<RouteProps> & {
 };
 
 export interface State {
-  currentIssue: Issue;
+  currentIssue?: Issue;
   currentIssueId: string;
   currentGroup: Group | undefined;
   hasBeenCached: boolean;
@@ -66,7 +66,7 @@ class CallPageView extends React.Component<Props, State> {
 
     return {
       currentIssue: currentIssue,
-      currentIssueId: currentIssue.id,
+      currentIssueId: currentIssue ? currentIssue.id : '',
       currentGroup: currentGroup,
       hasBeenCached: false,
     };
@@ -83,18 +83,18 @@ class CallPageView extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (this.props.remoteState.issues) {
       if (!isEqual(this.props, prevProps)) {
-        const curIssue = this.getCurrentIssue(this.props.remoteState);
+        const currentIssue = this.getCurrentIssue(this.props.remoteState);
         this.setState({
           ...this.state,
-          currentIssue: curIssue,
-          currentIssueId: curIssue.id,
+          currentIssue: currentIssue,
+          currentIssueId: currentIssue ? currentIssue.id : '',
         });
       }
     }
   }
 
-  getCurrentIssue = (remoteState: RemoteDataState) => {
-    let currIssue = new Issue();
+  getCurrentIssue = (remoteState: RemoteDataState): Issue | undefined => {
+    let currentIssue: Issue | undefined = undefined;
     const path = this.props.location.pathname.split('/');
     let issueid = '';
     if (path.length > 2) {
@@ -103,13 +103,13 @@ class CallPageView extends React.Component<Props, State> {
     if (path) {
       if (!this.state || this.state.currentIssueId !== issueid) {
         store.dispatch(selectIssueActionCreator(issueid));
-        currIssue = getIssue(remoteState, issueid);
+        currentIssue = getIssue(remoteState, issueid);
       }
     } else {
-      currIssue = getIssue(remoteState, this.state.currentIssueId);
+      currentIssue = getIssue(remoteState, this.state.currentIssueId);
     }
 
-    return currIssue;
+    return currentIssue;
   }
 
   getCurrentGroup = (groupState: GroupState) => {
@@ -207,7 +207,7 @@ class CallPageView extends React.Component<Props, State> {
           }
         </Layout>
       );
-    } else {
+    } else if (this.state.currentIssue) {
       return (
         <Layout
           extraComponent={extraComponent}
@@ -236,6 +236,8 @@ class CallPageView extends React.Component<Props, State> {
           }
         </Layout>
       );
+    } else {
+      return <></>;
     }
   }
 

@@ -23,7 +23,7 @@ interface Props extends RouteComponentProps<RouteProps> {
 }
 
 export interface State {
-  currentIssue: Issue;
+  currentIssue?: Issue;
   totalCount: number;
 }
 
@@ -57,8 +57,9 @@ class DonePageView extends React.Component<Props, State> {
     getIssuesIfNeeded();
   }
 
-  getCurrentIssue = (remoteState: RemoteDataState) => {
-    let currIssue = new Issue();
+  getCurrentIssue = (remoteState: RemoteDataState): Issue | undefined => {
+    let currIssue: Issue | undefined;
+
     const path = this.props.location.pathname.split('/');
     let issueid = '';
     if (path.length > 2) {
@@ -66,6 +67,7 @@ class DonePageView extends React.Component<Props, State> {
       store.dispatch(selectIssueActionCreator(issueid));
       currIssue = getIssue(remoteState, issueid);
     }
+
     return currIssue;
   }
 

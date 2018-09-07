@@ -2,8 +2,6 @@
 
 exports[`NoContactSplitDistrict component snapshot renders correctly when splitDistrict=true 1`] = `
 <Translate(NoContactSplitDistrict)
-  clearLocation={[Function]}
   splitDistrict={false}
-  t={[Function]}
 />
 `;
