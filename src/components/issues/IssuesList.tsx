@@ -44,7 +44,7 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
           issue={issue}
           isIssueComplete={
             props.completedIssueIds &&
-            (find(props.completedIssueIds, (issueId: string) => issue.id === issueId) !== undefined)
+            (find(props.completedIssueIds, (issueId: string) => issue.slug === issueId) !== undefined)
           }
           isIssueActive={currentIssueId === issue.id}
           currentGroup={props.currentGroup}
