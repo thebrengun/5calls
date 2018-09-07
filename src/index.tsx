@@ -27,10 +27,7 @@ import { GroupPage } from './components/groups';
 import './components/bundle.css';
 import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
-<<<<<<< HEAD
-=======
 import AppProvider from './components/AppProvider';
->>>>>>> Refactor the site to use the context api
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
