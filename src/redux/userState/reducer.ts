@@ -21,6 +21,8 @@ export interface UserProfile {
   exp: number;
   picture: string; // a url for the users' photo
   callDetails?: UserCallDetails;
+  'https://5calls.org/email'?: string;
+  'https://5calls.org/phone'?: string;
 }
 
 const initialState: UserState = {

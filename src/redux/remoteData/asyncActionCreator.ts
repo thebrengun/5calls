@@ -303,7 +303,7 @@ export const startup = () => {
       }).catch((error) => {
         // clear the session
         dispatch(clearProfileActionCreator());
-      });  
+      });
     }
 
     // if a location is passed as a query, override or set the location address manually
