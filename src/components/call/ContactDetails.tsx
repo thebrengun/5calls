@@ -8,8 +8,7 @@ import { makePhoneLink } from '../shared/jsxUtils';
 interface Props {
   readonly currentIssue: Issue;
   readonly contactIndex: number;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
 }
 
 const ContactDetails: React.StatelessComponent<Props> = ({ currentIssue, contactIndex = 0, t }: Props) => {

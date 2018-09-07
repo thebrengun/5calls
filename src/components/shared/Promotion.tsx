@@ -6,8 +6,7 @@ import { Issue } from '../../common/model';
 
 interface Props {
   readonly currentIssue: Issue | null;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
 }
 
 const Promotion: React.StatelessComponent<Props> = (props: Props) => {

@@ -16,8 +16,7 @@ interface Props {
   readonly activeIssues: Issue[];
   readonly inactiveIssues: Issue[];
   readonly completedIssueIds: string[];
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
   readonly currentIssue: Issue;
 }
 

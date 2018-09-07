@@ -7,8 +7,7 @@ import { makePhoneLink, cityFormat } from '../shared/jsxUtils';
 interface Props {
   readonly currentIssue: Issue;
   readonly contactIndex: number;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
 }
 
 export interface State {

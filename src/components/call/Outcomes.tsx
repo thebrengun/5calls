@@ -10,8 +10,7 @@ import { Issue } from '../../common/model';
 
 interface Props { readonly currentIssue: Issue; readonly currentContactId: string;
   readonly numberContactsLeft: number;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
 }
 interface State { }
 

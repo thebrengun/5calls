@@ -7,8 +7,7 @@ import { store } from '../../redux/store';
 
 interface Props {
   readonly splitDistrict: boolean;
-  // tslint:disable-next-line:no-any
-  readonly t: TranslationFunction|any;
+  readonly t: TranslationFunction;
 }
 
 class NoContactSplitDistrict extends React.PureComponent<Props> {
