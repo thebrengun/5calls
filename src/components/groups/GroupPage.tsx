@@ -38,12 +38,11 @@ interface RouteProps {
   issueid: string;
 }
 
-// tslint:disable-next-line:no-bitwise
-type Props = RouteComponentProps<RouteProps> & {
+interface Props extends RouteComponentProps<RouteProps> {
   readonly remoteState: RemoteDataState;
   readonly appCache: AppCache;
   readonly groupState: GroupState;
-};
+}
 
 export interface State {
   issues: Issue[];

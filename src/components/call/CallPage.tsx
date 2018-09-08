@@ -10,6 +10,7 @@ import * as Constants from '../../common/constants';
 
 import { getIssue } from '../shared/utils';
 
+import i18n from '../../services/i18n';
 import { CallTranslatable, FetchCall } from './index';
 import { Layout } from '../layout';
 import { Issue, Group } from '../../common/model';
@@ -237,7 +238,13 @@ class CallPageView extends React.Component<Props, State> {
         </Layout>
       );
     } else {
-      return <></>;
+      return (
+        <Layout>
+          <h1 className="call__title">{i18n.t('noCalls.title')}</h1>
+          <p>{i18n.t('noCalls.reason')}</p>
+          <p>{i18n.t('noCalls.nextStep')}</p>
+        </Layout>
+      );
     }
   }
 

@@ -18,11 +18,10 @@ import {
   userStatsContext,
   appCacheContext,
 } from '../contexts';
+import { ApplicationState } from '../redux/root';
 
 interface Props {
-  // temporary until completely converted to Provider pattern
-  // tslint:disable-next-line:no-any
-  store: Store<any>;
+  store: Store<ApplicationState>;
 }
 
 interface State {
