@@ -70,6 +70,9 @@ class GroupPageView extends React.Component<Props, State> {
     const groupStatus = this.getCurrentGroup();
     const groupIssues = this.getGroupIssues(groupStatus.currentGroup);
 
+    // tslint:disable-next-line:no-console
+    console.log('Group issues', groupIssues);
+
     return {
       issues: groupIssues,
       loadingState: groupStatus.loadingStatus,
@@ -108,6 +111,8 @@ class GroupPageView extends React.Component<Props, State> {
   getGroupIssues = (currentGroup: Group) => {
     const groupIssues = this.props.remoteState.groupIssues;
     let groupPageIssues: Issue[] = [];
+    // tslint:disable-next-line:no-console
+    console.log('in getgroup issues', this.props.remoteState.groupIssues, currentGroup.customCalls);
     if (groupIssues && groupIssues.length > 0 && currentGroup.customCalls) {
       groupPageIssues = groupIssues;
     } else {
@@ -130,7 +135,8 @@ class GroupPageView extends React.Component<Props, State> {
 
       if (!this.props.remoteState.issues || this.props.remoteState.issues.length === 0) {
         queueUntilRehydration(() => {
-          getGroupIssuesIfNeeded(this.state.groupId);
+        // tslint:disable-next-line:no-any
+        store.dispatch<any>(getGroupIssuesIfNeeded(this.state.groupId));
         });
       }
 
@@ -141,7 +147,8 @@ class GroupPageView extends React.Component<Props, State> {
   componentDidMount() {
     if (!this.props.remoteState.issues || this.props.remoteState.issues.length === 0) {
       queueUntilRehydration(() => {
-        getGroupIssuesIfNeeded(this.state.groupId);
+        // tslint:disable-next-line:no-any
+        store.dispatch<any>(getGroupIssuesIfNeeded(this.state.groupId));
       });
     }
   }
