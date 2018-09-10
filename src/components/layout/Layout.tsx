@@ -49,7 +49,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
             <remoteStateContext.Consumer>
             { remoteState =>
                 <div className="issues">
-                  <SidebarHeader/>
+                  <SidebarHeader currentGroup={groupState.currentGroup}/>
                   <Sidebar
                     issues={remoteState.issues}
                     currentIssue={props.currentIssue ? props.currentIssue : undefined}
