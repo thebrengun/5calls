@@ -118,14 +118,13 @@ class GroupPageView extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     if (!isEqual(this.props, prevProps)) {
-      // tslint:disable-next-line:no-console
-      console.log('did update state', this.state);
       let newState = this.setStateFromProps(this.props);
       if (!this.state.hasBeenCached && newState.group) {
         newState.hasBeenCached = true;
         queueUntilRehydration(() => {
           let group = newState.group as Group;
-          updateGroup(group);
+          // tslint:disable-next-line:no-any
+          store.dispatch<any>(updateGroup(group));
         });
       }
 
