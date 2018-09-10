@@ -16,9 +16,7 @@ import { store } from '../../redux/store';
 import { getIssue } from '../shared/utils';
 import { remoteStateContext } from '../../contexts';
 
-interface RouteProps {}
-
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props extends RouteComponentProps<{}> {
   remoteState: RemoteDataState;
 }
 
