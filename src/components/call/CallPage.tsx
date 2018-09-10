@@ -154,7 +154,7 @@ class CallPageView extends React.Component<Props, State> {
       extraComponent = <GroupDisclaimer/>;
     }
 
-    let pageTitle = Constants.PAGETITLE;
+    let pageTitle = '5 Calls: Make your voice heard';
     if (this.state.currentIssue) {
       if (this.state.currentGroup) {
         pageTitle = `${this.state.currentIssue.name} - ${this.state.currentGroup.name}: 5 Calls`;
