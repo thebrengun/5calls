@@ -25,7 +25,6 @@ import {
   AppCache,
   cacheGroup,
 } from '../../redux/cache';
-import { joinGroupActionCreator } from '../../redux/callState';
 import { RemoteDataState } from '../../redux/remoteData';
 import { store } from '../../redux/store';
 import {
@@ -131,7 +130,7 @@ class GroupPageView extends React.Component<Props, State> {
         });
       }
 
-      if (!this.props.remoteState.issues || this.props.remoteState.issues.length === 0) {
+      if (!this.props.remoteState.groupIssues || this.props.remoteState.groupIssues.length === 0) {
         queueUntilRehydration(() => {
         // tslint:disable-next-line:no-any
         store.dispatch<any>(getGroupIssuesIfNeeded(this.state.groupId));
@@ -145,20 +144,12 @@ class GroupPageView extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if (!this.props.remoteState.issues || this.props.remoteState.issues.length === 0) {
+    if (!this.props.remoteState.groupIssues || this.props.remoteState.groupIssues.length === 0) {
       queueUntilRehydration(() => {
         // tslint:disable-next-line:no-any
         store.dispatch<any>(getGroupIssuesIfNeeded(this.state.groupId));
         this.determineCachedState(this.props.groupState);
       });
-    }
-  }
-
-  joinTeam = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.blur();
-
-    if (this.state.group) {
-      store.dispatch(joinGroupActionCreator(this.state.group));
     }
   }
 
