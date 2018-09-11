@@ -85,6 +85,7 @@ class CallPageView extends React.Component<Props, State> {
     if (this.props.remoteState.issues) {
       if (!isEqual(this.props, prevProps)) {
         const currentIssue = this.getCurrentIssue(this.props.remoteState);
+        this.determineCachedState(this.props.groupState);
         this.setState({
           ...this.state,
           currentIssue: currentIssue,
@@ -129,7 +130,8 @@ class CallPageView extends React.Component<Props, State> {
       queueUntilRehydration(() => {
         if (groupState.currentGroup) {
           let group = groupState.currentGroup as Group;
-          cacheGroup(group.groupID);
+          // tslint:disable-next-line:no-any
+          store.dispatch<any>(cacheGroup(group.groupID));
         }
       });
     }

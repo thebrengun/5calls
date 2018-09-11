@@ -122,6 +122,8 @@ export const getDonations = (): Promise<DonationGoal> => {
 
 export const getGroup = (groupId: string): Promise<Group> => {
   const groupUrl = `${Constants.GROUP_API_URL}/${groupId}`;
+  // tslint:disable-next-line:no-console
+  console.log('in getGroup');
   return axios.get(groupUrl)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));

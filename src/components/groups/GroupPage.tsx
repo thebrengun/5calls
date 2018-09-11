@@ -23,6 +23,7 @@ import { getGroupIssuesIfNeeded } from '../../redux/remoteData';
 import {
   findCacheableGroup,
   AppCache,
+  cacheGroup,
 } from '../../redux/cache';
 import { joinGroupActionCreator } from '../../redux/callState';
 import { RemoteDataState } from '../../redux/remoteData';
@@ -70,9 +71,6 @@ class GroupPageView extends React.Component<Props, State> {
     const groupStatus = this.getCurrentGroup();
     const groupIssues = this.getGroupIssues(groupStatus.currentGroup);
 
-    // tslint:disable-next-line:no-console
-    console.log('Group issues', groupIssues);
-
     return {
       issues: groupIssues,
       loadingState: groupStatus.loadingStatus,
@@ -92,6 +90,7 @@ class GroupPageView extends React.Component<Props, State> {
     }
 
     const cgroup = findCacheableGroup(groupid, this.props.appCache);
+
     if (cgroup) {
       loadingStatus = GroupLoadingActionStatus.FOUND;
     }
@@ -101,6 +100,7 @@ class GroupPageView extends React.Component<Props, State> {
        this.props.groupState.groupLoadingStatus) {
        loadingStatus = this.props.groupState.groupLoadingStatus;
     }
+
     return {
       currentGroup: currentGroup,
       groupid: groupid,
@@ -111,8 +111,6 @@ class GroupPageView extends React.Component<Props, State> {
   getGroupIssues = (currentGroup: Group) => {
     const groupIssues = this.props.remoteState.groupIssues;
     let groupPageIssues: Issue[] = [];
-    // tslint:disable-next-line:no-console
-    console.log('in getgroup issues', this.props.remoteState.groupIssues, currentGroup.customCalls);
     if (groupIssues && groupIssues.length > 0 && currentGroup.customCalls) {
       groupPageIssues = groupIssues;
     } else {
@@ -141,6 +139,8 @@ class GroupPageView extends React.Component<Props, State> {
       }
 
       this.setState(newState);
+      this.determineCachedState(this.props.groupState);
+
     }
   }
 
@@ -149,6 +149,7 @@ class GroupPageView extends React.Component<Props, State> {
       queueUntilRehydration(() => {
         // tslint:disable-next-line:no-any
         store.dispatch<any>(getGroupIssuesIfNeeded(this.state.groupId));
+        this.determineCachedState(this.props.groupState);
       });
     }
   }
@@ -158,6 +159,25 @@ class GroupPageView extends React.Component<Props, State> {
 
     if (this.state.group) {
       store.dispatch(joinGroupActionCreator(this.state.group));
+    }
+  }
+
+  determineCachedState = (groupState: GroupState) => {
+    let hasBeenCached = false;
+
+    if (this.state.group && groupState.currentGroup) {
+      hasBeenCached = this.state.group.groupID === groupState.currentGroup.groupID;
+    }
+    this.setState({ hasBeenCached: hasBeenCached });
+
+    if (!hasBeenCached) {
+      queueUntilRehydration(() => {
+        if (groupState.currentGroup) {
+          let group = groupState.currentGroup as Group;
+          // tslint:disable-next-line:no-any
+          store.dispatch<any>(cacheGroup(group.groupID));
+        }
+      });
     }
   }
 

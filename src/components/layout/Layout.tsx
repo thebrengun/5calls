@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Issue, Group } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
+import { RemoteDataState } from '../../redux/remoteData';
 import {
   groupStateContext,
   remoteStateContext,
@@ -24,6 +25,13 @@ function hideDonation(group?: Group): boolean {
   }
 
   return false;
+}
+
+function getIssues(remoteState: RemoteDataState): Issue[] {
+  if (remoteState.groupIssues) {
+    return remoteState.groupIssues;
+  }
+  return remoteState.issues;
 }
 
 const Layout: React.StatelessComponent<Props> = (props: Props) => (
@@ -51,7 +59,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
                 <div className="issues">
                   <SidebarHeader currentGroup={groupState.currentGroup}/>
                   <Sidebar
-                    issues={remoteState.issues}
+                    issues={getIssues(remoteState)}
                     currentIssue={props.currentIssue ? props.currentIssue : undefined}
                     currentGroup={groupState.currentGroup}
                     completedIssueIds={callState.completedIssueIds}
