@@ -152,8 +152,10 @@ class CallPageView extends React.Component<Props, State> {
     }
 
     let extraComponent;
+    let showGroup = false;
     if (this.state.currentGroup) {
       extraComponent = <GroupDisclaimer/>;
+      showGroup = true;
     }
 
     let pageTitle = '5 Calls: Make your voice heard';
@@ -185,6 +187,7 @@ class CallPageView extends React.Component<Props, State> {
         return (
         <Layout
           extraComponent={extraComponent}
+          groupPage={showGroup}
         >
           <Helmet>
             <title>{pageTitle}</title>
@@ -214,6 +217,7 @@ class CallPageView extends React.Component<Props, State> {
       return (
         <Layout
           extraComponent={extraComponent}
+          groupPage={showGroup}
         >
           <Helmet>
             <title>{pageTitle}</title>
@@ -241,7 +245,7 @@ class CallPageView extends React.Component<Props, State> {
       );
     } else {
       return (
-        <Layout>
+        <Layout groupPage={showGroup}>
           <h1 className="call__title">{i18n.t('noCalls.title')}</h1>
           <p>{i18n.t('noCalls.reason')}</p>
           <p>{i18n.t('noCalls.nextStep')}</p>

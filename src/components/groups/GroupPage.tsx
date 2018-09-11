@@ -176,6 +176,7 @@ class GroupPageView extends React.Component<Props, State> {
     return (
       <Layout
         extraComponent={<GroupDisclaimer/>}
+        groupPage={true}
       >
         <div className="page__group">
           {wrappedHeader}

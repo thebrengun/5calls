@@ -17,6 +17,7 @@ interface Props {
   readonly extraComponent?: {};
   readonly postcards?: boolean;
   readonly currentIssue?: Issue;
+  readonly groupPage?: boolean;
 }
 
 function hideDonation(group?: Group): boolean {
@@ -27,8 +28,8 @@ function hideDonation(group?: Group): boolean {
   return false;
 }
 
-function getIssues(remoteState: RemoteDataState): Issue[] {
-  if (remoteState.groupIssues) {
+function getIssues(remoteState: RemoteDataState, showGroups?: boolean): Issue[] {
+  if (remoteState.groupIssues && showGroups) {
     return remoteState.groupIssues;
   }
   return remoteState.issues;
@@ -59,7 +60,7 @@ const Layout: React.StatelessComponent<Props> = (props: Props) => (
                 <div className="issues">
                   <SidebarHeader currentGroup={groupState.currentGroup}/>
                   <Sidebar
-                    issues={getIssues(remoteState)}
+                    issues={getIssues(remoteState, props.groupPage)}
                     currentIssue={props.currentIssue ? props.currentIssue : undefined}
                     currentGroup={groupState.currentGroup}
                     completedIssueIds={callState.completedIssueIds}
