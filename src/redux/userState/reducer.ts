@@ -37,7 +37,7 @@ export const userStateReducer: Reducer<UserState> = (
       const idToken = action.payload as string | undefined;
 
       const newState: UserState = { ...state, idToken: idToken };
-      return newState;      
+      return newState;
     }
     case UserStateActionType.SET_USER_PROFILE: {
       const profile = action.payload as UserProfile | undefined;

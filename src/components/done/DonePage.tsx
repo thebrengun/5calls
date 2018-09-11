@@ -1,25 +1,31 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
+import { isEqual } from 'lodash';
 import { DoneTranslatable } from './index';
-import { LayoutContainer } from '../layout';
+import { Layout } from '../layout';
 import { Issue } from '../../common/model';
-import { RouteComponentProps } from 'react-router-dom';
+import {
+  withRouter,
+  RouteComponentProps,
+} from 'react-router';
+import {
+  getIssuesIfNeeded,
+  RemoteDataState,
+} from '../../redux/remoteData';
+import { selectIssueActionCreator } from '../../redux/callState';
+import { store } from '../../redux/store';
+import { getIssue } from '../shared/utils';
+import { remoteStateContext } from '../../contexts';
 
-interface RouteProps extends RouteComponentProps<{ id: string }> { }
-
-interface Props extends RouteProps {
-  readonly issues: Issue[];
-  readonly currentIssue: Issue;
-  readonly totalCount: number;
-  readonly onSelectIssue: (issueId: string) => Function;
-  readonly onGetIssuesIfNeeded: () => Function;
+interface Props extends RouteComponentProps<{}> {
+  remoteState: RemoteDataState;
 }
 
 export interface State {
-  currentIssue: Issue;
+  currentIssue?: Issue;
+  totalCount: number;
 }
 
-class DonePage extends React.Component<Props, State> {
+class DonePageView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     // set initial state
@@ -28,35 +34,52 @@ class DonePage extends React.Component<Props, State> {
   }
 
   setStateFromProps(props: Props): State {
+    let currentIssue = this.getCurrentIssue(props.remoteState);
     return {
-      currentIssue: props.currentIssue,
+      currentIssue: currentIssue,
+      totalCount: props.remoteState.callTotal,
     };
   }
 
-  componentWillReceiveProps(newProps: Props) {
-    this.setState(this.setStateFromProps(newProps));
-
-    if (!this.state.currentIssue && newProps.currentIssue) {
-      this.props.onSelectIssue(newProps.currentIssue.id);
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.remoteState.issues && !isEqual(this.props, prevProps)) {
+      const curIssue = this.getCurrentIssue(this.props.remoteState);
+      this.setState({
+        currentIssue: curIssue,
+        totalCount: this.props.remoteState.callTotal,
+      });
     }
   }
 
   componentDidMount() {
-    this.props.onGetIssuesIfNeeded();
+    getIssuesIfNeeded();
+  }
+
+  getCurrentIssue = (remoteState: RemoteDataState): Issue | undefined => {
+    let currIssue: Issue | undefined;
+
+    const path = this.props.location.pathname.split('/');
+    let issueid = '';
+    if (path.length > 2) {
+      issueid = path[path.length - 1];
+      store.dispatch(selectIssueActionCreator(issueid));
+      currIssue = getIssue(remoteState, issueid);
+    }
+
+    return currIssue;
   }
 
   getView() {
-    if (this.props.currentIssue) {
+    if (this.state.currentIssue) {
       return (
-        <LayoutContainer issueId={this.props.currentIssue.id}>
-          {this.props.currentIssue &&
+        <Layout>
+          {this.state.currentIssue &&
             <DoneTranslatable
-              currentIssue={this.props.currentIssue}
-              totalCount={this.props.totalCount}
-              t={i18n.t}
+              currentIssue={this.state.currentIssue}
+              totalCount={this.state.totalCount}
             />
           }
-        </LayoutContainer>
+        </Layout>
       );
     } else {
       return <div />;
@@ -72,4 +95,16 @@ class DonePage extends React.Component<Props, State> {
   }
 }
 
-export default DonePage;
+export const DonePageWithRouter = withRouter(DonePageView);
+
+export default class DonePage extends React.Component {
+  render() {
+    return (
+      <remoteStateContext.Consumer>
+      { remoteState =>
+        <DonePageWithRouter remoteState={remoteState} />
+      }
+      </remoteStateContext.Consumer>
+    );
+  }
+}

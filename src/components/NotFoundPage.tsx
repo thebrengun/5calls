@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { find } from 'lodash';
 
-import i18n from '../services/i18n';
 import { LocationState } from '../redux/location/reducer';
 import { newLocationLookup, clearAddress } from '../redux/location';
 import { CallState } from '../redux/callState/reducer';
@@ -15,6 +14,11 @@ import { ApplicationState } from '../redux/root';
 import { Issue, CacheableGroup } from '../common/model';
 
 import { SidebarHeader, Sidebar, Footer, Header } from './layout';
+
+import {
+  callStateContext,
+  remoteStateContext,
+} from '../contexts';
 
 type AllProps = Props & DispatchProps;
 
@@ -28,18 +32,20 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
       <div className="layout">
         <aside id="nav" role="contentinfo" className="layout__side">
           <div className="issues">
-            <SidebarHeader
-              callState={props.callState}
-              locationState={props.locationState}
-              setLocation={props.setLocation}
-              clearLocation={props.clearLocation}
-            />
-            <Sidebar
-              issues={props.issues}
-              currentIssue={undefined}
-              completedIssueIds={props.completedIssueIds}
-              onSelectIssue={props.onSelectIssue}
-            />
+            <SidebarHeader />
+            <remoteStateContext.Consumer>
+            { remoteState =>
+              <callStateContext.Consumer>
+              { callState =>
+                <Sidebar
+                  issues={remoteState.issues}
+                  currentIssue={undefined}
+                  completedIssueIds={callState.completedIssueIds}
+                />
+                }
+              </callStateContext.Consumer>
+            }
+            </remoteStateContext.Consumer>
           </div>
         </aside>
         <main id="content" role="main" aria-live="polite" className="layout__main">
@@ -48,9 +54,7 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
           <p>Looks like you visited a page that doesn't exist. Pick one of the issues on the sidebar or <Link to="/">go back to the homepage</Link>.</p>
         </main>
       </div>
-      <Footer
-        t={i18n.t}
-      />
+      <Footer/>
     </div>
   );
 };

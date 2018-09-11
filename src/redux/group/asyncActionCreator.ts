@@ -10,8 +10,10 @@ export const updateGroup = (group: Group) => {
     getState: () => ApplicationState
     ) => {
     const state = getState();
+
     if (state.groupState.groupLoadingStatus === GroupLoadingActionStatus.LOADING) {
-      dispatch(cacheGroup(group.groupID));
+      // tslint:disable-next-line:no-any
+      dispatch<any>(cacheGroup(group.groupID));
     }
   };
 };

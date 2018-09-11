@@ -50,8 +50,10 @@ export default (initialState) => {
     store,
     { whitelist: localPersistKeys },
     () => {
-      store.dispatch(startup());
-      store.dispatch(onStorageRehydrated());
+      // tslint:disable-next-line:no-any
+      store.dispatch<any>(startup());
+      // tslint:disable-next-line:no-any
+      store.dispatch<any>(onStorageRehydrated());
     }
   );
 

@@ -11,11 +11,9 @@ test('MyImpact component snapshot renders correctly', () => {
     unavailable: 0,
     contact: 0,
   };
-  const count = 1000;
   const component = shallow(
     <MyImpact
       userStats={userStats}
-      totalCount={count}
       t={i18n.t}
     />
   );

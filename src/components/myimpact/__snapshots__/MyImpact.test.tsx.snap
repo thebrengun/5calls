@@ -6,15 +6,18 @@ exports[`MyImpact component snapshot renders correctly 1`] = `
 >
   <h1
     className="impact__title"
-  />
+  >
+    impact.title
+  </h1>
   <div>
     <h2
       className="impact_total"
-    />
+    >
+      impact.noCallsYet
+    </h2>
   </div>
-  <Translate(Component)
-    t={[Function]}
-    totalCount={1000}
-  />
+  <ContextConsumer>
+    <Component />
+  </ContextConsumer>
 </section>
 `;

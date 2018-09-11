@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Issue, Group } from '../../common/model';
+import { selectIssueActionCreator } from '../../redux/callState';
 
 interface Props {
   readonly issue: Issue;
   readonly isIssueComplete: boolean;
   readonly isIssueActive: boolean;
   readonly currentGroup?: Group;
-  readonly onSelectIssue: (issueId: string) => void;
 }
 
 interface State { }
@@ -28,7 +28,7 @@ export class IssuesListItem extends React.Component<Props, State> {
           aria-controls="content"
           className={`issues-list__item ${isCompleted} ${isActive}`}
           to={issueLink}
-          onClick={() => this.props.onSelectIssue(this.props.issue.id)}
+          onClick={() => selectIssueActionCreator(this.props.issue.id)}
         >
           <span aria-live="polite" className={`issues-list__item__status ${isCompleted} ${isActive}`}>
             <span className="visually-hidden" />

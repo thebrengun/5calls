@@ -23,7 +23,7 @@ export class AppCache {
  */
 export function findCacheableGroup(groupID: string, cache: AppCache): CacheableGroup | undefined {
     return cache.groups ? cache.groups
-        .filter(g => g.group.groupID === groupID)
+        .filter(g => g.group.groupID.toLowerCase() === groupID.toLowerCase())
         .pop() : undefined;
     }
 

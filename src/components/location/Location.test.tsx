@@ -14,15 +14,11 @@ test('Location component should show location prop value if locationState.addres
     uiState: LocationUiState.LOCATION_FOUND,
     locationFetchType: LocationFetchType.BROWSER_GEOLOCATION
   };
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
 
   const component = shallow(
     <Location
       t={i18n.t}
       locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
     />
   );
   const node = component.find('#locationMessage span');
@@ -38,15 +34,11 @@ test('Location component should show location prop value if locationState.cached
     uiState: LocationUiState.LOCATION_FOUND,
     locationFetchType: LocationFetchType.BROWSER_GEOLOCATION
   };
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
 
   const component = shallow(
     <Location
       t={i18n.t}
       locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
     />
   );
   const node = component.find('#locationMessage span');
@@ -63,72 +55,14 @@ test('Should show "Getting your location" label if fetching location', () => {
     locationFetchType: LocationFetchType.CACHED_ADDRESS
   };
 
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
-
   const component = shallow(
     <Location
       locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
       t={i18n.t}
     />
   );
   const label = component.find('p.loadingAnimation').first();
   expect(label).toBeDefined();
-});
-
-test('Location component setLocation() should be called upon submit when entering location', () => {
-  const locationState: LocationState = {
-    address: '1234',
-    cachedCity: '',
-    splitDistrict: false,
-    invalidAddress: false,
-    uiState: LocationUiState.ENTERING_LOCATION,
-    locationFetchType: LocationFetchType.CACHED_ADDRESS
-  };
-
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
-
-  const component = shallow(
-    <Location
-      locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
-      t={i18n.t}
-    />
-  );
-  const zip = '10001';
-  const form = component.find('form').first();
-  // console.log('node: \n', form.debug());
-  form.simulate('submit', { preventDefault: jest.fn(), target: { elements: { address: { value: zip } } } });
-  expect(setLocation).toBeCalledWith(zip);
-});
-
-test('Location component clearLocation() should be called upon submit when entering location', () => {
-  const locationState: LocationState = {
-    address: 'Foobar USA',
-    cachedCity: '',
-    splitDistrict: false,
-    invalidAddress: false,
-    uiState: LocationUiState.LOCATION_FOUND,
-    locationFetchType: LocationFetchType.CACHED_ADDRESS
-  };
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
-
-  const component = shallow(
-    <Location
-      locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
-      t={i18n.t}
-    />
-  );
-  const button = component.find('button').first();
-  button.simulate('click', { preventDefault: jest.fn() });
-  expect(clearLocation).toBeCalled();
 });
 
 test('If address is invalid, show proper message and form with input and "Go" button', () => {
@@ -140,14 +74,10 @@ test('If address is invalid, show proper message and form with input and "Go" bu
     uiState: LocationUiState.LOCATION_ERROR,
     locationFetchType: LocationFetchType.CACHED_ADDRESS
   };
-  const setLocation = jest.fn();
-  const clearLocation = jest.fn();
 
   const component = shallow(
     <Location
       locationState={locationState}
-      setLocation={setLocation}
-      clearLocation={clearLocation}
       t={i18n.t}
     />
   );

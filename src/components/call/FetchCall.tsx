@@ -1,25 +1,21 @@
 import * as React from 'react';
 
 import i18n from '../../services/i18n';
-import { TranslationFunction } from 'i18next';
 import * as ReactMarkdown from 'react-markdown';
 
 import { Issue, VoterContact, Group } from '../../common/model';
 import { CallHeaderTranslatable, SupportOutcomes, ACAOutcomes } from './index';
-import { CallState, OutcomeData } from '../../redux/callState';
-import { LocationState } from '../../redux/location/reducer';
+import {
+  submitOutcome,
+} from '../../redux/callState';
 import { getNextContact } from '../../services/apiServices';
 import { queueUntilRehydration } from '../../redux/rehydrationUtil';
+import { locationStateContext } from '../../contexts';
 
 // This defines the props that we must pass into this component.
 export interface Props {
-  readonly issue: Issue;
-  readonly currentGroup?: Group;
-  readonly callState: CallState;
-  readonly locationState: LocationState;
-  readonly t: TranslationFunction;
-  readonly clearLocation: () => void;
-  readonly onSubmitOutcome: (data: OutcomeData) => Function;
+  issue: Issue;
+  currentGroup?: Group;
 }
 
 export interface State {
@@ -31,13 +27,11 @@ export interface State {
 export default class FetchCall extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    // set initial state
     this.state = this.setStateFromProps(props);
   }
 
   setStateFromProps(props: Props): State {
     return {
-      // currentContact: currentContact,
       checkedForContact: false,
       issue: props.issue
     };
@@ -67,7 +61,7 @@ export default class FetchCall extends React.Component<Props, State> {
   }
 
   nextContact(outcome: string) {
-    this.props.onSubmitOutcome({
+    submitOutcome({
       outcome: outcome,
       numberContactsLeft: 0,
       issueId: this.props.issue.id,
@@ -89,7 +83,7 @@ export default class FetchCall extends React.Component<Props, State> {
         <div>
           <div className="call__contact" id="contact">
             {/* <div className="call__contact__image"><img alt="" src="" /></div> */}
-            <h3 className="call__contact__type">{this.props.t('contact.callThisOffice')}</h3>
+            <h3 className="call__contact__type">{i18n.t('contact.callThisOffice')}</h3>
             <p className="call__contact__name">
               {this.state.currentContact.name} <span>from</span> {this.state.currentContact.location}
             </p>
@@ -129,14 +123,17 @@ export default class FetchCall extends React.Component<Props, State> {
 
   render() {
     return (
-      <section className="call voter">
-        <CallHeaderTranslatable
-          invalidAddress={this.props.locationState.invalidAddress}
-          currentIssue={this.state.issue}
-          t={i18n.t}
-        />
-        {this.contactArea()}
-      </section>
+      <locationStateContext.Consumer>
+      { location =>
+        <section className="call voter">
+          <CallHeaderTranslatable
+            invalidAddress={location.invalidAddress}
+            currentIssue={this.state.issue}
+          />
+          {this.contactArea()}
+        </section>
+      }
+    </locationStateContext.Consumer>
     );
   }
 }

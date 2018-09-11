@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
+import i18n from '../../services/i18n';
 import * as ReactMarkdown from 'react-markdown';
 
 import { Issue } from '../../common/model';
 
 interface Props {
-  readonly invalidAddress: boolean;
-  readonly currentIssue: Issue;
-  readonly t: TranslationFunction;
+  invalidAddress: boolean;
+  currentIssue: Issue;
 }
 
-export const CallHeader: React.StatelessComponent<Props> = ({ invalidAddress, currentIssue, t }: Props) => {
+export const CallHeader: React.StatelessComponent<Props> = ({ invalidAddress, currentIssue }: Props) => {
   if (currentIssue) {
     return (
       <header className="call__header">
@@ -32,9 +31,9 @@ export const CallHeader: React.StatelessComponent<Props> = ({ invalidAddress, cu
           </span>
         :
           <span>
-            <h1 className="call__title">{t('noCalls.title')}</h1>
-            <p>{t('noCalls.reason')}</p>
-            <p>{t('noCalls.nextStep')}</p>
+            <h1 className="call__title">{i18n.t('noCalls.title')}</h1>
+            <p>{i18n.t('noCalls.reason')}</p>
+            <p>{i18n.t('noCalls.nextStep')}</p>
           </span>
         }
       </header>

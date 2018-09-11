@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TranslationFunction } from 'i18next';
+import i18n from '../../services/i18n';
 import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
@@ -7,12 +7,10 @@ import { Issue, Group } from '../../common/model';
 import { IssuesListItem } from './index';
 
 interface Props {
-  readonly issues: Issue[];
-  readonly currentIssue?: Issue;
-  readonly currentGroup?: Group;
-  readonly completedIssueIds: string[];
-  readonly t: TranslationFunction;
-  readonly onSelectIssue: (issueId: string) => void;
+  issues: Issue[];
+  currentIssue?: Issue;
+  currentGroup?: Group;
+  completedIssueIds: string[];
 }
 
 export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
@@ -26,7 +24,7 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
             to={`/more`}
             className={`issues__footer-link`}
           >
-            <span>{props.t('issues.viewAllActiveIssues')}</span>
+            <span>{i18n.t('issues.viewAllActiveIssues')}</span>
           </Link>
         </li>
       );
@@ -36,7 +34,7 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
   };
 
   const listItems = () => {
-    if (props.currentGroup && props.issues.length === 0) {
+    if (props.currentGroup && props.issues && props.issues.length === 0) {
       return <li><a className="issues__footer-link"><span>Getting your team calls...</span></a></li>;
     } else if (props.issues && props.issues.map) {
       return props.issues.map(issue =>
@@ -46,15 +44,14 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
           issue={issue}
           isIssueComplete={
             props.completedIssueIds &&
-            (find(props.completedIssueIds, (issueId: string) => issue.id === issueId) !== undefined)
+            (find(props.completedIssueIds, (issueId: string) => issue.slug === issueId) !== undefined)
           }
           isIssueActive={currentIssueId === issue.id}
           currentGroup={props.currentGroup}
-          onSelectIssue={props.onSelectIssue}
         />
       ));
     } else {
-      return <div style={{ textAlign: 'center' }}>{props.t('noCalls.title')}</div>;
+      return <div style={{ textAlign: 'center' }}>{i18n.t('noCalls.title')}</div>;
     }
   };
 

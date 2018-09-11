@@ -31,6 +31,7 @@ export function submitOutcome(data: OutcomeData) {
 
     const state = getState();
     const location = state.locationState.address;
+
     // FIXME: parse out zip code or geolocation
     data.location = formatLocationForBackEnd(location);
 
@@ -54,7 +55,7 @@ export function submitOutcome(data: OutcomeData) {
 
       // we've gone back and forth on how this data is set, but don't overwrite it
       if (data.groupId === undefined) {
-        data.groupId = state.callState.group ? state.callState.group.groupID : '';        
+        data.groupId = state.callState.group ? state.callState.group.groupID : '';
       }
 
       // if we have a userid, the call is counted server side
@@ -68,12 +69,11 @@ export function submitOutcome(data: OutcomeData) {
 
       dispatch(addCallEventActionCreator(userContactData));
 
-      // console.log(`submitOutcome() called with data:`, data)
       apiServices.postOutcomeData(data)
         // tslint:disable-next-line:no-console
         .catch(e => console.error('Problem posting outcome data', e));
     }
- 
+
     if (data.numberContactsLeft === 0) {
       return dispatch(completeIssueActionCreator());
     } else {

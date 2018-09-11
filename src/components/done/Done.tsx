@@ -6,17 +6,16 @@ import { isValidNumber } from 'libphonenumber-js';
 import 'react-phone-number-input/rrui.css';
 import 'react-phone-number-input/style.css';
 
+import i18n from '../../services/i18n';
 import * as Constants from '../../common/constants';
-import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { Issue } from '../../common/model';
 import { CallCount } from '../shared';
 import { postPhoneRemind } from '../../services/apiServices';
 
 interface Props {
-  readonly currentIssue: Issue;
-  readonly totalCount: number;
-  readonly t: TranslationFunction;
+  currentIssue: Issue;
+  totalCount: number;
 }
 
 interface State {
@@ -28,9 +27,9 @@ interface State {
 export class Done extends React.Component<Props, State> {
   url = encodeURIComponent(Constants.APP_URL);
   additionalTwitterComps = '&via=make5calls';
-  tweet = encodeURIComponent(this.props.t('promote.motto'));
-  twitterTitle = this.props.t('promote.shareOnTwitter');
-  facebookTitle = this.props.t('promote.shareOnFacebook');
+  tweet = encodeURIComponent(i18n.t('promote.motto'));
+  twitterTitle = i18n.t('promote.shareOnTwitter');
+  facebookTitle = i18n.t('promote.shareOnFacebook');
 
   constructor(props: Props) {
     super(props);
@@ -65,7 +64,7 @@ export class Done extends React.Component<Props, State> {
 
   setReminder(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    
+
     if (isValidNumber(this.state.reminderPhone, 'US')) {
       // ignore errors from the server
       postPhoneRemind(this.state.reminderPhone);
@@ -87,14 +86,14 @@ export class Done extends React.Component<Props, State> {
     // for selected issues, customize the share text a bit more
     if (this.props.currentIssue) {
       const issueID = this.props.currentIssue.slug ? this.props.currentIssue.slug : this.props.currentIssue.id;
-  
+
       this.url = encodeURIComponent(`${Constants.APP_URL}/issue/${issueID}`);
       // the additional "via @make5calls" text that the via param introduces doesn't fit with issue titles, remove it
       this.additionalTwitterComps = '';
       // tslint:disable-next-line:max-line-length
-      this.tweet = encodeURIComponent(this.props.t('promote.iJustCalled') + this.props.currentIssue.name.substring(0, 72) + this.props.t('promote.youShouldToo'));
-      this.twitterTitle = this.props.t('promote.tweetThisIssue');
-      this.facebookTitle = this.props.t('promote.shareThisIssue');
+      this.tweet = encodeURIComponent(i18n.t('promote.iJustCalled') + this.props.currentIssue.name.substring(0, 72) + i18n.t('promote.youShouldToo'));
+      this.twitterTitle = i18n.t('promote.tweetThisIssue');
+      this.facebookTitle = i18n.t('promote.shareThisIssue');
     }
 
     const shareURL = `${Constants.SHARE_BUCKET_URL}${this.props.currentIssue.id}.png`;
@@ -102,13 +101,12 @@ export class Done extends React.Component<Props, State> {
     return (
       <section className="call">
         <div className="call__complete">
-          <h1 className="call__title">{this.props.t('callComplete.title')}</h1>
+          <h1 className="call__title">{i18n.t('callComplete.title')}</h1>
           <p className="call__text">
-            {this.props.t('callComplete.pickAnotherIssue')}
+            {i18n.t('callComplete.pickAnotherIssue')}
           </p>
           <CallCount
             totalCount={this.props.totalCount}
-            t={this.props.t}
           />
           <div className="call__complete__donate">
             <h2>

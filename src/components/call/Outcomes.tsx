@@ -2,15 +2,15 @@ import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
-import { OutcomeData } from '../../redux/callState';
+import {
+  submitOutcome,
+} from '../../redux/callState';
+import { store } from '../../redux/store';
 import { Issue } from '../../common/model';
 
-interface Props {
-  readonly currentIssue: Issue;
-  readonly currentContactId: string;
+interface Props { readonly currentIssue: Issue; readonly currentContactId: string;
   readonly numberContactsLeft: number;
   readonly t: TranslationFunction;
-  readonly onSubmitOutcome: (data: OutcomeData) => void;
 }
 interface State { }
 
@@ -24,13 +24,16 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
     */
     e.currentTarget.blur();
 
-    this.props.onSubmitOutcome(
-      {
-        outcome: outcome,
-        numberContactsLeft: this.props.numberContactsLeft,
-        issueId: this.props.currentIssue.id,
-        contactId: this.props.currentContactId,
-      }
+    // tslint:disable-next-line:no-any
+    store.dispatch<any>(
+      submitOutcome(
+        {
+          outcome: outcome,
+          numberContactsLeft: this.props.numberContactsLeft,
+          issueId: this.props.currentIssue.id,
+          contactId: this.props.currentContactId,
+        }
+      )
     );
 
     // navigate to /done when finished
@@ -39,17 +42,17 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
       if (this.props.match.params.groupid) {
         this.props.history.push(`/team/${this.props.match.params.groupid}`);
       } else {
-        this.props.history.push(`/done/${this.props.currentIssue.id}`);        
+        this.props.history.push(`/done/${this.props.currentIssue.id}`);
       }
 
       window.scroll(1, 1);
     } else {
       // scroll to the contact element
       const contact = document.getElementById('contact');
-      const yOffset = contact ? (contact.getBoundingClientRect().top * -1) + 200 : 1; 
+      const yOffset = contact ? (contact.getBoundingClientRect().top * -1) + 200 : 1;
       window.scroll(1, yOffset);
     }
-    
+
     return true;
   }
 
@@ -63,7 +66,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
                 I Did It!
               </button>
             </div>
-          </div>          
+          </div>
         );
       } else {
         return (
@@ -79,7 +82,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
               )}
             </div>
           </div>
-        );    
+        );
       }
     } else {
       return <span />;

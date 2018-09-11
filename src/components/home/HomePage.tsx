@@ -1,11 +1,10 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { RouteComponentProps } from 'react-router-dom';
 import { Why5callsTranslatable, HomeExtras } from './index';
-import { LayoutContainer } from '../layout';
+import { Layout } from '../layout';
+import { remoteStateContext } from '../../contexts/RemoteStateContext';
 
 interface Props extends RouteComponentProps<{ id: string }> {
-  readonly totalCount: number;
 }
 
 /*
@@ -17,15 +16,17 @@ interface Props extends RouteComponentProps<{ id: string }> {
   this component to child components
 */
 export const HomePage: React.StatelessComponent<Props> = (props: Props) => (
-  <LayoutContainer
-   issueId={props.match.params.id}
-   extraComponent={<HomeExtras/>}
-  >
-    <Why5callsTranslatable
-      totalCount={props.totalCount}
-      t={i18n.t}
-    />
-  </LayoutContainer>
+  <remoteStateContext.Consumer>
+  { state =>
+    <Layout
+     extraComponent={<HomeExtras/>}
+    >
+      <Why5callsTranslatable
+        totalCount={state.callTotal}
+      />
+    </Layout>
+  }
+  </remoteStateContext.Consumer>
 );
 
 export default HomePage;

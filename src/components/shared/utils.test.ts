@@ -1,4 +1,4 @@
-import { Issue, DefaultIssue } from './../../common/model';
+import { Issue } from './../../common/model';
 import { RemoteDataState } from '../../redux/remoteData';
 import { formatLocationForBackEnd, formatNumber, getIssue } from './utils';
 
@@ -82,12 +82,12 @@ const formatNumberTester = (data: Data) => {
 
 test('if issueId arg is for an active issue, getIssue should return the current active issue', () => {
   const id = '1';
-  let issue = Object.assign({}, DefaultIssue, {id, inactive: false});
+  let issue = Object.assign({}, new Issue(), {id, inactive: false});
   let issues: Issue[] = [
       issue
   ];
   let inactiveIssues: Issue[] = [
-    Object.assign({}, DefaultIssue, {id: '999', inactive: true})
+    Object.assign({}, new Issue(), {id: '999', inactive: true})
   ];
   let state = Object.assign({}, {} as RemoteDataState, {issues, inactiveIssues});
   let result: Issue = getIssue(state, id) as Issue;
@@ -96,12 +96,12 @@ test('if issueId arg is for an active issue, getIssue should return the current 
 
 test('if issueId arg is for an inactive issue, getIssue should return the current inactive issue', () => {
   const id = 'inactive1';
-  let issue = Object.assign({}, DefaultIssue, {id: '1', inactive: false});
+  let issue = Object.assign({}, new Issue(), {id: '1', inactive: false});
   let issues: Issue[] = [
       issue
   ];
   let inactiveIssues: Issue[] = [
-    Object.assign({}, DefaultIssue, {id, inactive: true})
+    Object.assign({}, new Issue(), {id, inactive: true})
   ];
   let state = Object.assign({}, {} as RemoteDataState, {issues, inactiveIssues});
   let result: Issue = getIssue(state, id) as Issue;
@@ -111,13 +111,13 @@ test('if issueId arg is for an inactive issue, getIssue should return the curren
 test('if issueId arg is for an unknown issue, getIssue should return undefined', () => {
   const id = 'unknown1111';
   const activeId = 'active100';
-  let issue = Object.assign({}, DefaultIssue, {id: activeId, inactive: false});
+  let issue = Object.assign({}, new Issue(), {id: activeId, inactive: false});
   let issues: Issue[] = [
       issue
   ];
   const inactiveId = 'inactive101';
   let inactiveIssues: Issue[] = [
-    Object.assign({}, DefaultIssue, {id: inactiveId, inactive: true})
+    Object.assign({}, new Issue(), {id: inactiveId, inactive: true})
   ];
   let state = Object.assign({}, {} as RemoteDataState, {issues, inactiveIssues});
   let result = getIssue(state, id);

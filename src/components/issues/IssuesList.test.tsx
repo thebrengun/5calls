@@ -1,21 +1,17 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import i18n from '../../services/i18n';
 import { IssuesList } from './index';
-import { DefaultIssue } from '../../common/model';
+import { Issue } from '../../common/model';
 
 test('should show IssuesListItem elements', () => {
   const issues = [
-    Object.assign({}, DefaultIssue, { id: '1' }),
-    Object.assign({}, DefaultIssue, { id: '2' })
+    Object.assign({}, new Issue(), { id: '1' }),
+    Object.assign({}, new Issue(), { id: '2' })
   ];
-  const onSelectIssue = jest.fn();
   const component = shallow(
     <IssuesList
       issues={issues}
       completedIssueIds={[]}
-      onSelectIssue={onSelectIssue}
-      t={i18n.t}
     />
   );
   const items = component.find('IssuesListItem');
@@ -24,13 +20,10 @@ test('should show IssuesListItem elements', () => {
 
 test('should show no IssueListItem elements if there are no issues to show', () => {
   const issues = [];
-  const onSelectIssue = jest.fn();
   const component = shallow(
     <IssuesList
       issues={issues}
       completedIssueIds={[]}
-      onSelectIssue={onSelectIssue}
-      t={i18n.t}
     />
   );
   const node = component.find('ul').find('IssuesListItem');

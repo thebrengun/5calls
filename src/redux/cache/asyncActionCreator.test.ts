@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
-const configureStore = require('redux-mock-store');
 import * as moxios from 'moxios';
+import configureStore from 'redux-mock-store';
 import { Group, CacheableGroup } from './../../common/model';
 import {
   AppCache, cacheGroup, AppCacheActionType } from './';
@@ -31,8 +31,8 @@ test('fetchGroup() action creator functions correctly', ( ) => {
   const appCache = new AppCache([cgroup1]);
   initialState.appCache = appCache;
   const store = mockStore(initialState);
-  // console.log('Store actions', store.getActions());
-  store.dispatch(cacheGroup(groupId))
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(cacheGroup(groupId))
     .then(() => {
       const actions = store.getActions();
       // console.log('Actions', actions);

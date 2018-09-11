@@ -1,10 +1,11 @@
 import thunk from 'redux-thunk';
-const configureStore = require('redux-mock-store');
+import configureStore from 'redux-mock-store';
 import * as moxios from 'moxios';
+
 import { RemoteDataActionType } from './action';
 import { fetchCallCount, fetchAllIssues, fetchLocationByIP } from './index';
 import { ApplicationState } from './../root';
-import { ApiData, DefaultIssue, IpInfoData, LocationFetchType, LocationUiState } from './../../common/model';
+import { ApiData, Issue, IpInfoData, LocationFetchType, LocationUiState } from './../../common/model';
 import * as Constants from '../../common/constants';
 
 const middlewares = [thunk];
@@ -36,7 +37,8 @@ test('getApiData() action creator functions correctly', () => {
   };
   initialState.locationState = locationState;
   const store = mockStore(initialState);
-  store.dispatch(fetchAllIssues(address))
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(fetchAllIssues(address))
     .then(() => {
       const actions = store.getActions();
       // console.log('Actions', actions);
@@ -46,7 +48,7 @@ test('getApiData() action creator functions correctly', () => {
 });
 
 const getApiDataResponse = (address, issueName): ApiData => {
-  const mockIssue = Object.assign({}, DefaultIssue, {name: issueName});
+  const mockIssue = Object.assign({}, new Issue(), {name: issueName});
 
   const mockResponse: ApiData = {
     splitDistrict: false,
@@ -75,7 +77,8 @@ test.skip('fetchLocationByIP() action creator works correctly', () => {
   const initialState = {} as ApplicationState;
   // initialState.locationState = {address: ''};
   const store = mockStore(initialState);
-  store.dispatch(fetchLocationByIP())
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(fetchLocationByIP())
     .then(() => {
       // const actions = store.getActions();
       // console.log('fetchLocationByIP() Actions', actions);
@@ -88,7 +91,8 @@ test('fetchCallCount() action creator dispatches proper action', () => {
   moxios.stubRequest(/counts/, { response: { count} });
   const initialState = {} as ApplicationState;
   const store = mockStore(initialState);
-  store.dispatch(fetchCallCount())
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(fetchCallCount())
     .then(() => {
       const actions = store.getActions();
       expect(actions[0].type).toEqual(expectedType);
