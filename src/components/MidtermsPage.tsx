@@ -148,16 +148,16 @@ class MidtermsPage extends React.Component<Props, State> {
                 Confirm your registration - then help others
               </span>
             </li>
-            <li className="item preview">
+            <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week3') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 3
+                <Link to="/issue/midterm-challenge-week-3">Week 3: Adopt a Key Race</Link>
                 {this.week3actions()}
               </span>
               <span className="item__subtitle">
-                Week 3 starts {this.weekCountdown('20181001')}
+                Phone bank for a swing race
               </span>
             </li>
             <li className="item preview">
