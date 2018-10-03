@@ -25,7 +25,11 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "config/testSetup.ts"
+    "config/testSetup.ts",
+    "e2e-tests",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "web-tests"
   ],
   "types": [
     "typePatches"
