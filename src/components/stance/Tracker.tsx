@@ -163,7 +163,7 @@ definitelyNo.forEach((senator) => {
 });
 
 const definitelyYes: string[] = [
-
+  'WV-JoeManchin',
 ];
 definitelyYes.forEach((senator) => {
   // add to hard list
@@ -181,8 +181,6 @@ definitelyYes.forEach((senator) => {
 });
 
 const definitelyUnknown = [
-  'WV-JoeManchin',
-  'ME-SusanCollins',
 ];
 definitelyUnknown.forEach((senator) => {
   // add to hard list
