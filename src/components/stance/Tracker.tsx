@@ -12,7 +12,7 @@ const nameMap = {
   'AR-JohnBoozman': { 'name': 'John Boozman (R-AR)', 'party': 'R', 'state': 'AR' },
   'AR-TomCotton': { 'name': 'Tom Cotton (R-AR)', 'party': 'R', 'state': 'AR' },
   'AZ-JeffFlake': { 'name': 'Jeff Flake (R-AZ)', 'party': 'R', 'state': 'AZ' },
-  // 'AZ-JohnMcCain': { 'name': 'John McCain (not voting)', 'party': 'R', 'state': 'AZ' },
+  'AZ-JonKyl': { 'name': 'Jon Kyl (R-AZ)', 'party': 'R', 'state': 'AZ' },
   'CA-DianneFeinstein': { 'name': 'Dianne Feinstein (D-CA)', 'party': 'D', 'state': 'CA' },
   'CA-KamalaDHarris': { 'name': 'Kamala Harris (D-CA)', 'party': 'D', 'state': 'CA' },
   'CO-CoryGardner': { 'name': 'Cory Gardner (R-CO)', 'party': 'R', 'state': 'CO' },
@@ -139,6 +139,7 @@ const unknownReps: string[] = [];
 const unknownVotes: string[] = unknownReps.sort(sortByParty);
 
 const definitelyNo: string[] = [
+  'AK-LisaMurkowski',
 ];
 for (const senatorName in nameMap) {
   if (nameMap[senatorName].party !== 'R') {
@@ -180,9 +181,7 @@ definitelyYes.forEach((senator) => {
 });
 
 const definitelyUnknown = [
-  'ND-HeidiHeitkamp',
   'WV-JoeManchin',
-  'AK-LisaMurkowski',
   'ME-SusanCollins',
 ];
 definitelyUnknown.forEach((senator) => {
