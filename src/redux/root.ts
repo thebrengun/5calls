@@ -1,12 +1,13 @@
+import storage from 'redux-persist/lib/storage';
+import getStoredState from 'redux-persist/lib/integration/getStoredStateMigrateV4';
+
 import { ApplicationState } from './root';
-import { combineReducers } from 'redux';
 import { LocationState, locationStateReducer } from './location';
 import { CallState, callStateReducer } from './callState';
 import { RemoteDataState, remoteDataReducer } from './remoteData';
 import { UserStatsState, userStatsReducer } from './userStats';
 import { UserState, userStateReducer } from './userState';
-import { AppCache, appCacheReducer } from './cache';
-import { GroupState, groupStateReducer } from '../redux/group';
+import { persistCombineReducers } from 'redux-persist';
 
 export enum OutcomeType {
   UNAVAILABLE = 'unavailable',
@@ -21,8 +22,6 @@ export interface ApplicationState {
   locationState: LocationState;
   userStatsState: UserStatsState;
   userState: UserState;
-  appCache: AppCache;
-  groupState: GroupState;
 }
 
 export const DefaultApplicationState: ApplicationState = {
@@ -31,8 +30,6 @@ export const DefaultApplicationState: ApplicationState = {
   locationState: {} as LocationState,
   userStatsState: {} as UserStatsState,
   userState: {} as UserState,
-  appCache: {} as AppCache,
-  groupState: {} as GroupState
 };
 
 // DANGER: TypeScript magic ahead!!
@@ -54,18 +51,36 @@ export const ApplicationStateKey: ApplicationStateKeyTypes = {
   callState: 'callState',
   userStatsState: 'userStatsState',
   userState: 'userState',
-  appCache: 'appCache',
-  groupState: 'groupState'
 };
 
-const rootReducer = combineReducers({
+const v4config = {
+  whitelist: [
+    ApplicationStateKey.locationState,
+    ApplicationStateKey.userStatsState,
+    ApplicationStateKey.userState,
+    ApplicationStateKey.callState,
+  ],
+};
+
+const config = {
+  key: 'fivecalls',
+  debug: true,
+  storage,
+  whitelist: [
+    ApplicationStateKey.locationState,
+    ApplicationStateKey.userStatsState,
+    ApplicationStateKey.userState,
+    ApplicationStateKey.callState,
+  ],
+  getStoredState: getStoredState(v4config),
+};
+
+const rootReducer = persistCombineReducers(config, {
   remoteDataState: remoteDataReducer,
   callState: callStateReducer,
   locationState: locationStateReducer,
   userStatsState: userStatsReducer,
   userState: userStateReducer,
-  appCache: appCacheReducer,
-  groupState: groupStateReducer
 });
 
 export default rootReducer;

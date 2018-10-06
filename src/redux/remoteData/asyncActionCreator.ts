@@ -1,14 +1,12 @@
 import { Dispatch } from 'redux';
 import {
   ApiData,
-  GroupIssues,
   IpInfoData,
   LocationFetchType,
   CountData
 } from './../../common/model';
 import {
   getAllIssues,
-  getGroupIssues,
   getCountData,
   postBackfillOutcomes,
   getUserCallDetails
@@ -21,7 +19,7 @@ import {
   setUiState
 } from '../location/index';
 import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
-import { issuesActionCreator, groupIssuesActionCreator, callCountActionCreator } from './index';
+import { issuesActionCreator, callCountActionCreator } from './index';
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
 import { LocationUiState } from '../../common/model';
@@ -61,24 +59,6 @@ export const getIssuesIfNeeded = () => {
   };
 };
 
-export const getGroupIssuesIfNeeded = (groupid: string) => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    const state: ApplicationState = getState();
-    // Only make the api call if it hasn't already been made
-    // This method is primarily for when a user has navigated
-    // directly to a route with an issue id
-    if (!state.remoteDataState.groupIssues || state.remoteDataState.groupIssues.length === 0 ||
-        state.remoteDataState.currentGroupId !== groupid) {
-      const loc = state.locationState.address;
-      if (loc) {
-        // tslint:disable-next-line:no-any
-        dispatch<any>(fetchGroupIssues(groupid, loc));
-      }
-    }
-  };
-};
-
 export const fetchAllIssues = (address: string = '') => {
   return (dispatch: Dispatch<ApplicationState>,
           getState: () => ApplicationState) => {
@@ -104,34 +84,6 @@ export const fetchAllIssues = (address: string = '') => {
         // tslint:disable-next-line:no-console
         console.error(`getIssue error: ${error.message}`, error);
         // can't return promises from this dispatch bullshit
-      });
-  };
-};
-
-export const fetchGroupIssues = (groupid: string, address: string = '') => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    return getGroupIssues(groupid, address)
-      .then((response: GroupIssues) => {
-        if (response.invalidAddress) {
-          dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          dispatch(setInvalidAddress(response.invalidAddress));
-        } else {
-          const normalizedAddress = response.normalizedLocation as string;
-          dispatch(setCachedCity(normalizedAddress));
-          dispatch(setLocation(address));
-          if (!address) {
-            dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          }
-          dispatch(setSplitDistrict(response.splitDistrict));
-          dispatch(setInvalidAddress(false));
-          dispatch(setLocationFetchType(LocationFetchType.CACHED_ADDRESS));
-          dispatch(groupIssuesActionCreator(response.issues));
-        }
-      }).catch((error) => {
-        // dispatch(apiErrorMessageActionCreator(error.message));
-        // tslint:disable-next-line:no-console
-        console.error(`getIssue error: ${error.message}`, error);
       });
   };
 };
@@ -294,54 +246,37 @@ export const getProfileInfo = async (): Promise<UserProfile> => {
 };
 
 export const startup = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-    const state = getState();
+  const state = store.getState();
 
-    dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
-    // clear contact indexes loaded from local storage
-    dispatch(clearContactIndexes());
+  store.dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
+  // clear contact indexes loaded from local storage
+  store.dispatch(clearContactIndexes());
 
-    // check expired login and handle or logout
-    const auth = new LoginService(Auth0Config);
-    if (state.userState.profile && state.userState.idToken) {
-      auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
-        // Set the updated profile ourselves - auth is a component that doesn't know about redux
-        dispatch(setAuthTokenActionCreator(authResponse.authToken));
-        dispatch(setProfileActionCreator(authResponse.userProfile));
-      }).catch((error) => {
-        // clear the session
-        dispatch(clearProfileActionCreator());
-      });
-    }
+  // check expired login and handle or logout
+  const auth = new LoginService(Auth0Config);
+  if (state.userState.profile && state.userState.idToken) {
+    auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
+      // Set the updated profile ourselves - auth is a component that doesn't know about redux
+      store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
+      store.dispatch(setProfileActionCreator(authResponse.userProfile));
+    }).catch((error) => {
+      // clear the session
+      store.dispatch(clearProfileActionCreator());
+    });
+  }
 
-    // if a location is passed as a query, override or set the location address manually
-    // this will remove hashes, so... don't use them? Or fix this.
-    let addressQuery = 'forceAddress';
-    let query = window.location.search.substring(1);
-    let vars = query.split('&');
-    for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) === addressQuery) {
-          dispatch(setLocation(pair[1]));
-          dispatch(setCachedCity(''));
-        }
-    }
-    window.history.replaceState(null, '', window.location.pathname);
+  const loc = state.locationState.address;
 
-    const loc = state.locationState.address;
-
-    if (loc) {
-      // tslint:disable-next-line:no-any
-      dispatch<any>(fetchAllIssues(loc))
-      .then(() => {
-        setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
-      });
-    } else {
-      // tslint:disable-next-line:no-any
-      dispatch<any>(fetchBrowserGeolocation());
-    }
+  if (loc) {
     // tslint:disable-next-line:no-any
-    dispatch<any>(fetchCallCount());
-  };
+    store.dispatch<any>(fetchAllIssues(loc))
+    .then(() => {
+      setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
+    });
+  } else {
+    // tslint:disable-next-line:no-any
+    store.dispatch<any>(fetchBrowserGeolocation());
+  }
+  // tslint:disable-next-line:no-any
+  store.dispatch<any>(fetchCallCount());
 };

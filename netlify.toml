@@ -1,7 +1,47 @@
 [Settings]
-ID = "eloquent-swirles-2ba06d"
+ID = "5calls"
+
+[[redirects]]
+  from = "/issues/"
+  query = {address = ":address", all = ":all"}
+  to = "http://167.99.163.163:8080/issues/?all=:all&address=:address"
+  status = 200
+
+[[redirects]]
+  from = "/issues/"
+  query = {address = ":address"}
+  to = "http://167.99.163.163:8080/issues/?address=:address"
+  status = 200
+
+[[redirects]]
+  from = "/issues"
+  query = {address = ":address", all = ":all"}
+  to = "http://167.99.163.163:8080/issues/?all=:all&address=:address"
+  status = 200
+
+[[redirects]]
+  from = "/issues"
+  query = {address = ":address"}
+  to = "http://167.99.163.163:8080/issues/?address=:address"
+  status = 200
+
+[[redirects]]
+  from = "/report"
+  to = "https://api.5calls.org/v1/report"
+  status = 200
+
+[[redirects]]
+  from = "/photo/*"
+  to = "http://167.99.163.163:8080/photo/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/admin/refresh"
+  to = "http://167.99.163.163:8080/admin/refresh"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
