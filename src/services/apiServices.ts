@@ -13,7 +13,7 @@ export const getAllIssues = (address: string): Promise<ApiData> => {
 };
 
 export const getCountData = (): Promise<CountData> => {
-  return axios.get(`${Constants.COUNTS_API_URL}`)
+  return axios.get(`${Constants.REPORT_API_URL}`)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
