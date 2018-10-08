@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { TranslationFunction } from 'i18next';
-import { translate } from 'react-i18next';
+
 import { formatNumber } from '../shared/utils';
 
 export interface Props {
   totalCount: number;
   minimal?: boolean;
-  t: TranslationFunction;
 }
 
 export const CallCount: React.StatelessComponent<Props> = (props: Props) => {
@@ -62,4 +60,4 @@ export const CallCount: React.StatelessComponent<Props> = (props: Props) => {
   );
 };
 
-export default translate()(CallCount);
+export default CallCount;

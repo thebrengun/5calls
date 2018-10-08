@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
-import { Tracker } from '../stance/Tracker';
+import * as Constants from '../../common/constants';
 
 interface Props {
   totalCount: number;
@@ -30,13 +30,22 @@ export const Why5calls: React.StatelessComponent<Props> = (props: Props) => (
           />
         </a>
       </div>
-      {/* <CallCount
-        totalCount={props.totalCount}
-        t={i18n.t}
-      /> */}
-      <Tracker
-        includeList={true}
-      />
+      <a href={Constants.contact.apps}><img src="/img/5calls-apps.png" className="hypothesis__text__mobile" /></a>
+      <p dangerouslySetInnerHTML={{ __html: props.t('hypothesis.p3') }} />
+      <div className="subscribe">
+        <form
+          action="//5calls.us16.list-manage.com/subscribe/post?u=82a164d5fe7f51f4a4efb1f83&amp;id=624ef52208"
+          method="post"
+          target="popupwindow"
+        >
+          <label htmlFor="email"><strong>{props.t('footer.emailLabel')}</strong></label>
+          <span className="emailform">
+            <input type="text" placeholder="youremail@example.com" name="email" id="email" />
+            <input type="submit" value={props.t('footer.subscribe')} />
+          </span>
+        </form>
+      </div>
+      <div style={{'clear': 'both'}} />
     </div>
   </div>
 );
