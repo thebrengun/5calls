@@ -160,16 +160,16 @@ class MidtermsPage extends React.Component<Props, State> {
                 Phone bank for a swing race
               </span>
             </li>
-            <li className="item preview">
+            <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week4') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 4
+                <Link to="/issue/midterm-challenge-week-4">Week 4: Know Your Ballot</Link>
                 {this.week4actions()}
               </span>
               <span className="item__subtitle">
-                Week 4 starts {this.weekCountdown('20181008')}
+                Inform yourself and your friends, up and down the ballot
               </span>
             </li>
             <li className="item preview">

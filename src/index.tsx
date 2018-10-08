@@ -22,12 +22,12 @@ import { DonePage } from './components/done';
 import { MoreIssuesPage } from './components/issues';
 import { CallPage } from './components/call';
 import { MyImpactPage } from './components/myimpact';
-import './components/bundle.css';
 import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import AppProvider from './components/AppProvider';
 import MidtermsPage from './components/MidtermsPage';
 import { startup } from './redux/remoteData';
+import './components/bundle.css';
 
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
