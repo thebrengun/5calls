@@ -17,7 +17,7 @@ export default (initialState) => {
       // This added for Redux Dev Tools - install Chrome or Firefox extension to use
       // tslint:disable-next-line:max-line-length no-string-literal
       typeof window === 'object' && typeof window['devToolsExtension'] !== 'undefined' ? window['devToolsExtension']() : (f) => f
-    ));
+    )) as Store<ApplicationState>;
 
   persistor = persistStore(store);
 

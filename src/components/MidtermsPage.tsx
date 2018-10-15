@@ -172,16 +172,16 @@ class MidtermsPage extends React.Component<Props, State> {
                 Inform yourself and your friends, up and down the ballot
               </span>
             </li>
-            <li className="item preview">
+            <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week5') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 5
+                <Link to="/issue/midterm-challenge-week-5">Week 5: Plan a Voting Party</Link>
                 {this.week5actions()}
               </span>
               <span className="item__subtitle">
-                Week 5 starts {this.weekCountdown('20181015')}
+                Where, when, and how - and who with?
               </span>
             </li>
             <li className="item preview">
