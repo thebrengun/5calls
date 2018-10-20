@@ -26,6 +26,11 @@ ID = "5calls"
   status = 200
 
 [[redirects]]
+  from = "/issues/*"
+  to = "http://167.99.163.163:8080/issues/:splat"
+  status = 200
+
+[[redirects]]
   from = "/report"
   to = "https://api.5calls.org/v1/report"
   status = 200

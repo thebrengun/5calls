@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Issue } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
 
-import { RemoteDataState } from '../../redux/remoteData';
 import {
   remoteStateContext,
   callStateContext,
@@ -14,50 +13,58 @@ interface Props {
   readonly children?: {};
   readonly extraComponent?: {};
   readonly postcards?: boolean;
-  readonly currentIssue?: Issue;
 }
 
-function getIssues(remoteState: RemoteDataState): Issue[] {
-  return remoteState.issues;
+function currentIssue(issues: Issue[], currentIssueID: string): Issue | undefined {
+  let issue: Issue | undefined;
+  if (issues) {
+    issue = issues.find((eachIssue) => {
+      return (eachIssue.id === currentIssueID || eachIssue.slug === currentIssueID);
+    });  
+  }
+
+  return issue;
 }
 
 const Layout: React.StatelessComponent<Props> = (props: Props) => (
-  <>
-    <userStateContext.Consumer>
-    { userState =>
-      <Header
-        postcards={props.postcards}
-        currentUser={userState}
-        currentIssue={props.currentIssue}
-      />
-    }
-    </userStateContext.Consumer>
-    <div className="layout">
-      <aside id="nav" role="contentinfo" className="layout__side">
-        <callStateContext.Consumer>
-        { callState =>
-          <remoteStateContext.Consumer>
-          { remoteState =>
-            <div className="issues">
-              <SidebarHeader/>
-              <Sidebar
-                issues={getIssues(remoteState)}
-                currentIssue={props.currentIssue ? props.currentIssue : undefined}
-                completedIssueIds={callState.completedIssueIds}
-              />
-            </div>
-          }
-          </remoteStateContext.Consumer>
-        }
-        </callStateContext.Consumer>
-      </aside>
-      <main id="content" role="main" aria-live="polite" className="layout__main">
-        {props.children}
-      </main>
-    </div>
-    {props.extraComponent}
-    <Footer/>
-  </>
+  <remoteStateContext.Consumer>
+  { remoteState =>
+    <>
+    <callStateContext.Consumer>
+    { callState =>
+      <>
+      <userStateContext.Consumer>
+      { userState =>
+        <Header
+          postcards={props.postcards}
+          currentUser={userState}
+          currentIssue={currentIssue(remoteState.issues, callState.currentIssueId)}
+        />
+      }
+      </userStateContext.Consumer>
+      <div className="layout">
+        <aside id="nav" role="contentinfo" className="layout__side">
+              <div className="issues">
+                <SidebarHeader/>
+                <Sidebar
+                  issues={remoteState.issues}
+                  currentIssue={currentIssue(remoteState.issues, callState.currentIssueId)}
+                  completedIssueIds={callState.completedIssueIds}
+                />
+              </div>
+        </aside>
+        <main id="content" role="main" aria-live="polite" className="layout__main">
+          {props.children}
+        </main>
+      </div>
+      {props.extraComponent}
+      <Footer/>
+      </>
+      }
+      </callStateContext.Consumer>
+    </>
+  }
+  </remoteStateContext.Consumer>
 );
 
 export default Layout;

@@ -21,6 +21,7 @@ interface Props {
   readonly postcards?: boolean;
   readonly currentUser?: UserState;
   readonly currentIssue?: Issue;
+  readonly issues: Issue[]; 
   readonly hideDonation: boolean;
 }
 
@@ -77,7 +78,7 @@ class HeaderImpl extends React.Component<Props, State> {
   }
 
   render() {
-    let profile: UserProfile|undefined;
+    let profile: UserProfile | undefined;
     if (this.props.currentUser !== undefined) {
       profile = this.props.currentUser.profile;
     }

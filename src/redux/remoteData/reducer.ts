@@ -5,8 +5,6 @@ import { RemoteDataAction, RemoteDataActionType } from './index';
 export interface RemoteDataState {
   issues: Issue[];
   inactiveIssues: Issue[];
-  currentGroupId: string;
-  groupIssues: Issue[];
   callTotal: number;
   donations: Donations;
   errorMessage: string;

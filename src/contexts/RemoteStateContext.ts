@@ -11,8 +11,6 @@ const defaultDonation = {
 const defaultRemoteState = {
   issues: [],
   inactiveIssues: [],
-  currentGroupId: '',
-  groupIssues: [],
   callTotal: 0,
   donations: defaultDonation,
   errorMessage: '',
