@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { isEqual } from 'lodash';
-import { Helmet } from 'react-helmet';
 import {
   withRouter,
   RouteComponentProps,
 } from 'react-router';
-
-import * as Constants from '../../common/constants';
 
 import { getIssue } from '../shared/utils';
 
@@ -110,24 +107,6 @@ class CallPageView extends React.Component<Props, State> {
 
     let extraComponent;
 
-    let pageTitle = '5 Calls: Make your voice heard';
-    if (this.state.currentIssue) {
-      pageTitle = `${this.state.currentIssue.name}: 5 Calls`;
-    }
-
-    let canonicalURL: string | undefined = undefined;
-    let shareImageURL = 'https://5calls.org/img/5calls-twitter.png';
-    if (this.state.currentIssue) {
-      let slug = this.state.currentIssue.slug;
-      if (slug === '' || slug === undefined) {
-        slug = this.state.currentIssue.id;
-      }
-
-      canonicalURL = Constants.APP_URL + '/issue/' + slug;
-
-      shareImageURL = `${Constants.SHARE_BUCKET_URL}${this.state.currentIssue.id}.png`;
-    }
-
     if (this.state.currentIssue &&
         this.state.currentIssue.contactType &&
         this.state.currentIssue.contactType === 'FETCH') {
@@ -135,10 +114,6 @@ class CallPageView extends React.Component<Props, State> {
         <Layout
           extraComponent={extraComponent}
         >
-          <Helmet>
-            <title>{pageTitle}</title>
-            {canonicalURL && <link rel="canonical" href={canonicalURL} />}
-          </Helmet>
           <FetchCall
             issue={this.state.currentIssue}
           />
@@ -149,20 +124,6 @@ class CallPageView extends React.Component<Props, State> {
         <Layout
           extraComponent={extraComponent}
         >
-          <Helmet>
-            <title>{pageTitle}</title>
-            {canonicalURL && <link rel="canonical" href={canonicalURL} />}
-            {/* schema.org */}
-            <meta itemProp="description" content={pageTitle} />
-            <meta itemProp="image" content={shareImageURL} />
-            {/* twitter */}
-            <meta name="twitter:description" content={pageTitle} />
-            <meta name="twitter:image:src" content={shareImageURL} />
-            {/* facebook */}
-            <meta property="og:url" content={canonicalURL} />
-            <meta property="og:description" content={pageTitle} />
-            <meta property="og:image" content={shareImageURL} />
-          </Helmet>
           <CallTranslatable
             issue={this.state.currentIssue}
             callState={this.props.callState}

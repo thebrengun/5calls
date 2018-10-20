@@ -14,10 +14,13 @@ import { Auth0Config } from '../../common/constants';
 import { DonationContainer } from '../donation';
 import { postEmail } from '../../services/apiServices';
 import { eventContext } from '../../contexts/EventContext';
+import HeadMeta from '../shared/HeadMeta';
+import { Issue } from '../../common/model';
 
 interface Props {
   readonly postcards?: boolean;
   readonly currentUser?: UserState;
+  readonly currentIssue?: Issue;
   readonly hideDonation: boolean;
 }
 
@@ -80,30 +83,35 @@ class HeaderImpl extends React.Component<Props, State> {
     }
 
     return (
-      <header className="logo__header" role="banner" >
-        <div className="logo__header__logo layout">
-          <Link to="/">
-            <img src="/img/5calls-logo-small.png" alt="5 Calls" />
-          </Link>
-          {/* keep this around for teams / campaigns, but don't show for now */}
-          {/* <ul>
-            <li><Link className={props.postcards ? '' : 'active'} to="/">Calls</Link></li>
-            <li><Link className={props.postcards ? 'active' : ''} to="/postcards">Postcards</Link></li>
-          </ul> */}
-          <eventContext.Consumer>
-            {eventManager => 
-              <CustomLogin
-                auth0Config={Auth0Config}
-                userProfile={profile}
-                eventEmitter={eventManager.ee}
-                logoutHandler={this.logout}
-                refreshHandler={this.refresh}
-              />
-            }
-          </eventContext.Consumer>
-        </div>
-        {!this.props.hideDonation && <DonationContainer />}
-      </header>
+      <>
+        <HeadMeta
+          issue={this.props.currentIssue}
+        />
+        <header className="logo__header" role="banner" >
+          <div className="logo__header__logo layout">
+            <Link to="/">
+              <img src="/img/5calls-logo-small.png" alt="5 Calls" />
+            </Link>
+            {/* keep this around for teams / campaigns, but don't show for now */}
+            {/* <ul>
+              <li><Link className={props.postcards ? '' : 'active'} to="/">Calls</Link></li>
+              <li><Link className={props.postcards ? 'active' : ''} to="/postcards">Postcards</Link></li>
+            </ul> */}
+            <eventContext.Consumer>
+              {eventManager => 
+                <CustomLogin
+                  auth0Config={Auth0Config}
+                  userProfile={profile}
+                  eventEmitter={eventManager.ee}
+                  logoutHandler={this.logout}
+                  refreshHandler={this.refresh}
+                />
+              }
+            </eventContext.Consumer>
+          </div>
+          {!this.props.hideDonation && <DonationContainer />}
+        </header>
+      </>
     );
   }
 }

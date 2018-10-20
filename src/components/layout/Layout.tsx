@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Helmet } from 'react-helmet';
 
 import { Issue } from '../../common/model';
 import { SidebarHeader, Sidebar, Footer, Header } from './index';
@@ -24,14 +23,12 @@ function getIssues(remoteState: RemoteDataState): Issue[] {
 
 const Layout: React.StatelessComponent<Props> = (props: Props) => (
   <>
-    <Helmet>
-      <title>5 Calls: Make your voice heard</title>
-    </Helmet>
     <userStateContext.Consumer>
     { userState =>
       <Header
         postcards={props.postcards}
         currentUser={userState}
+        currentIssue={props.currentIssue}
       />
     }
     </userStateContext.Consumer>
