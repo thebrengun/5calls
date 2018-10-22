@@ -184,7 +184,7 @@ class MidtermsPage extends React.Component<Props, State> {
                 Where, when, and how - and who with?
               </span>
             </li>
-            <li className="item preview">
+            <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week6') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
