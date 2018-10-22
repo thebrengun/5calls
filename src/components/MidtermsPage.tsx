@@ -189,11 +189,11 @@ class MidtermsPage extends React.Component<Props, State> {
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 6
+                <Link to="/issue/midterm-challenge-week-6">Week 6: Hit the Pavement</Link>
                 {this.week6actions()}
               </span>
               <span className="item__subtitle">
-                Week 6 starts {this.weekCountdown('20181022')}
+                Canvass for a local candidate or issue
               </span>
             </li>
             <li className="item preview">
