@@ -25,6 +25,7 @@
     "acceptance-tests",
     "webpack",
     "jest",
+    "config/env.js",
     "config/testSetup.ts",
     "e2e-tests",
     "**/*.test.ts",

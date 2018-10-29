@@ -196,16 +196,16 @@ class MidtermsPage extends React.Component<Props, State> {
                 Canvass for a local candidate or issue
               </span>
             </li>
-            <li className="item preview">
+            <li className="item">
               <span className={`item__status ${isIssueComplete('midterm-challenge-week7') ? 'is-complete' : ''}`}>
                 <span className="visually-hidden" />
               </span>
               <span className="item__title">
-                Week 7
+                <Link to="/issue/midterm-challenge-week-7">Week 7: All Hands on Deck!</Link>
                 {this.week7actions()}
               </span>
               <span className="item__subtitle">
-                Week 7 starts {this.weekCountdown('20181029')}
+                Review your past weekly actions
               </span>
             </li>
             <li className="item last preview">
