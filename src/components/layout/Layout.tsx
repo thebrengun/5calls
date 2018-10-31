@@ -19,7 +19,7 @@ function currentIssue(issues: Issue[], currentIssueID: string): Issue | undefine
   let issue: Issue | undefined;
   if (issues) {
     issue = issues.find((eachIssue) => {
-      return (eachIssue.id === currentIssueID || eachIssue.slug === currentIssueID);
+      return (eachIssue.id.toString() === currentIssueID || eachIssue.slug === currentIssueID);
     });  
   }
 

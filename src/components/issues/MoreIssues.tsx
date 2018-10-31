@@ -2,11 +2,7 @@ import * as React from 'react';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { find } from 'lodash';
-import {
-  Issue,
-  CategoryMap,
-  Category,
-} from '../../common/model';
+import { Issue, CategoryMap } from '../../common/model';
 import { IssuesListItem } from './index';
 import { getIssuesIfNeeded } from '../../redux/remoteData';
 import { store } from '../../redux/store';
@@ -42,26 +38,27 @@ export class MoreIssues extends React.Component<Props, State> {
     // to render in the view no matter what I tried, so it's this /shrug
     if (this.props.inactiveIssues) {
       this.props.inactiveIssues.forEach((issue) => {
-        let category: string = 'uncategorized';
+        // let category: string = 'uncategorized';
 
-        if (issue.categories[0]) {
-          category = issue.categories[0].name;
+        console.error("FIX CATEGORIES"); 
+        // if (issue.categories[0]) {
+        //   category = issue.categories[0].name;
 
-          let availableMap;
-          categoryMap.forEach((map) => {
-            if (map.category.name === category) {
-              availableMap = map;
-            }
-          });
+        //   let availableMap;
+        //   categoryMap.forEach((map) => {
+        //     if (map.category.name === category) {
+        //       availableMap = map;
+        //     }
+        //   });
 
-          if (availableMap) {
-            availableMap.issues.push(issue);
-          } else {
-            let newCategory: Category = {name: category};
-            let newCategoryMap: CategoryMap = {category: newCategory, issues: [issue] };
-            categoryMap.push(newCategoryMap);
-          }
-        }
+        //   if (availableMap) {
+        //     availableMap.issues.push(issue);
+        //   } else {
+        //     let newCategory: Category = {name: category};
+        //     let newCategoryMap: CategoryMap = {category: newCategory, issues: [issue] };
+        //     categoryMap.push(newCategoryMap);
+        //   }
+        // }
       });
     }
 
@@ -99,7 +96,7 @@ export class MoreIssues extends React.Component<Props, State> {
 
   render() {
     if (!this.state.currentIssue && this.props.currentIssue) {
-      store.dispatch(selectIssueActionCreator(this.props.currentIssue.id));
+      store.dispatch(selectIssueActionCreator(this.props.currentIssue.id.toString()));
     }
 
     return (
@@ -118,7 +115,8 @@ export class MoreIssues extends React.Component<Props, State> {
                 issue={issue}
                 isIssueComplete={
                   this.props.completedIssueIds &&
-                  (find(this.props.completedIssueIds, (issueId: string) => issue.id === issueId) !== undefined)
+                  (find(this.props.completedIssueIds,
+                        (issueId: string) => issue.id.toString() === issueId) !== undefined)
                 }
                 isIssueActive={false}
               />

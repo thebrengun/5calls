@@ -9,7 +9,7 @@ import {
   submitOutcome,
 } from '../../redux/callState';
 import { store } from '../../redux/store';
-import { Issue, slugOrID } from '../../common/model';
+import { Issue } from '../../common/model';
 import { UserState } from '../../redux/userState';
 
 interface Props {
@@ -34,7 +34,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
         {
           outcome: outcome,
           numberContactsLeft: this.props.numberContactsLeft,
-          issueId: this.props.currentIssue.id,
+          issueId: this.props.currentIssue.id.toString(),
           contactId: this.props.currentContactId,
         }
       )
@@ -46,7 +46,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
       if (this.props.match.params.groupid) {
         this.props.history.push(`/team/${this.props.match.params.groupid}`);
       } else {
-        this.props.history.push(`/done/${slugOrID(this.props.currentIssue)}`);
+        this.props.history.push(`/done/${this.props.currentIssue.slugOrID()}`);
       }
 
       window.scroll(1, 1);

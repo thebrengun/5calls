@@ -1,38 +1,103 @@
-export class Issue {
-  id: string;
-  name: string;
-  reason: string;
-  script: string;
-  contactAreas?: string[];
-  contacts?: Contact[];
-  contactType?: string;
-  categories: Category[];
-  inactive: boolean;
-  outcomeModels: Outcome[];
-  link: string;
-  linkTitle: string;
-  slug: string;
+import { ContactList } from './contactList';
 
-  constructor() {
-    this.id = '';
-    this.name = '';
-    this.reason = '';
-    this.script = '';
-    this.categories = [];
-    this.inactive = false;
-    this.outcomeModels = [];
-    this.link = '';
-    this.linkTitle = '';
-    this.slug = '';
+export class Issue {
+  public id: number;
+  public name: string;
+  public contactType: string;
+  public contactAreas: string[];
+  public reason: string;
+  public script: string;
+  public active: boolean;
+  public createdAt: string;
+  public slug: string;
+  public outcomeModels: Outcome[];
+  public link: string;
+  public linkTitle: string;
+  public stats: IssueStats;
+
+  constructor(oldIssue: Issue) {
+    this.id = oldIssue.id;
+    this.name = oldIssue.name;
+    this.contactType = oldIssue.contactType;
+    this.contactAreas = oldIssue.contactAreas;
+    this.reason = oldIssue.reason;
+    this.script = oldIssue.script;
+    this.active = oldIssue.active;
+    this.createdAt = oldIssue.createdAt;
+    this.slug = oldIssue.slug;
+    this.outcomeModels = oldIssue.outcomeModels;
+    this.link = oldIssue.link;
+    this.linkTitle = oldIssue.linkTitle;
+    this.stats = oldIssue.stats;
+  }
+
+  public slugOrID(): string {
+    if (this.slug !== '') {
+      return this.slug;
+    }
+
+    return this.id.toString();
+  }
+
+  public numberOfContacts(contactList: ContactList): number {
+    return this.filteredContacts(contactList).length;
+  }
+
+  public currentContact(contactList: ContactList, contactIndex: number): Contact | undefined {
+
+    return undefined;
+  }
+
+  public filteredContacts(contactList: ContactList): Contact[] {
+    const contacts: Contact[] = [];
+
+    for (const contactArea of this.contactAreas) {
+      if (contactArea === 'US Senate') {
+        contacts.push(...contactList.senate);
+      } else if (contactArea === 'US House') {
+        contacts.push(...contactList.house);
+      } else if (contactArea === 'Governor' && contactList.governor) {
+        contacts.push(contactList.governor);
+      } else if (contactArea === 'StateUpper' && contactList.stateUpper) {
+        contacts.push(contactList.stateUpper);
+      } else if (contactArea === 'StateLower' && contactList.stateLower) {
+        contacts.push(contactList.stateLower);
+      }
+    }
+
+    return contacts;
+  }
+
+  public listItemLabel(): string {
+    switch (this.contactType) {
+      case 'REPS':
+        return 'Call reps' + this.countLabel();
+      case 'ACTION':
+        return 'Take action' + this.countLabel();
+      default:
+        return '???';
+    }
+  }
+
+  public countLabel(): string {
+    if (this.stats.calls < 10) {
+      return '';
+    }
+
+    switch (this.contactType) {
+      case 'REPS':
+        return ' ⋆ ' + this.stats.calls + ' calls made';
+      case 'ACTION':
+        return ' ⋆ ' + this.stats.calls + ' actions taken';
+      default:
+        return '???';
+    }
   }
 }
 
-export function slugOrID(issue: Issue): string {
-  if (issue.slug !== '') {
-    return issue.slug;
-  }
-
-  return issue.id;
+export interface IssueStats {
+  completion: number;
+  calls: number;
 }
 
 export interface Outcome {
@@ -109,11 +174,7 @@ export interface GeolocationPosition {
 }
 
 /* 5 Calls API data */
-export interface ApiData {
-  splitDistrict: boolean;
-  invalidAddress: boolean;
-  normalizedLocation: string | undefined;
-  divisions: string[];
+export interface IssueData {
   issues: Issue[];
 }
 

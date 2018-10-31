@@ -1,22 +1,23 @@
 import * as React from 'react';
-import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
-import { translate } from 'react-i18next';
+
 import { Issue, Contact } from '../../common/model';
-import { CallHeaderTranslatable, ContactDetails, Outcomes,
-  ScriptTranslatable, NoContactSplitDistrict, IssueLink } from './index';
 import { CallState } from '../../redux/callState';
-import { locationStateContext, userStateContext } from '../../contexts';
-import { eventContext } from '../../contexts/EventContext';
+import CallHeader from './CallHeader';
+import { ContactList } from '../../common/contactList';
+import { ContactDetails } from '.';
+import { locationStateContext } from '../../contexts';
+import Script from './Script';
+import { ContactProgress } from './ContactProgress';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   issue: Issue;
+  contacts: ContactList;
   callState: CallState;
 }
 
 export interface State {
-  issue: Issue;
   currentContact: Contact | undefined;
   currentContactIndex: number;
   numberContactsLeft: number;
@@ -37,24 +38,17 @@ export class Call extends React.Component<Props, State> {
    * @returns {State}
    */
   setStateFromProps(props: Props): State {
-
     let currentContactIndex = 0;
     if (props.issue && props.callState.contactIndexes && props.callState.contactIndexes[props.issue.slug]) {
       currentContactIndex = props.callState.contactIndexes[props.issue.slug];
     }
 
-    const currentContact = (props.issue && props.issue.contacts
-      ? props.issue.contacts[currentContactIndex]
-      : undefined);
-    const numberContactsLeft = props.issue && props.issue.contacts
-      ? props.issue.contacts.length - (currentContactIndex + 1)
-      : 0;
+    const numberContactsLeft = props.issue && props.issue.numberOfContacts(this.props.contacts);
 
     return {
-      currentContact: currentContact,
+      currentContact: props.issue.currentContact(this.props.contacts, currentContactIndex),
       currentContactIndex: currentContactIndex,
       numberContactsLeft: numberContactsLeft,
-      issue: props.issue
     };
   }
 
@@ -65,107 +59,64 @@ export class Call extends React.Component<Props, State> {
     }
   }
 
-  // this should obviously be somewhere on issue but as an interface and not a class I don't know where...
-  // split district as we define it now applies to house reps, not state level. This helps us ignore it if
-  // reps are only Senate or only State level
-  hasHouseReps(issue: Issue | undefined): boolean {
-    let hasHouseRep = false;
-
-    if (issue && issue.contacts) {
-      issue.contacts.forEach(contact => {
-        if (contact.area === 'US House') {
-          hasHouseRep = true;
-        }
-      });
-    }
-
-    return hasHouseRep;
-  }
-
-  // use this to get split district scenarios
-  missingContacts(issue: Issue | undefined): boolean {
-    let missingContacts = false;
-
-    if (issue && issue.contactAreas) {
-      issue.contactAreas.forEach(area => {
-        let foundArea = false;
-
-        // skip other contacts, these are non-rep types
-        if (area === 'Other') {
-          return;
-        }
-
-        if (issue.contacts) {
-          issue.contacts.forEach(contact => {
-            if (contact.area === area) {
-              foundArea = true;
-            }
-          });
-        }
-
-        if (foundArea === false) {
-          missingContacts = true;
-        }
-      });
-    }
-
-    return missingContacts;
-  }
-
   render() {
     return (
-      <locationStateContext.Consumer>
-      { locationState =>
-        <section className="call">
-          <CallHeaderTranslatable
-            invalidAddress={locationState.invalidAddress}
-            currentIssue={this.state.issue}
-          />
-          {this.missingContacts(this.props.issue) ?
-          <NoContactSplitDistrict
-            splitDistrict={locationState.splitDistrict}
-          /> :
+      <section className="call">
+        <CallHeader
+          currentIssue={this.props.issue}
+        />
+        <ContactProgress
+          callState={this.props.callState}
+          contactList={this.props.contacts}
+          currentContact={this.state.currentContact}
+        />
+        {this.state.currentContact &&
+          <>
           <ContactDetails
-            currentIssue={this.state.issue}
-            contactIndex={this.state.currentContactIndex}
-          />}
-          <IssueLink
-            issue={this.state.issue}
+            currentIssue={this.props.issue}
+            currentContact={this.state.currentContact}
           />
-          <ScriptTranslatable
-            issue={this.state.issue}
-            contactIndex={this.state.currentContactIndex}
-            locationState={locationState}
-          />
-          { this.missingContacts(this.props.issue) ? <span/> :
-          <userStateContext.Consumer>
-            {userState =>
-              <eventContext.Consumer>
-                {eventManager =>
-                  <Outcomes
-                    currentIssue={this.state.issue}
-                    userState={userState}
-                    eventEmitter={eventManager.ee}
-                    numberContactsLeft={this.state.numberContactsLeft}
-                    currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-                  />                
-                }
-              </eventContext.Consumer>
+          <locationStateContext.Consumer>
+            {locationState =>
+              <>
+              {/* this is sort of weird, right? Should be implicit from above */}
+              {this.state.currentContact &&
+              <Script
+                issue={this.props.issue}
+                currentContact={this.state.currentContact}
+                locationState={locationState}
+              />
+              }
+              </>
             }
-          </userStateContext.Consumer>
-}
-          {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
-          { this.missingContacts(this.props.issue) ? <span/> :
-          this.state.numberContactsLeft > 0 ?
-            <h3 aria-live="polite" className="call__contacts__left" >
-              {i18n.t('outcomes.contactsLeft', { contactsRemaining: this.state.numberContactsLeft })}
-            </h3> : ''
-          }
-        </section>
-      }
-      </locationStateContext.Consumer>
+          </locationStateContext.Consumer>
+          </>
+        }
+
+{/* //           {this.missingContacts(this.props.issue) ?
+//           <NoContactSplitDistrict
+//             splitDistrict={locationState.splitDistrict}
+//           /> :
+//           <IssueLink
+//             issue={this.state.issue}
+//           />
+//           { this.missingContacts(this.props.issue) ? <span/> :
+//           <userStateContext.Consumer>
+//             {userState =>
+//               <eventContext.Consumer>
+//                 {eventManager =>
+//                   <Outcomes
+//                     currentIssue={this.state.issue}
+//                     userState={userState}
+//                     eventEmitter={eventManager.ee}
+//                     numberContactsLeft={this.state.numberContactsLeft}
+//                     currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
+//                   />                
+//                 }
+//               </eventContext.Consumer>
+//             }
+//           </userStateContext.Consumer> */}
+      </section>
     );
   }
 }
-
-export const CallTranslatable = translate()(Call);

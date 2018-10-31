@@ -1,10 +1,11 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
-import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
+
 import { Issue } from '../../common/model';
 import { IssuesListItem } from './index';
+import { getIssuesIfNeeded } from '../../redux/remoteData';
 
 interface Props {
   issues: Issue[];
@@ -12,10 +13,12 @@ interface Props {
   completedIssueIds: string[];
 }
 
-export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
-  let currentIssueId: string = props.currentIssue ? props.currentIssue.id : '';
+class IssuesList extends React.Component<Props> {
+  componentDidMount() {
+    getIssuesIfNeeded();
+  }
 
-  const listFooter = () => {
+  listFooter = () => {
     return (
       <li>
         <Link
@@ -26,18 +29,20 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
         </Link>
       </li>
     );
-  };
+  }
 
-  const listItems = () => {
-    if (props.issues && props.issues.map) {
-      return props.issues.map(issue =>
+  listItems = () => {
+    let currentIssueId = this.props.currentIssue ? this.props.currentIssue.id : 0;
+
+    if (this.props.issues && this.props.issues.map) {
+      return this.props.issues.map(issue =>
         (
         <IssuesListItem
           key={issue.id}
           issue={issue}
           isIssueComplete={
-            props.completedIssueIds &&
-            (find(props.completedIssueIds, (issueId: string) => issue.slug === issueId) !== undefined)
+            this.props.completedIssueIds &&
+            (find(this.props.completedIssueIds, (issueId: string) => issue.slug === issueId) !== undefined)
           }
           isIssueActive={currentIssueId === issue.id}
         />
@@ -45,14 +50,16 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
     } else {
       return <div style={{ textAlign: 'center' }}>{i18n.t('noCalls.title')}</div>;
     }
-  };
+  }
 
-  return (
-    <ul className="issues-list" role="navigation">
-      {listItems()}
-      {listFooter()}
-    </ul>
-  );
-};
+  render() {
+    return (
+      <ul className="issues-list" role="navigation">
+        {this.listItems()}
+        {this.listFooter()}
+      </ul>
+    );  
+  }
+}
 
-export const IssuesListTranslatable = translate()(IssuesList);
+export default IssuesList;

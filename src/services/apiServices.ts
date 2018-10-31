@@ -1,19 +1,40 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { ApiData, CountData, MidtermStats } from './../common/model';
+import { CountData, MidtermStats, Issue } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
+import { store } from '../redux/store';
 
-export const getAllIssues = (address: string): Promise<ApiData> => {
-  return axios.get(`${Constants.ISSUES_API_URL}${encodeURIComponent(address)}`)
+const prepareHeaders = (): Headers => {
+  const state = store.getState();
+
+  let headers: Headers = { 'Content-Type': 'application/json; charset=utf-8'};
+  if (state.userState.idToken) {
+    headers.Authorization = 'Bearer ' + state.userState.idToken;
+  }
+
+  return headers;
+};
+
+interface Headers {
+  Authorization?: string;
+  'Content-Type': string;
+}
+
+export const getAllIssues = (): Promise<Issue[]> => {
+  const headers = prepareHeaders();
+
+  return axios.get(Constants.ISSUES_API_URL, {
+      headers: headers,
+    })
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
 
 export const getCountData = (): Promise<CountData> => {
-  return axios.get(`${Constants.REPORT_API_URL}`)
+  return axios.get(Constants.REPORT_API_URL)
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };

@@ -4,10 +4,7 @@ import { LocationState } from '../../redux/location/reducer';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 import { LocationUiState } from '../../common/model';
-import {
-  newLocationLookup,
-  clearAddress,
-} from '../../redux/location';
+import { clearAddress } from '../../redux/location';
 import { store } from '../../redux/store';
 
 interface Props {
@@ -113,7 +110,7 @@ export class Location extends React.Component<Props, State> {
             window.location.reload();
           } else {
             // tslint:disable-next-line:no-any
-            store.dispatch<any>(newLocationLookup(newLocation));
+            // store.dispatch<any>(newLocationLookup(newLocation));
           }
         };
         const clearTextBox = (e) => { e.target.value = ''; };

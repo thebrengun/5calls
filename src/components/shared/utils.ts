@@ -61,14 +61,15 @@ export const formatNumber = (unformattedNumber: number | string) => {
 
 export const getIssue = (remoteDataState: RemoteDataState, issueId: string): Issue | undefined => {
   if (remoteDataState.issues) {
-    const currentActiveIssue = find(remoteDataState.issues, (i => i.id === issueId || i.slug === issueId));
+    const currentActiveIssue = find(remoteDataState.issues, (i => i.id.toString() === issueId || i.slug === issueId));
     if (currentActiveIssue) {
       return currentActiveIssue;
     }
   }
 
   if (remoteDataState.inactiveIssues) {
-    const currentInactiveIssue = find(remoteDataState.inactiveIssues, (i => i.id === issueId || i.slug === issueId));
+    const currentInactiveIssue = find(remoteDataState.inactiveIssues,
+                                      (i => i.id.toString() === issueId || i.slug === issueId));
     if (currentInactiveIssue) {
       return currentInactiveIssue;
     }
