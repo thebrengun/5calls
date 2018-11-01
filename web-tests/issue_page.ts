@@ -13,17 +13,34 @@ const getWindowLocation = ClientFunction(() => window.location.href);
 fixture`IssuePage`
   .page`http://localhost:3000`
   .beforeEach(async () => {
-    await waitForReact(7000);
+    await waitForReact(15000);
   });
 
-// tslint:disable-next-line:no-shadowed-variable
-test('Link on sidebar navigates to issue page', async t => {
-  const Sidebar = await ReactSelector('Sidebar');
+const skipOnCi = process.env.CI ? test.skip : test;
 
-  const IssueItems = await Sidebar.findReact('li');
-  const firstIssue = IssueItems.nth(1);
-  const linkComponent = await firstIssue.findReact('a');
-  const link = await linkComponent.getAttribute('href');
+// tslint:disable-next-line:no-shadowed-variable
+skipOnCi('Link on sidebar navigates to issue page', async t => {
+  // const Sidebar = await ReactSelector('Sidebar');
+  // const IssueItems = await Sidebar.findReact('li');
+  // // FIXME: make this `nth()` choice stable. The data in these tests comes
+  // // from a live API and is therefore not predictable. Different data can lead
+  // // to different renderings, some of will cause this test to fail.
+  // const firstIssue = IssueItems.nth(2);
+  // const linkComponent = await firstIssue.findReact('a');
+  // const link = await linkComponent.getAttribute('href');
+  
+  // FIXME: the above code using React-based selectors has been commented out
+  // because it doesn't seem to be very reliable in practice (it often hangs
+  // waiting for components to show up even when they are verifiably there).
+  // This standard HTML-element based selector code appears to be reliable, but
+  // getting the React stuff above to work would be nice.
+
+  // FIXME: make this nth-child choice stable. The data in these tests comes
+  // from a live API and is therefore not predictable. Different data can lead
+  // to different renderings, some of will cause this test to fail.
+  const firstIssue = Selector('.layout__side .issues-list > li:nth-child(5) a');
+  const link = await firstIssue.getAttribute('href');
+
   await t
     .click(firstIssue)
     .navigateTo(link);
@@ -65,8 +82,11 @@ test('Link on sidebar navigates to issue page', async t => {
   const reasonBody = await Selector('.call__contact__reason');
   await t.expect(reasonBody.exists).ok('The call contact reason is missing');
 
+  // FIXME: this will frequently fail because not all issue pages render this
+  // field. See where /src/components/call/ContactOffices.tsx both returns early
+  // and branches, providing multiple conditions in which this will fail.
   const contactOffice = await Selector('.call__contact__show-field-offices');
-  await t.expect(contactOffice.exists).ok('The ContactOffice component is missint');
+  await t.expect(contactOffice.exists).ok('The ContactOffice component is missing');
 
   // check for the call script
   const script = await Selector('.call__script');
