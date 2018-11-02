@@ -4,7 +4,8 @@ import {
   getAllIssues,
   getCountData,
   postBackfillOutcomes,
-  getUserCallDetails
+  getUserCallDetails,
+  getContacts
 } from '../../services/apiServices';
 import { setUiState } from '../location/index';
 // import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
@@ -19,6 +20,9 @@ import { setUploadedActionCreator } from '../userStats/actionCreator';
 import { clearProfileActionCreator, setAuthTokenActionCreator, setProfileActionCreator } from '../userState';
 // import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
+import { ContactList } from '../../common/contactList';
+import { setInvalidAddress } from '../location/actionCreator';
+import { contactsActionCreator } from './actionCreator';
 
 /**
  * Timer for calling fetchLocationByIP() if
@@ -30,16 +34,30 @@ export const getIssuesIfNeeded = () => {
   const state = store.getState();
 
   // Only make the api call if it hasn't already been made
-  // This method is primarily for when a user has navigated
-  // directly to a route with an issue id
   if (!state.remoteDataState.issues || state.remoteDataState.issues.length === 0) {
     getAllIssues()
     .then((response: Issue[]) => {
       store.dispatch(issuesActionCreator(response));
     }).catch((error) => {
-      // tslint:disable-next-line:no-console
       console.error(`error getting issues: ${error.message}`, error);
       // can't return promises from this dispatch bullshit
+    });
+  }
+};
+
+export const getContactsIfNeeded = () => {
+  const state = store.getState();
+
+  // Senate should be the easiest to get, so let's do test that for validity
+  if (state.remoteDataState.contacts.senate.length === 0) {
+    getContacts()
+    .then((contactList: ContactList) => {
+      store.dispatch(contactsActionCreator(contactList));
+      store.dispatch(setInvalidAddress(false));
+    }).catch((error) => {
+      // tslint:disable-next-line:no-console
+      console.error("couldn't fetch contacts: ",error);
+      store.dispatch(setInvalidAddress(true));
     });
   }
 };

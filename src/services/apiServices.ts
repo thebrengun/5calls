@@ -1,11 +1,12 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { CountData, MidtermStats, Issue } from './../common/model';
+import { CountData, MidtermStats, Issue, Contact } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
 import { store } from '../redux/store';
+import { ContactList } from '../common/contactList';
 
 const prepareHeaders = (): Headers => {
   const state = store.getState();
@@ -32,6 +33,43 @@ export const getAllIssues = (): Promise<Issue[]> => {
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
+
+export const getContacts = (): Promise<ContactList> => {
+  const state = store.getState();
+  const location = state.locationState.address;
+
+  if (location === '' || location === undefined) {
+    // console.log("not fetching location because it's",location);
+    Promise.reject('no location entered');
+  }
+
+  const headers = prepareHeaders();
+
+  return axios.get<ContactResponse>(`http://localhost:8090/v1/reps?location=${location}`, {
+  // return axios.get<ContactResponse>(`https://api.5calls.org/v1/reps?location=${location}`, {
+    headers: headers,
+  })
+  .then(result => {
+    const contactList = new ContactList();
+    contactList.house = result.data.house;
+    contactList.senate = result.data.senate;
+    contactList.governor = result.data.governor;
+    // maybe we want all the reps to be in the same array, then we can pick them out with area?
+    contactList.stateLower = result.data.state.find(contact => contact.area === 'StateLower');
+    contactList.stateUpper = result.data.state.find(contact => contact.area === 'StateUpper');
+    return Promise.resolve(contactList);
+  }).catch(error => {
+    // console.error("bad address",error);
+    return Promise.reject(error);
+  });
+};
+
+interface ContactResponse {
+  house: Contact[];
+  senate: Contact[];
+  governor?: Contact;
+  state: Contact[];
+}
 
 export const getCountData = (): Promise<CountData> => {
   return axios.get(Constants.REPORT_API_URL)

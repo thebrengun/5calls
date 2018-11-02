@@ -3,6 +3,14 @@ import { Issue } from '../../common/model';
 import { RemoteDataAction, RemoteDataActionType } from './index';
 import { ContactList } from '../../common/contactList';
 
+export const defaultRemoteDataState: RemoteDataState = {
+  issues: [],
+  inactiveIssues: [],
+  contacts: new ContactList(),
+  callTotal: 0,
+  errorMessage: '',
+};
+
 export interface RemoteDataState {
   issues: Issue[];
   inactiveIssues: Issue[];
@@ -27,10 +35,11 @@ export const remoteDataReducer: Reducer<RemoteDataState> = (
 
       const issuesState = Object.assign({}, state, {issues: activeIssues, inactiveIssues: inactiveIssues});
       return issuesState;
+    case RemoteDataActionType.GET_CONTACTS:
+      const contacts = action.payload as ContactList;
+      return Object.assign({}, state, {contacts});
     case RemoteDataActionType.GET_CALL_TOTAL:
       return Object.assign({}, state, {callTotal: action.payload});
-    case RemoteDataActionType.GET_DONATIONS:
-      return Object.assign({}, state, {donations: action.payload});
     case RemoteDataActionType.API_ERROR:
       return Object.assign({}, state, {errorMessage: action.payload});
     default:

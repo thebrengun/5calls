@@ -9,6 +9,7 @@ import { ContactDetails } from '.';
 import { locationStateContext } from '../../contexts';
 import Script from './Script';
 import { ContactProgress } from './ContactProgress';
+import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
 
 // This defines the props that we must pass into this component.
 export interface Props {
@@ -28,6 +29,10 @@ export class Call extends React.Component<Props, State> {
     super(props);
     // set initial state
     this.state = this.setStateFromProps(props);
+  }
+
+  componentDidMount() {
+    getContactsIfNeeded();
   }
 
   /**
@@ -53,21 +58,23 @@ export class Call extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-
     if (!isEqual(prevProps, this.props)) {
       this.setState(this.setStateFromProps(this.props));
     }
   }
 
   render() {
+    console.log("issue areas",this.props.issue.contactAreas);
+
     return (
       <section className="call">
         <CallHeader
           currentIssue={this.props.issue}
         />
         <ContactProgress
-          callState={this.props.callState}
+          currentIssue={this.props.issue}
           contactList={this.props.contacts}
+          callState={this.props.callState}
           currentContact={this.state.currentContact}
         />
         {this.state.currentContact &&

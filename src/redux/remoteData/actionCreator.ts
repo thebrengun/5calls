@@ -1,8 +1,6 @@
-import { DonationsAction } from './action';
-import { Donations } from './../../common/model';
-import { NewLocationLookupAction, LocationActionType } from './../location/index';
-import { CallCountAction, ApiErrorAction, IssuesAction, RemoteDataActionType } from './index';
+import { CallCountAction, ApiErrorAction, IssuesAction, RemoteDataActionType, ContactsAction } from './index';
 import { Issue } from '../../common/model';
+import { ContactList } from '../../common/contactList';
 
 export const issuesActionCreator = (issues: Issue[]): IssuesAction => {
   return {
@@ -25,16 +23,9 @@ export const apiErrorMessageActionCreator = (message: string): ApiErrorAction =>
   };
 };
 
-export const newLocationLookup = (location: string): NewLocationLookupAction => {
+export const contactsActionCreator = (contacts: ContactList): ContactsAction => {
   return {
-    type: LocationActionType.NEW_LOCATION_LOOKUP,
-    payload: location
-  };
-};
-
-export const donationsActionCreator = (donations: Donations): DonationsAction => {
-  return {
-    type: RemoteDataActionType.GET_DONATIONS,
-    payload: donations
+    payload: contacts,
+    type: RemoteDataActionType.GET_CONTACTS,
   };
 };
