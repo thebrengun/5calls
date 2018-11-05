@@ -44,6 +44,11 @@ export class Issue {
   }
 
   public currentContact(contactList: ContactList, contactIndex: number): Contact | undefined {
+    const contacts = this.filteredContacts(contactList);
+
+    if (contactIndex <= contacts.length) {
+      return contacts[contactIndex];
+    }
 
     return undefined;
   }

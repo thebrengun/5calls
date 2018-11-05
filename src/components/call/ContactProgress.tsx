@@ -15,14 +15,14 @@ interface Props {
 export const ContactProgress: React.StatelessComponent<Props> = (
   { currentIssue, callState, contactList, currentContact }: Props) => {
   
-  const listItem = (area: string, areaContact: Contact | undefined) => {
+  const listItem = (area: string, areaContact: Contact | undefined, active: boolean, index: number) => {
     return (
-      <li key={area}>
+      <li key={index}>
         <a href="#">
           <img alt="" src={areaContact && areaContact.photoURL ? areaContact.photoURL : '/img/no-rep.png'} />
         </a>
         <h4>{areaContact ? <a href="#">{areaContact.name}</a> : area}</h4>
-        <p>{areaContact ? areaContact.reason : 'Location not accurate enough to find this representative'}</p>
+        <p>{active ? 'active':'nope'}{areaContact ? areaContact.reason : 'Location not accurate enough to find this representative'}</p>
       </li>
     );
   };
@@ -60,7 +60,10 @@ export const ContactProgress: React.StatelessComponent<Props> = (
     <div className="contact-progress">
       <h3>Contacts for this topic:</h3>
       <ul>
-        {contactsForArea(currentIssue.contactAreas).map(areaMap => listItem(areaMap[0], areaMap[1]))}
+        {contactsForArea(currentIssue.contactAreas).map((areaMap, index) => {
+          const isActiveContact = areaMap[1] === currentContact;
+          return listItem(areaMap[0], areaMap[1], isActiveContact, index);
+        })}
       </ul>
       <p className="help"><a href="#">Where are the rest of my representatives?</a></p>
     </div>

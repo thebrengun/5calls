@@ -49,9 +49,10 @@ export class Call extends React.Component<Props, State> {
     }
 
     const numberContactsLeft = props.issue && props.issue.numberOfContacts(this.props.contacts);
+    const currentContact = props.issue.currentContact(this.props.contacts, currentContactIndex);
 
     return {
-      currentContact: props.issue.currentContact(this.props.contacts, currentContactIndex),
+      currentContact: currentContact,
       currentContactIndex: currentContactIndex,
       numberContactsLeft: numberContactsLeft,
     };
@@ -64,8 +65,6 @@ export class Call extends React.Component<Props, State> {
   }
 
   render() {
-    console.log("issue areas",this.props.issue.contactAreas);
-
     return (
       <section className="call">
         <CallHeader

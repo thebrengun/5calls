@@ -45,8 +45,8 @@ export const getContacts = (): Promise<ContactList> => {
 
   const headers = prepareHeaders();
 
-  return axios.get<ContactResponse>(`http://localhost:8090/v1/reps?location=${location}`, {
-  // return axios.get<ContactResponse>(`https://api.5calls.org/v1/reps?location=${location}`, {
+  // return axios.get<ContactResponse>(`http://localhost:8090/v1/reps?location=${location}`, {
+  return axios.get<ContactResponse>(`${Constants.REPS_API_URL}?location=${location}`, {
     headers: headers,
   })
   .then(result => {
