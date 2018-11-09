@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Route, Switch, Router } from 'react-router-dom';
+import { Route, Switch, Router, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 
@@ -14,7 +14,6 @@ import * as Raven from 'raven-js';
 import NotFoundPage from './components/NotFoundPage';
 import { HomePage } from './components/home';
 import { AboutPage } from './components/about';
-import { PhonebanksPage } from './components/phonebanks';
 import { PostcardsPage } from './components/postcards';
 import { FaqPage } from './components/faq';
 import { PrivacyPage } from './components/privacy';
@@ -25,7 +24,6 @@ import { MyImpactPage } from './components/myimpact';
 import { Auth0CallbackContainer } from './components/shared';
 import ProfilePageContainer from './components/profile/ProfilePageContainer';
 import AppProvider from './components/AppProvider';
-import MidtermsPage from './components/MidtermsPage';
 import { startup } from './redux/remoteData';
 import './components/bundle.css';
 
@@ -59,11 +57,15 @@ ReactDOM.render(
                 <Route path="/profile" exact={true} component={ProfilePageContainer} />
                 <Route path="/impact" exact={true} component={MyImpactPage} />
                 <Route path="/more" exact={true} component={MoreIssuesPage} />
-                <Route path="/midterms" exact={true} component={MidtermsPage} />
+                <Route path="/midterms" exact={true}>
+                  <Redirect to="/" />
+                </Route>
                 <Route path="/faq" exact={true} component={FaqPage} />
                 <Route path="/privacy" exact={true} component={PrivacyPage} />
                 <Route path="/about" exact={true} component={AboutPage} />
-                <Route path="/phonebanks" exact={true} component={PhonebanksPage} />
+                <Route path="/phonebanks" exact={true}>
+                  <Redirect to="/" />
+                </Route>
                 <Route path="/postcards" exact={true} component={PostcardsPage} />
                 <Route path="/auth0callback" exact={true} component={Auth0CallbackContainer} />
                 <Route path="*" component={NotFoundPage} />

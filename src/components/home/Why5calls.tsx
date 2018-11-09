@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
@@ -16,20 +15,10 @@ export const Why5calls: React.StatelessComponent<Props> = (props: Props) => (
       <h1 className="hypothesis__title">{props.t('hypothesis.title')}</h1>
       <h2 className="hypothesis__subtitle">
         {/*tslint:disable-next-line:max-line-length*/}
-        {/* <strong>5 Calls</strong> is the easiest and most effective way for citizens to make an impact in national and local politics */}
-        {/*tslint:disable-next-line:max-line-length*/}
-        Ready to save our democracy? Join the <Link to="/midterms">5 Calls 2018 Midterm Challenge</Link> and make an impact every week.
+        <strong>5 Calls</strong> is the easiest and most effective way for citizens to make an impact in national and local politics
       </h2>
     </header>
     <div className="hypothesis__text">
-      <div className="midterms-join">
-        <a href="https://www.youtube.com/watch?v=LhAij3X1vQo" target="_blank">
-          <img
-            src="/img/midterm-video-play.jpg"
-            alt="Join the 5 Calls Midterm Challenge Today"
-          />
-        </a>
-      </div>
       <a href={Constants.contact.apps}><img src="/img/5calls-apps.png" className="hypothesis__text__mobile" /></a>
       <p dangerouslySetInnerHTML={{ __html: props.t('hypothesis.p3') }} />
       <div className="subscribe">
