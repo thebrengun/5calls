@@ -17,12 +17,14 @@ export const ContactProgress: React.StatelessComponent<Props> = (
   
   const listItem = (area: string, areaContact: Contact | undefined, active: boolean, index: number) => {
     return (
-      <li key={index}>
+      <li key={index} className={active ? 'active' : ''}>
         <a href="#">
           <img alt="" src={areaContact && areaContact.photoURL ? areaContact.photoURL : '/img/no-rep.png'} />
         </a>
         <h4>{areaContact ? <a href="#">{areaContact.name}</a> : area}</h4>
-        <p>{active ? 'active':'nope'}{areaContact ? areaContact.reason : 'Location not accurate enough to find this representative'}</p>
+        <p>
+          {areaContact ? areaContact.reason : 'Location not accurate enough to find this representative'}
+        </p>
       </li>
     );
   };

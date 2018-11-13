@@ -26,8 +26,13 @@
         padding: 4px;
         height: 50px;
         background-color: $gray-xlight;
+        border-left: 3px solid $gray-xlight;
         font-family: $font-sans-normal;
         overflow: hidden;
+
+        &.active {
+          border-left-color: $blue;
+        }
 
         img {
           margin: 3px 6px 0 3px;
