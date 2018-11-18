@@ -6,10 +6,12 @@ import { CallState } from '../../redux/callState';
 import CallHeader from './CallHeader';
 import { ContactList } from '../../common/contactList';
 import { ContactDetails } from '.';
-import { locationStateContext } from '../../contexts';
+import { locationStateContext, userStatsContext, userStateContext } from '../../contexts';
 import Script from './Script';
 import { ContactProgress } from './ContactProgress';
 import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
+import { eventContext } from '../../contexts/EventContext';
+import Outcomes from './Outcomes';
 
 // This defines the props that we must pass into this component.
 export interface Props {
@@ -75,13 +77,18 @@ export class Call extends React.Component<Props, State> {
         <CallHeader
           currentIssue={this.props.issue}
         />
-        <ContactProgress
-          currentIssue={this.props.issue}
-          contactList={this.props.contacts}
-          callState={this.props.callState}
-          currentContact={this.state.currentContact}
-          selectContact={(index) => { this.selectContact(index); }}
-        />
+        <userStatsContext.Consumer>
+        { userStatsState => 
+          <ContactProgress
+            currentIssue={this.props.issue}
+            contactList={this.props.contacts}
+            callState={this.props.callState}
+            userStatsState={userStatsState}
+            currentContact={this.state.currentContact}
+            selectContact={(index) => { this.selectContact(index); }}
+          />
+        }
+        </userStatsContext.Consumer>
         {this.state.currentContact &&
           <>
           <ContactDetails
@@ -102,6 +109,21 @@ export class Call extends React.Component<Props, State> {
               </>
             }
           </locationStateContext.Consumer>
+           <userStateContext.Consumer>
+             {userState =>
+               <eventContext.Consumer>
+                 {eventManager =>
+                   <Outcomes
+                     currentIssue={this.props.issue}
+                     userState={userState}
+                     eventEmitter={eventManager.ee}
+                     numberContactsLeft={this.state.numberContactsLeft}
+                     currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
+                   />                
+                 }
+               </eventContext.Consumer>
+             }
+           </userStateContext.Consumer> 
           </>
         }
 
