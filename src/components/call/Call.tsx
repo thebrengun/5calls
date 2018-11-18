@@ -64,6 +64,11 @@ export class Call extends React.Component<Props, State> {
     }
   }
 
+  selectContact(index: number) {
+    const currentContact = this.props.issue.currentContact(this.props.contacts, index);
+    this.setState({ currentContactIndex: index, currentContact: currentContact });
+  }
+
   render() {
     return (
       <section className="call">
@@ -75,6 +80,7 @@ export class Call extends React.Component<Props, State> {
           contactList={this.props.contacts}
           callState={this.props.callState}
           currentContact={this.state.currentContact}
+          selectContact={(index) => { this.selectContact(index); }}
         />
         {this.state.currentContact &&
           <>

@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-// import { ContactList } from '../../common/contactList';
 import { Contact, Issue } from '../../common/model';
 import { CallState } from '../../redux/callState';
 import { ContactList } from '../../common/contactList';
@@ -10,18 +9,25 @@ interface Props {
   readonly callState: CallState;
   readonly contactList: ContactList;
   readonly currentContact?: Contact;
+  readonly selectContact: (index: number) => void;
 }
 
 export const ContactProgress: React.StatelessComponent<Props> = (
-  { currentIssue, callState, contactList, currentContact }: Props) => {
+  { currentIssue, callState, contactList, currentContact, selectContact }: Props) => {
+
+  // this component can handle the click to avoid complexity upstream
+  const selectIndirect = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+    e.preventDefault();
+    selectContact(index);
+  };
   
   const listItem = (area: string, areaContact: Contact | undefined, active: boolean, index: number) => {
     return (
       <li key={index} className={active ? 'active' : ''}>
-        <a href="#">
+        <a href="#" onClick={(e) => selectIndirect(e, index)}>
           <img alt="" src={areaContact && areaContact.photoURL ? areaContact.photoURL : '/img/no-rep.png'} />
         </a>
-        <h4>{areaContact ? <a href="#">{areaContact.name}</a> : area}</h4>
+        <h4>{areaContact ? <a href="#" onClick={(e) => selectIndirect(e, index)}>{areaContact.name}</a> : area}</h4>
         <p>
           {areaContact ? areaContact.reason : 'Location not accurate enough to find this representative'}
         </p>
