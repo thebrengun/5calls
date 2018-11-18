@@ -50,7 +50,9 @@ export class Call extends React.Component<Props, State> {
       currentContactIndex = props.callState.contactIndexes[props.issue.slug];
     }
 
-    const numberContactsLeft = props.issue && props.issue.numberOfContacts(this.props.contacts);
+    // after this contact, the number of contacts that are left to connect with
+    const numberContactsLeft = props.issue &&
+      (props.issue.numberOfContacts(this.props.contacts) - (currentContactIndex + 1));
     const currentContact = props.issue.currentContact(this.props.contacts, currentContactIndex);
 
     return {
@@ -126,30 +128,6 @@ export class Call extends React.Component<Props, State> {
            </userStateContext.Consumer> 
           </>
         }
-
-{/* //           {this.missingContacts(this.props.issue) ?
-//           <NoContactSplitDistrict
-//             splitDistrict={locationState.splitDistrict}
-//           /> :
-//           <IssueLink
-//             issue={this.state.issue}
-//           />
-//           { this.missingContacts(this.props.issue) ? <span/> :
-//           <userStateContext.Consumer>
-//             {userState =>
-//               <eventContext.Consumer>
-//                 {eventManager =>
-//                   <Outcomes
-//                     currentIssue={this.state.issue}
-//                     userState={userState}
-//                     eventEmitter={eventManager.ee}
-//                     numberContactsLeft={this.state.numberContactsLeft}
-//                     currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-//                   />                
-//                 }
-//               </eventContext.Consumer>
-//             }
-//           </userStateContext.Consumer> */}
       </section>
     );
   }

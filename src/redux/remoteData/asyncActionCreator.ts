@@ -24,12 +24,6 @@ import { ContactList } from '../../common/contactList';
 import { setInvalidAddress } from '../location/actionCreator';
 import { contactsActionCreator } from './actionCreator';
 
-/**
- * Timer for calling fetchLocationByIP() if
- * fetchBrowserGeolocation() fails or times out.
- */
-// let setTimeoutHandle; //
-
 export const getIssuesIfNeeded = () => {
   const state = store.getState();
 
@@ -39,8 +33,8 @@ export const getIssuesIfNeeded = () => {
     .then((response: Issue[]) => {
       store.dispatch(issuesActionCreator(response));
     }).catch((error) => {
+      // tslint:disable-next-line:no-console
       console.error(`error getting issues: ${error.message}`, error);
-      // can't return promises from this dispatch bullshit
     });
   }
 };
@@ -56,7 +50,7 @@ export const getContactsIfNeeded = () => {
       store.dispatch(setInvalidAddress(false));
     }).catch((error) => {
       // tslint:disable-next-line:no-console
-      console.error("couldn't fetch contacts: ",error);
+      console.error('couldnt fetch contacts: ', error);
       store.dispatch(setInvalidAddress(true));
     });
   }
