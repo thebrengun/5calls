@@ -101,9 +101,7 @@ class Outcomes extends React.Component<Props & RouteComponentProps<any>, State> 
       } else {
         return (
           <div className="call__outcomes">
-            <h3 className="call__outcomes__header">
-              {this.props.t('outcomes.enterYourCallResult')}
-            </h3>
+            <h3 className="call__outcomes__header">Help track representative availability by selecting your result:</h3>
             <div className="call__outcomes__items">
               {this.props.currentIssue.outcomeModels.map((outcome, index) =>
                 <button key={index} onClick={(e) => this.dispatchOutcome(e, outcome.label)}>

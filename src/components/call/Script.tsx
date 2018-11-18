@@ -60,7 +60,6 @@ export const Script: React.StatelessComponent<Props> = ({ issue, currentContact,
 
   return (
     <div className="call__script">
-      <h3 className="call__script__header">Your script:</h3>
       <div className="call__script__body">
         <ReactMarkdown source={formattedScript}/>
       </div>

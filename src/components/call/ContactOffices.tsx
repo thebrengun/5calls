@@ -25,14 +25,9 @@ export class ContactOffices extends React.Component<Props, State> {
   // this component is reused and the local state is maintained through contact changes,
   // we want the local state to reset when it's updated
   componentWillReceiveProps(nextProps: Props) {
-    // const contact: Contact = this.props.currentIssue.contacts && this.props.currentIssue.contacts.length !== 0 ?
-    //   this.props.currentIssue.contacts[this.props.contactIndex] : DefaultContact;
-    // const nextContact: Contact = nextProps.currentIssue.contacts && nextProps.currentIssue.contacts.length !== 0 ?
-    //   nextProps.currentIssue.contacts[nextProps.contactIndex] : DefaultContact;
-
-    // if (contact !== nextContact) {
-    //   this.setState({showFieldOfficeNumbers: false});
-    // }
+    if (this.props.currentContact !== nextProps.currentContact) {
+      this.setState({showFieldOfficeNumbers: false});
+    }
   }
 
   render() {
@@ -54,8 +49,8 @@ export class ContactOffices extends React.Component<Props, State> {
     } else {
       return (
         <div>
-          <p className="call__contact__show-field-offices">Busy line?&nbsp;
-            <a onClick={this.showField}>Click here to see local office numbers</a>
+          <p className="call__contact__show-field-offices">
+            <a onClick={this.showField}>Or call a local office</a>
           </p>
         </div>
       );
