@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import i18n from './services/i18n';
 import * as ReactGA from 'react-ga';
 import * as Raven from 'raven-js';
+import mixpanel from 'mixpanel-browser/src/loader-module';
 
 import NotFoundPage from './components/NotFoundPage';
 import { HomePage } from './components/home';
@@ -27,6 +28,8 @@ import AppProvider from './components/AppProvider';
 import { startup } from './redux/remoteData';
 import './components/bundle.css';
 
+mixpanel.init('776fce75f7e3ddfbb13b615dcb94ff95');
+
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
   ReactGA.set({
@@ -35,8 +38,10 @@ const trackPageView = location => {
   ReactGA.pageview(location.pathname);
 };
 
-Raven.config('https://7f6e814bc848495aafd63747694a0a30@sentry.io/131886', {
-}).install();
+Raven.config(
+  'https://7f6e814bc848495aafd63747694a0a30@sentry.io/131886',
+  {}
+).install();
 
 const history = createHistory();
 trackPageView(history.location);
@@ -49,28 +54,36 @@ ReactDOM.render(
     <Provider store={store}>
       <AppProvider store={store}>
         <PersistGate persistor={persistor} onBeforeLift={() => startup()}>
-            <Router history={history}>
-              <Switch>
-                <Route path="/" exact={true} component={HomePage} />
-                <Route path="/issue/:issueid" exact={true} component={CallPage} />
-                <Route path="/done/:id" exact={true} component={DonePage} />
-                <Route path="/profile" exact={true} component={ProfilePageContainer} />
-                <Route path="/impact" exact={true} component={MyImpactPage} />
-                <Route path="/more" exact={true} component={MoreIssuesPage} />
-                <Route path="/midterms" exact={true}>
-                  <Redirect to="/" />
-                </Route>
-                <Route path="/faq" exact={true} component={FaqPage} />
-                <Route path="/privacy" exact={true} component={PrivacyPage} />
-                <Route path="/about" exact={true} component={AboutPage} />
-                <Route path="/phonebanks" exact={true}>
-                  <Redirect to="/" />
-                </Route>
-                <Route path="/postcards" exact={true} component={PostcardsPage} />
-                <Route path="/auth0callback" exact={true} component={Auth0CallbackContainer} />
-                <Route path="*" component={NotFoundPage} />
-              </Switch>
-            </Router>
+          <Router history={history}>
+            <Switch>
+              <Route path="/" exact={true} component={HomePage} />
+              <Route path="/issue/:issueid" exact={true} component={CallPage} />
+              <Route path="/done/:id" exact={true} component={DonePage} />
+              <Route
+                path="/profile"
+                exact={true}
+                component={ProfilePageContainer}
+              />
+              <Route path="/impact" exact={true} component={MyImpactPage} />
+              <Route path="/more" exact={true} component={MoreIssuesPage} />
+              <Route path="/midterms" exact={true}>
+                <Redirect to="/" />
+              </Route>
+              <Route path="/faq" exact={true} component={FaqPage} />
+              <Route path="/privacy" exact={true} component={PrivacyPage} />
+              <Route path="/about" exact={true} component={AboutPage} />
+              <Route path="/phonebanks" exact={true}>
+                <Redirect to="/" />
+              </Route>
+              <Route path="/postcards" exact={true} component={PostcardsPage} />
+              <Route
+                path="/auth0callback"
+                exact={true}
+                component={Auth0CallbackContainer}
+              />
+              <Route path="*" component={NotFoundPage} />
+            </Switch>
+          </Router>
         </PersistGate>
       </AppProvider>
     </Provider>

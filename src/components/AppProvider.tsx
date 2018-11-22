@@ -1,5 +1,9 @@
 import * as React from 'react';
 import { Store } from 'react-redux';
+
+import { MixpanelProvider } from 'react-mixpanel';
+import mixpanel from 'mixpanel-browser/src/loader-module';
+
 import { CallState } from '../redux/callState';
 import { RemoteDataState } from '../redux/remoteData';
 import { LocationState } from '../redux/location';
@@ -10,7 +14,7 @@ import {
   callStateContext,
   locationStateContext,
   userStateContext,
-  userStatsContext,
+  userStatsContext
 } from '../contexts';
 import { ApplicationState } from '../redux/root';
 
@@ -38,31 +42,30 @@ export default class AppProvider extends React.Component<Props, State> {
         callState: store.callState,
         locationState: store.locationState,
         userState: store.userState,
-        userStats: store.userStatsState,
+        userStats: store.userStatsState
       });
     });
-
   }
 
   render() {
     if (this.state) {
-    return (
-        <remoteStateContext.Provider value={this.state.remoteState}>
-          <callStateContext.Provider value={this.state.callState}>
-            <locationStateContext.Provider value={this.state.locationState}>
-              <userStateContext.Provider value={this.state.userState}>
-                <userStatsContext.Provider value={this.state.userStats}>
-                  {this.props.children}
-                </userStatsContext.Provider>
-              </userStateContext.Provider>
-            </locationStateContext.Provider>
-          </callStateContext.Provider>
-        </remoteStateContext.Provider>
+      return (
+        <MixpanelProvider mixpanel={mixpanel}>
+          <remoteStateContext.Provider value={this.state.remoteState}>
+            <callStateContext.Provider value={this.state.callState}>
+              <locationStateContext.Provider value={this.state.locationState}>
+                <userStateContext.Provider value={this.state.userState}>
+                  <userStatsContext.Provider value={this.state.userStats}>
+                    {this.props.children}
+                  </userStatsContext.Provider>
+                </userStateContext.Provider>
+              </locationStateContext.Provider>
+            </callStateContext.Provider>
+          </remoteStateContext.Provider>
+        </MixpanelProvider>
       );
     } else {
-      return (
-        <></>
-      );
+      return <></>;
     }
   }
 }

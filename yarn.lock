@@ -93,6 +93,11 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
   integrity sha512-lRnAtKnxMXcYYXqOiotTmJd74uawNWuPnsnPrrO7HiFuE3npE2iQhfABatbYDyxTNqZNuXzcKGhw37R7RjBFLg==
 
+"@types/mixpanel@^2.14.0":
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/@types/mixpanel/-/mixpanel-2.14.0.tgz#ecca57f7f9fa18eb4e8096bd92a6afffd1511acc"
+  integrity sha512-UMFS1lqhXAaPiy3CPD0Tl/+7YGI69IPJ6dvwXgvbA5LO5Dh6vetyVn7crVsiC39dtt/LtbS/NEigKeK7epeCLg==
+
 "@types/node@*":
   version "10.10.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.10.1.tgz#d5c96ca246a418404914d180b7fdd625ad18eca6"
@@ -6122,6 +6127,11 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
+mixpanel-browser@^2.23.0:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/mixpanel-browser/-/mixpanel-browser-2.23.0.tgz#e7757f7f1fa8c2e57aefb0f38eefd24e1359484d"
+  integrity sha512-EYFid0GoXQQaP1qalbf+8owi5njQAnfiqAz3c56A+ar3ujrbFnw2KTipHfrRUR7YwatPMzd4f4RqCjgWc5rAnQ==
+
 mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@~0.5.1:
   version "0.5.1"
   resolved "http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
@@ -7799,6 +7809,11 @@ react-markdown@^2.5.0:
     commonmark "^0.24.0"
     commonmark-react-renderer "^4.3.4"
     prop-types "^15.5.1"
+
+react-mixpanel@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-mixpanel/-/react-mixpanel-1.0.1.tgz#1bf8aa09b7bbb09458472ea1aff618ce327afe36"
+  integrity sha512-p+k7dYoJv84mRVZLLYpLkrh+2S0h2k7J91nxsolh/5HH+4pWQYtcs3DaB9XHLHPcTLlbJCNehr8I0UivADhb4w==
 
 react-modal@^3.0.0:
   version "3.5.1"
