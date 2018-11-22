@@ -146,12 +146,10 @@
     "testURL": "http://localhost",
     "transform": {
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
-      "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js",
+      "^.+\\.(js|jsx)?$": "babel-jest",
+      "^.+\\.(ts|tsx)?$": "ts-jest"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
-    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
