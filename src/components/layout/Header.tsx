@@ -21,8 +21,9 @@ interface Props {
   readonly postcards?: boolean;
   readonly currentUser?: UserState;
   readonly currentIssue?: Issue;
-  readonly issues: Issue[]; 
+  readonly issues: Issue[];
   readonly hideDonation: boolean;
+  readonly mixpanel: Mixpanel;
 }
 
 interface State {
@@ -39,17 +40,25 @@ class HeaderImpl extends React.Component<Props, State> {
     };
   }
 
-  handleClickOutside = () => {
-    if (!this.state.userMenuHidden) { this.toggleMenu(); }
+  componentDidMount() {
+    if (this.props.currentUser && this.props.currentUser.profile) {
+      mixpanel.identify(this.props.currentUser.profile.sub);
+    }
   }
 
-  toggleMenu() {
+  handleClickOutside = () => {
+    if (!this.state.userMenuHidden) {
+      this.toggleMenu();
+    }
+  };
+
+  toggleMenu = () => {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
-  }
+  };
 
   logout = () => {
     store.dispatch(clearProfileActionCreator());
-  }
+  };
 
   refresh = (email: string, subscribe: boolean) => {
     let idToken = '';
@@ -58,24 +67,36 @@ class HeaderImpl extends React.Component<Props, State> {
     }
 
     // send email, then refresh
-    postEmail(email, subscribe, idToken).then(() => {
-      let login = new LoginService(Auth0Config);
+    postEmail(email, subscribe, idToken)
+      .then(() => {
+        let login = new LoginService(Auth0Config);
 
-      if (this.props.currentUser && this.props.currentUser.profile && this.props.currentUser.idToken) {
-        login.checkAndRenewSession(this.props.currentUser.profile, this.props.currentUser.idToken, true)
-        .then((authResponse) => {
-          // Set the updated profile ourselves - auth is a component that doesn't know about redux
-          store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
-          store.dispatch(setProfileActionCreator(authResponse.userProfile));
-        }).catch((error) => {
-          // clear the session
-          store.dispatch(clearProfileActionCreator());
-        });
-      }  
-    }).catch(error => {
-      // console.error("got an error updating email");
-    });
-  }
+        if (
+          this.props.currentUser &&
+          this.props.currentUser.profile &&
+          this.props.currentUser.idToken
+        ) {
+          login
+            .checkAndRenewSession(
+              this.props.currentUser.profile,
+              this.props.currentUser.idToken,
+              true
+            )
+            .then(authResponse => {
+              // Set the updated profile ourselves - auth is a component that doesn't know about redux
+              store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
+              store.dispatch(setProfileActionCreator(authResponse.userProfile));
+            })
+            .catch(error => {
+              // clear the session
+              store.dispatch(clearProfileActionCreator());
+            });
+        }
+      })
+      .catch(error => {
+        // console.error("got an error updating email");
+      });
+  };
 
   render() {
     let profile: UserProfile | undefined;
@@ -85,10 +106,8 @@ class HeaderImpl extends React.Component<Props, State> {
 
     return (
       <>
-        <HeadMeta
-          issue={this.props.currentIssue}
-        />
-        <header className="logo__header" role="banner" >
+        <HeadMeta issue={this.props.currentIssue} />
+        <header className="logo__header" role="banner">
           <div className="logo__header__logo layout">
             <Link to="/">
               <img src="/img/5calls-logo-small.png" alt="5 Calls" />
@@ -99,7 +118,7 @@ class HeaderImpl extends React.Component<Props, State> {
               <li><Link className={props.postcards ? 'active' : ''} to="/postcards">Postcards</Link></li>
             </ul> */}
             <eventContext.Consumer>
-              {eventManager => 
+              {eventManager => (
                 <CustomLogin
                   auth0Config={Auth0Config}
                   userProfile={profile}
@@ -107,7 +126,7 @@ class HeaderImpl extends React.Component<Props, State> {
                   logoutHandler={this.logout}
                   refreshHandler={this.refresh}
                 />
-              }
+              )}
             </eventContext.Consumer>
           </div>
           {!this.props.hideDonation && <DonationContainer />}
