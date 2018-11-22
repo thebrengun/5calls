@@ -2,9 +2,17 @@ import * as React from 'react';
 import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
 import { translate } from 'react-i18next';
+import mixpanel from 'mixpanel-browser/src/loader-module';
+
 import { Issue, Contact } from '../../common/model';
-import { CallHeaderTranslatable, ContactDetails, Outcomes,
-  ScriptTranslatable, NoContactSplitDistrict, IssueLink } from './index';
+import {
+  CallHeaderTranslatable,
+  ContactDetails,
+  Outcomes,
+  ScriptTranslatable,
+  NoContactSplitDistrict,
+  IssueLink
+} from './index';
 import { CallState } from '../../redux/callState';
 import { locationStateContext, userStateContext } from '../../contexts';
 import { eventContext } from '../../contexts/EventContext';
@@ -13,6 +21,7 @@ import { eventContext } from '../../contexts/EventContext';
 export interface Props {
   issue: Issue;
   callState: CallState;
+  mixpanel: Mixpanel;
 }
 
 export interface State {
@@ -37,18 +46,23 @@ export class Call extends React.Component<Props, State> {
    * @returns {State}
    */
   setStateFromProps(props: Props): State {
-
     let currentContactIndex = 0;
-    if (props.issue && props.callState.contactIndexes && props.callState.contactIndexes[props.issue.slug]) {
+    if (
+      props.issue &&
+      props.callState.contactIndexes &&
+      props.callState.contactIndexes[props.issue.slug]
+    ) {
       currentContactIndex = props.callState.contactIndexes[props.issue.slug];
     }
 
-    const currentContact = (props.issue && props.issue.contacts
-      ? props.issue.contacts[currentContactIndex]
-      : undefined);
-    const numberContactsLeft = props.issue && props.issue.contacts
-      ? props.issue.contacts.length - (currentContactIndex + 1)
-      : 0;
+    const currentContact =
+      props.issue && props.issue.contacts
+        ? props.issue.contacts[currentContactIndex]
+        : undefined;
+    const numberContactsLeft =
+      props.issue && props.issue.contacts
+        ? props.issue.contacts.length - (currentContactIndex + 1)
+        : 0;
 
     return {
       currentContact: currentContact,
@@ -58,8 +72,11 @@ export class Call extends React.Component<Props, State> {
     };
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidMount() {
+    mixpanel.track('Topic Page');
+  }
 
+  componentDidUpdate(prevProps: Props) {
     if (!isEqual(prevProps, this.props)) {
       this.setState(this.setStateFromProps(this.props));
     }
@@ -115,54 +132,65 @@ export class Call extends React.Component<Props, State> {
   render() {
     return (
       <locationStateContext.Consumer>
-      { locationState =>
-        <section className="call">
-          <CallHeaderTranslatable
-            invalidAddress={locationState.invalidAddress}
-            currentIssue={this.state.issue}
-          />
-          {this.missingContacts(this.props.issue) ?
-          <NoContactSplitDistrict
-            splitDistrict={locationState.splitDistrict}
-          /> :
-          <ContactDetails
-            currentIssue={this.state.issue}
-            contactIndex={this.state.currentContactIndex}
-          />}
-          <IssueLink
-            issue={this.state.issue}
-          />
-          <ScriptTranslatable
-            issue={this.state.issue}
-            contactIndex={this.state.currentContactIndex}
-            locationState={locationState}
-          />
-          { this.missingContacts(this.props.issue) ? <span/> :
-          <userStateContext.Consumer>
-            {userState =>
-              <eventContext.Consumer>
-                {eventManager =>
-                  <Outcomes
-                    currentIssue={this.state.issue}
-                    userState={userState}
-                    eventEmitter={eventManager.ee}
-                    numberContactsLeft={this.state.numberContactsLeft}
-                    currentContactId={(this.state.currentContact ? this.state.currentContact.id : '')}
-                  />                
-                }
-              </eventContext.Consumer>
-            }
-          </userStateContext.Consumer>
-}
-          {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
-          { this.missingContacts(this.props.issue) ? <span/> :
-          this.state.numberContactsLeft > 0 ?
-            <h3 aria-live="polite" className="call__contacts__left" >
-              {i18n.t('outcomes.contactsLeft', { contactsRemaining: this.state.numberContactsLeft })}
-            </h3> : ''
-          }
-        </section>
-      }
+        {locationState => (
+          <section className="call">
+            <CallHeaderTranslatable
+              invalidAddress={locationState.invalidAddress}
+              currentIssue={this.state.issue}
+            />
+            {this.missingContacts(this.props.issue) ? (
+              <NoContactSplitDistrict
+                splitDistrict={locationState.splitDistrict}
+              />
+            ) : (
+              <ContactDetails
+                currentIssue={this.state.issue}
+                contactIndex={this.state.currentContactIndex}
+              />
+            )}
+            <IssueLink issue={this.state.issue} />
+            <ScriptTranslatable
+              issue={this.state.issue}
+              contactIndex={this.state.currentContactIndex}
+              locationState={locationState}
+            />
+            {this.missingContacts(this.props.issue) ? (
+              <span />
+            ) : (
+              <userStateContext.Consumer>
+                {userState => (
+                  <eventContext.Consumer>
+                    {eventManager => (
+                      <Outcomes
+                        currentIssue={this.state.issue}
+                        userState={userState}
+                        eventEmitter={eventManager.ee}
+                        numberContactsLeft={this.state.numberContactsLeft}
+                        currentContactId={
+                          this.state.currentContact
+                            ? this.state.currentContact.id
+                            : ''
+                        }
+                      />
+                    )}
+                  </eventContext.Consumer>
+                )}
+              </userStateContext.Consumer>
+            )}
+            {/* TODO: Fix people/person text for 1 contact left. Move logic to a function */}
+            {this.missingContacts(this.props.issue) ? (
+              <span />
+            ) : this.state.numberContactsLeft > 0 ? (
+              <h3 aria-live="polite" className="call__contacts__left">
+                {i18n.t('outcomes.contactsLeft', {
+                  contactsRemaining: this.state.numberContactsLeft
+                })}
+              </h3>
+            ) : (
+              ''
+            )}
+          </section>
+        )}
       </locationStateContext.Consumer>
     );
   }

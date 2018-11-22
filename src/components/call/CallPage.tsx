@@ -1,31 +1,20 @@
 import * as React from 'react';
 import { isEqual } from 'lodash';
-import {
-  withRouter,
-  RouteComponentProps,
-} from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
+
+import { MixpanelConsumer } from 'react-mixpanel';
 
 import { getIssue } from '../shared/utils';
-
 import i18n from '../../services/i18n';
-import { CallTranslatable, FetchCall } from './index';
+import { CallTranslatable } from './index';
 import { Layout } from '../layout';
 import { Issue } from '../../common/model';
 
-import {
-  CallState,
-  selectIssueActionCreator,
-} from '../../redux/callState';
-import {
-  getIssuesIfNeeded,
-  RemoteDataState,
-} from '../../redux/remoteData';
+import { CallState, selectIssueActionCreator } from '../../redux/callState';
+import { getIssuesIfNeeded, RemoteDataState } from '../../redux/remoteData';
 import { store } from '../../redux/store';
 
-import {
-  remoteStateContext,
-  callStateContext,
-} from '../../contexts';
+import { remoteStateContext, callStateContext } from '../../contexts';
 
 interface RouteProps {
   readonly groupid: string;
@@ -57,7 +46,7 @@ class CallPageView extends React.Component<Props, State> {
     return {
       currentIssue: currentIssue,
       currentIssueId: currentIssue ? currentIssue.id : '',
-      hasBeenCached: false,
+      hasBeenCached: false
     };
   }
 
@@ -75,7 +64,7 @@ class CallPageView extends React.Component<Props, State> {
         this.setState({
           ...this.state,
           currentIssue: currentIssue,
-          currentIssueId: currentIssue ? currentIssue.id : '',
+          currentIssueId: currentIssue ? currentIssue.id : ''
         });
       }
     }
@@ -98,36 +87,25 @@ class CallPageView extends React.Component<Props, State> {
     }
 
     return currentIssue;
-  }
+  };
 
   getView = () => {
     if (!this.props.remoteState.issues) {
       getIssuesIfNeeded();
     }
 
-    let extraComponent;
-
-    if (this.state.currentIssue &&
-        this.state.currentIssue.contactType &&
-        this.state.currentIssue.contactType === 'FETCH') {
-        return (
-        <Layout
-          extraComponent={extraComponent}
-        >
-          <FetchCall
-            issue={this.state.currentIssue}
-          />
-        </Layout>
-      );
-    } else if (this.state.currentIssue) {
+    if (this.state.currentIssue) {
       return (
-        <Layout
-          extraComponent={extraComponent}
-        >
-          <CallTranslatable
-            issue={this.state.currentIssue}
-            callState={this.props.callState}
-          />
+        <Layout>
+          <MixpanelConsumer>
+            {mixpanel => (
+              <CallTranslatable
+                issue={this.state.currentIssue as Issue}
+                callState={this.props.callState}
+                mixpanel={mixpanel}
+              />
+            )}
+          </MixpanelConsumer>
         </Layout>
       );
     } else {
@@ -139,14 +117,10 @@ class CallPageView extends React.Component<Props, State> {
         </Layout>
       );
     }
-  }
+  };
 
   render() {
-    return (
-      <>
-        {this.getView()}
-      </>
-    );
+    return <>{this.getView()}</>;
   }
 }
 
@@ -156,16 +130,16 @@ export default class CallPage extends React.Component {
   render() {
     return (
       <remoteStateContext.Consumer>
-      { remoteState =>
-        <callStateContext.Consumer>
-        { callState =>
-          <CallPageWithRouter
-            remoteState={remoteState}
-            callState={callState}
-          />
-        }
-        </callStateContext.Consumer>
-      }
+        {remoteState => (
+          <callStateContext.Consumer>
+            {callState => (
+              <CallPageWithRouter
+                remoteState={remoteState}
+                callState={callState}
+              />
+            )}
+          </callStateContext.Consumer>
+        )}
       </remoteStateContext.Consumer>
     );
   }

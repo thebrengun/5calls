@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import onClickOutside from 'react-onclickoutside';
+import mixpanel from 'mixpanel-browser/src/loader-module';
 
 import { CustomLogin, LoginService } from '@5calls/react-components';
 import { store } from '../../redux/store';
