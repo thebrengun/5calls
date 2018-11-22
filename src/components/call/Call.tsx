@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
 import { translate } from 'react-i18next';
-import mixpanel from 'mixpanel-browser/src/loader-module';
 
 import { Issue, Contact } from '../../common/model';
 import {
@@ -21,7 +20,6 @@ import { eventContext } from '../../contexts/EventContext';
 export interface Props {
   issue: Issue;
   callState: CallState;
-  mixpanel: Mixpanel;
 }
 
 export interface State {
@@ -70,10 +68,6 @@ export class Call extends React.Component<Props, State> {
       numberContactsLeft: numberContactsLeft,
       issue: props.issue
     };
-  }
-
-  componentDidMount() {
-    mixpanel.track('Topic Page');
   }
 
   componentDidUpdate(prevProps: Props) {
