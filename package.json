@@ -96,6 +96,7 @@
     "testcafe-browser-provider-browserstack": "^1.5.0",
     "testcafe-react-selectors": "^3.0.0",
     "ts-jest": "^23.1.4",
+    "ts-lint": "^4.5.1",
     "ts-loader": "^2.0.3",
     "tslint": "^5.2.0",
     "tslint-loader": "^3.5.3",
@@ -159,16 +160,16 @@
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
       "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "moduleNameMapper": {
+      "mixpanel-browser/src/loader-module": "<rootDir>/src/tests/mixpanel-mock.js"
     },
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web"
-    }
+    ]
   },
   "babel": {
     "presets": [

@@ -36,6 +36,7 @@ const trackPageView = location => {
     page: location.pathname
   });
   ReactGA.pageview(location.pathname);
+  mixpanel.track(location.pathname);
 };
 
 Raven.config(
