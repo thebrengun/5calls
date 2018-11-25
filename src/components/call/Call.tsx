@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18n from '../../services/i18n';
 import { isEqual } from 'lodash';
 import { translate } from 'react-i18next';
-import mixpanel from 'mixpanel-browser/src/loader-module';
 
 import { Issue, Contact } from '../../common/model';
 import {
@@ -70,10 +69,6 @@ export class Call extends React.Component<Props, State> {
       numberContactsLeft: numberContactsLeft,
       issue: props.issue
     };
-  }
-
-  componentDidMount() {
-    mixpanel.track('Topic Page');
   }
 
   componentDidUpdate(prevProps: Props) {
