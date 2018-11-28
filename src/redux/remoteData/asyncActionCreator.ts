@@ -19,10 +19,9 @@ import {
   setAuthTokenActionCreator,
   setProfileActionCreator
 } from '../userState';
-// import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
 import { ContactList } from '../../common/contactList';
-import { setInvalidAddress } from '../location/actionCreator';
+import { setInvalidAddress, setCachedCity } from '../location/actionCreator';
 import { contactsActionCreator } from './actionCreator';
 
 export const getIssuesIfNeeded = () => {
@@ -52,6 +51,7 @@ export const getContactsIfNeeded = () => {
     getContacts()
       .then((contactList: ContactList) => {
         store.dispatch(contactsActionCreator(contactList));
+        store.dispatch(setCachedCity(contactList.location));
         store.dispatch(setInvalidAddress(false));
       })
       .catch(error => {
@@ -70,9 +70,9 @@ export const fetchCallCount = () => {
     return getCountData()
       .then((response: CountData) => {
         dispatch(callCountActionCreator(response.count));
-        // tslint:disable-next-line:no-console
       })
       .catch(error =>
+        // tslint:disable-next-line:no-console
         console.error(`fetchCallCount error: ${error.message}`, error)
       );
   };

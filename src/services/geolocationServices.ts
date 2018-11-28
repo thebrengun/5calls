@@ -1,7 +1,4 @@
-import axios from 'axios';
 import { GeolocationPosition } from '../common/model';
-import { IpInfoData } from './../common/model';
-import * as Constants from '../common/constants';
 
 // Geolocation PositionOptions properties
 // Browser geolocation timeout in milliseconds
@@ -63,14 +60,4 @@ export const getBrowserGeolocation = (): Promise<GeolocationPosition> => {
       reject(new Error('Browser Geolocation API not available'));
     }
   });
-};
-
-/**
- * Use ipinfo.io to find location by IP address.
- */
-export const getLocationByIP = (): Promise<IpInfoData> => {
-  return axios
-    .get(Constants.IP_INFO_URL)
-    .then(response => Promise.resolve(response.data))
-    .catch(e => Promise.reject(e));
 };

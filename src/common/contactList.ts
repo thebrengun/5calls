@@ -1,6 +1,7 @@
 import { Contact } from './model';
 
 export class ContactList {
+  public location: string;
   public house: Contact[];
   public senate: Contact[];
   public governor?: Contact;
@@ -8,6 +9,7 @@ export class ContactList {
   public stateLower?: Contact;
 
   constructor() {
+    this.location = '';
     this.house = [];
     this.senate = [];
   }
