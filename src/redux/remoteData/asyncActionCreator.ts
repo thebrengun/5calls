@@ -7,17 +7,18 @@ import {
   getUserCallDetails,
   getContacts
 } from '../../services/apiServices';
-import { setUiState } from '../location/index';
-// import { getLocationByIP, getBrowserGeolocation, GEOLOCATION_TIMEOUT } from '../../services/geolocationServices';
 import { issuesActionCreator, callCountActionCreator } from './index';
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
-import { LocationUiState } from '../../common/model';
 import { LoginService, UserProfile } from '@5calls/react-components';
 import { Auth0Config } from '../../common/constants';
 import { UserContactEvent } from '../userStats';
 import { setUploadedActionCreator } from '../userStats/actionCreator';
-import { clearProfileActionCreator, setAuthTokenActionCreator, setProfileActionCreator } from '../userState';
+import {
+  clearProfileActionCreator,
+  setAuthTokenActionCreator,
+  setProfileActionCreator
+} from '../userState';
 // import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
 import { ContactList } from '../../common/contactList';
@@ -28,14 +29,18 @@ export const getIssuesIfNeeded = () => {
   const state = store.getState();
 
   // Only make the api call if it hasn't already been made
-  if (!state.remoteDataState.issues || state.remoteDataState.issues.length === 0) {
+  if (
+    !state.remoteDataState.issues ||
+    state.remoteDataState.issues.length === 0
+  ) {
     getAllIssues()
-    .then((response: Issue[]) => {
-      store.dispatch(issuesActionCreator(response));
-    }).catch((error) => {
-      // tslint:disable-next-line:no-console
-      console.error(`error getting issues: ${error.message}`, error);
-    });
+      .then((response: Issue[]) => {
+        store.dispatch(issuesActionCreator(response));
+      })
+      .catch(error => {
+        // tslint:disable-next-line:no-console
+        console.error(`error getting issues: ${error.message}`, error);
+      });
   }
 };
 
@@ -45,39 +50,47 @@ export const getContactsIfNeeded = () => {
   // Senate should be the easiest to get, so let's do test that for validity
   if (state.remoteDataState.contacts.senate.length === 0) {
     getContacts()
-    .then((contactList: ContactList) => {
-      store.dispatch(contactsActionCreator(contactList));
-      store.dispatch(setInvalidAddress(false));
-    }).catch((error) => {
-      // tslint:disable-next-line:no-console
-      console.error('couldnt fetch contacts: ', error);
-      store.dispatch(setInvalidAddress(true));
-    });
+      .then((contactList: ContactList) => {
+        store.dispatch(contactsActionCreator(contactList));
+        store.dispatch(setInvalidAddress(false));
+      })
+      .catch(error => {
+        // tslint:disable-next-line:no-console
+        console.error('couldnt fetch contacts: ', error);
+        store.dispatch(setInvalidAddress(true));
+      });
   }
 };
 
 export const fetchCallCount = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
+  return (
+    dispatch: Dispatch<ApplicationState>,
+    getState: () => ApplicationState
+  ) => {
     return getCountData()
       .then((response: CountData) => {
         dispatch(callCountActionCreator(response.count));
         // tslint:disable-next-line:no-console
-      }).catch((error) => console.error(`fetchCallCount error: ${error.message}`, error));
+      })
+      .catch(error =>
+        console.error(`fetchCallCount error: ${error.message}`, error)
+      );
   };
 };
 
 export const fetchDonations = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
-      return;
-      // return getDonations()
-      //   .then((response: DonationGoal) => {
-      //     const donations: Donations = response.goal;
-      //     dispatch(donationsActionCreator(donations));
-      //   })
-      //   // tslint:disable-next-line:no-console
-      //   .catch(e => console.error(`fetchDonations error: ${e.message}`, e));
+  return (
+    dispatch: Dispatch<ApplicationState>,
+    getState: () => ApplicationState
+  ) => {
+    return;
+    // return getDonations()
+    //   .then((response: DonationGoal) => {
+    //     const donations: Donations = response.goal;
+    //     dispatch(donationsActionCreator(donations));
+    //   })
+    //   // tslint:disable-next-line:no-console
+    //   .catch(e => console.error(`fetchDonations error: ${e.message}`, e));
   };
 };
 
@@ -109,8 +122,10 @@ export const fetchDonations = () => {
 // };
 
 export const fetchBrowserGeolocation = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
+  return (
+    dispatch: Dispatch<ApplicationState>,
+    getState: () => ApplicationState
+  ) => {
     // // Sometimes, the user ignores the prompt or the browser does not
     // // provide a response when they do not permit browser location.
     // // After GEOLOCATION_TIMEOUT + 1 second, try IP-based location,
@@ -120,7 +135,6 @@ export const fetchBrowserGeolocation = () => {
     // const state = getState();
     // const fetchType = state.locationState.locationFetchType;
     // // const useGeolocation = state.locationState.useGeolocation || null;
-
     // // tslint:disable-next-line:no-shadowed-variable no-any
     // setTimeoutHandle = setTimeout(() => dispatch<any>(fetchLocationByIP()), GEOLOCATION_TIMEOUT + 1000);
     // // fetchType will be undefined at first
@@ -152,8 +166,10 @@ export const fetchBrowserGeolocation = () => {
 };
 
 export const uploadStatsIfNeeded = () => {
-  return (dispatch: Dispatch<ApplicationState>,
-          getState: () => ApplicationState) => {
+  return (
+    dispatch: Dispatch<ApplicationState>,
+    getState: () => ApplicationState
+  ) => {
     const state: ApplicationState = getState();
 
     if (state.userState.idToken) {
@@ -216,21 +232,23 @@ export const getProfileInfo = async (): Promise<UserProfile> => {
 export const startup = () => {
   const state = store.getState();
 
-  store.dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
   // clear contact indexes loaded from local storage
   store.dispatch(clearContactIndexes());
 
   // check expired login and handle or logout
   const auth = new LoginService(Auth0Config);
   if (state.userState.profile && state.userState.idToken) {
-    auth.checkAndRenewSession(state.userState.profile, state.userState.idToken).then((authResponse) => {
-      // Set the updated profile ourselves - auth is a component that doesn't know about redux
-      store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
-      store.dispatch(setProfileActionCreator(authResponse.userProfile));
-    }).catch((error) => {
-      // clear the session
-      store.dispatch(clearProfileActionCreator());
-    });
+    auth
+      .checkAndRenewSession(state.userState.profile, state.userState.idToken)
+      .then(authResponse => {
+        // Set the updated profile ourselves - auth is a component that doesn't know about redux
+        store.dispatch(setAuthTokenActionCreator(authResponse.authToken));
+        store.dispatch(setProfileActionCreator(authResponse.userProfile));
+      })
+      .catch(error => {
+        // clear the session
+        store.dispatch(clearProfileActionCreator());
+      });
   }
 
   // const loc = state.locationState.address;

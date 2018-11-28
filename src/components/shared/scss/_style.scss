@@ -1,26 +1,27 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700');
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700");
 
-@import 'normalize';
-@import 'variables-and-mixins';
-@import 'elements';
-@import 'utility';
+@import "normalize";
+@import "variables-and-mixins";
+@import "elements";
+@import "utility";
 
 // Components
-@import 'layout';
-@import 'issues';
-@import 'hypothesis';
-@import 'call';
-@import 'about';
-@import 'impact';
-@import 'loadingAnimation';
-@import 'group';
-@import 'footer';
-@import 'tracker';
-@import 'login';
-@import 'done';
-@import 'profile';
-@import 'midterms';
+@import "layout";
+@import "issues";
+@import "location";
+@import "hypothesis";
+@import "call";
+@import "about";
+@import "impact";
+@import "loadingAnimation";
+@import "group";
+@import "footer";
+@import "tracker";
+@import "login";
+@import "done";
+@import "profile";
+@import "midterms";
 
 // Debug
 // @include debug-layout();

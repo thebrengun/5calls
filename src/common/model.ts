@@ -43,7 +43,10 @@ export class Issue {
     return this.filteredContacts(contactList).length;
   }
 
-  public currentContact(contactList: ContactList, contactIndex: number): Contact | undefined {
+  public currentContact(
+    contactList: ContactList,
+    contactIndex: number
+  ): Contact | undefined {
     const contacts = this.filteredContacts(contactList);
 
     if (contactIndex <= contacts.length) {
@@ -205,13 +208,6 @@ export interface IpInfoData {
   loc: string; // long, lat - used in issue lookup
   org: string; // internet service provider
   postal: string; // zip code
-}
-
-export enum LocationUiState {
-  FETCHING_LOCATION = 'FETCHING_LOCATION',
-  LOCATION_FOUND = 'LOCATION_FOUND',
-  ENTERING_LOCATION = 'ENTERING_LOCATION',
-  LOCATION_ERROR = 'LOCATION_ERROR'
 }
 
 export interface DonationGoal {
