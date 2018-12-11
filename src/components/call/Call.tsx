@@ -34,7 +34,7 @@ export class Call extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    getContactsIfNeeded();
+    getContactsIfNeeded(false);
   }
 
   /**

@@ -41,7 +41,7 @@ export const getContacts = (): Promise<ContactList> => {
 
   if (location === '' || location === undefined) {
     // console.log("not fetching location because it's",location);
-    Promise.reject('no location entered');
+    return Promise.reject('no location entered');
   }
 
   const headers = prepareHeaders();

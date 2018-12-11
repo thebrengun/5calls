@@ -43,11 +43,11 @@ export const getIssuesIfNeeded = () => {
   }
 };
 
-export const getContactsIfNeeded = () => {
+export const getContactsIfNeeded = (force: boolean) => {
   const state = store.getState();
 
   // Senate should be the easiest to get, so let's do test that for validity
-  if (state.remoteDataState.contacts.senate.length === 0) {
+  if (state.remoteDataState.contacts.senate.length === 0 || force) {
     getContacts()
       .then((contactList: ContactList) => {
         store.dispatch(contactsActionCreator(contactList));

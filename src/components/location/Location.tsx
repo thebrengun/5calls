@@ -4,6 +4,7 @@ import { LocationState } from '../../redux/location/reducer';
 import { clearAddress, setLocation } from '../../redux/location';
 import { store } from '../../redux/store';
 import { getBrowserGeolocation } from '../../services/geolocationServices';
+import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
 
 interface Props {
   locationState: LocationState;
@@ -38,6 +39,13 @@ export class Location extends React.Component<Props, State> {
       this.props.locationState.address !== ''
     ) {
       this.setState({ uiState: LocationUIState.LOCATION_FOUND });
+
+      // if the location has updated, force a contact refresh
+      if (
+        prevProps.locationState.address !== this.props.locationState.address
+      ) {
+        getContactsIfNeeded(true);
+      }
     }
   }
 
@@ -45,7 +53,10 @@ export class Location extends React.Component<Props, State> {
     switch (this.state.uiState) {
       case LocationUIState.NO_LOCATION:
         // if there's a saved location, set it
-        if (this.props.locationState.address !== '') {
+        if (
+          this.props.locationState.address &&
+          this.props.locationState.address !== ''
+        ) {
           this.setState({ uiState: LocationUIState.LOCATION_FOUND });
         }
         break;
@@ -88,6 +99,7 @@ export class Location extends React.Component<Props, State> {
     const newLocation = e.currentTarget.elements['address'].value;
 
     if (newLocation === '') {
+      console.error('not the right behavior anymore');
       // if the user hits "Go" with no location, clear what they had and refresh to try the default again
       store.dispatch(clearAddress());
       window.location.reload();
@@ -114,7 +126,7 @@ export class Location extends React.Component<Props, State> {
           Getting your location automatically...
         </p>
         <p className="help">
-          <a href="#">Enter an address manually</a>
+          <a href="#">Or enter an address manually</a>
         </p>
       </>
     );
