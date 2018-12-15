@@ -3,12 +3,7 @@ import * as moxios from 'moxios';
 import configureStore from 'redux-mock-store';
 
 import { ApplicationState } from './../root';
-import {
-  ApiData,
-  Issue,
-  LocationUiState,
-  LocationFetchType
-} from './../../common/model';
+import { Issue, LocationFetchType } from './../../common/model';
 import { setAddress, LocationActionType } from './index';
 import * as Constants from '../../common/constants';
 
@@ -44,7 +39,6 @@ test('Expect setAddress() action creator to dispatch correctly', () => {
     useGeolocation: false,
     splitDistrict: false,
     invalidAddress: false,
-    uiState: LocationUiState.FETCHING_LOCATION,
     locationFetchType: LocationFetchType.CACHED_ADDRESS
   };
   initialState.locationState = locationState;

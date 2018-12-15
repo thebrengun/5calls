@@ -1,18 +1,87 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { ApiData, CountData, MidtermStats } from './../common/model';
+import { CountData, MidtermStats, Issue, Contact } from './../common/model';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
+import { ContactList } from '../common/contactList';
+import { store } from '../redux/store';
 
-export const getAllIssues = (address: string): Promise<ApiData> => {
+const prepareHeaders = (): Headers => {
+  const state = store.getState();
+
+  let headers: Headers = { 'Content-Type': 'application/json; charset=utf-8' };
+  if (state.userState.idToken) {
+    headers.Authorization = 'Bearer ' + state.userState.idToken;
+  }
+
+  return headers;
+};
+
+interface Headers {
+  Authorization?: string;
+  'Content-Type': string;
+}
+
+export const getAllIssues = (): Promise<Issue[]> => {
+  const headers = prepareHeaders();
+
   return axios
-    .get(`${Constants.ISSUES_API_URL}${encodeURIComponent(address)}`)
+    .get(Constants.ISSUES_API_URL, {
+      headers: headers
+    })
     .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
 
+export const getContacts = (): Promise<ContactList> => {
+  const state = store.getState();
+  const location = state.locationState.address;
+
+  if (location === '' || location === undefined) {
+    // console.log("not fetching location because it's",location);
+    return Promise.reject('no location entered');
+  }
+
+  const headers = prepareHeaders();
+
+  return axios
+    .get<ContactResponse>(
+      `${Constants.REPS_API_URL}?location=${location}`,
+      // `http://localhost:8090/v1/reps?location=${location}`,
+      {
+        headers: headers
+      }
+    )
+    .then(result => {
+      const contactList = new ContactList();
+      contactList.location = result.data.location;
+      contactList.house = result.data.house;
+      contactList.senate = result.data.senate;
+      contactList.governor = result.data.governor;
+      // maybe we want all the reps to be in the same array, then we can pick them out with area?
+      contactList.stateLower = result.data.state.find(
+        contact => contact.area === 'StateLower'
+      );
+      contactList.stateUpper = result.data.state.find(
+        contact => contact.area === 'StateUpper'
+      );
+      return Promise.resolve(contactList);
+    })
+    .catch(error => {
+      // console.error("bad address",error);
+      return Promise.reject(error);
+    });
+};
+
+interface ContactResponse {
+  location: string;
+  house: Contact[];
+  senate: Contact[];
+  governor?: Contact;
+  state: Contact[];
+}
 export const getCountData = (): Promise<CountData> => {
   return axios
     .get(`${Constants.REPORT_API_URL}`)

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Issue } from '../../common/model';
-import { IssuesListTranslatable } from '../issues';
+import { IssuesList } from '../issues';
 
 interface Props {
   readonly issues: Issue[];
@@ -10,7 +10,7 @@ interface Props {
 
 const Sidebar: React.StatelessComponent<Props> = (props: Props) => {
   return (
-    <IssuesListTranslatable
+    <IssuesList
       issues={props.issues}
       currentIssue={props.currentIssue}
       completedIssueIds={props.completedIssueIds}

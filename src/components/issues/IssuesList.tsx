@@ -1,10 +1,11 @@
 import * as React from 'react';
 import i18n from '../../services/i18n';
-import { translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
+
 import { Issue } from '../../common/model';
 import { IssuesListItem } from './index';
+import { getIssuesIfNeeded } from '../../redux/remoteData';
 
 interface Props {
   issues: Issue[];
@@ -12,10 +13,12 @@ interface Props {
   completedIssueIds: string[];
 }
 
-export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
-  let currentIssueId: string = props.currentIssue ? props.currentIssue.id : '';
+export class IssuesList extends React.Component<Props> {
+  componentDidMount() {
+    getIssuesIfNeeded();
+  }
 
-  const listFooter = () => {
+  listFooter = () => {
     return (
       <li>
         <Link to={`/more`} className={`issues__footer-link`}>
@@ -25,16 +28,20 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
     );
   };
 
-  const listItems = () => {
-    if (props.issues && props.issues.map) {
-      return props.issues.map(issue => (
+  listItems = () => {
+    let currentIssueId = this.props.currentIssue
+      ? this.props.currentIssue.id
+      : 0;
+
+    if (this.props.issues && this.props.issues.map) {
+      return this.props.issues.map(issue => (
         <IssuesListItem
           key={issue.id}
           issue={issue}
           isIssueComplete={
-            props.completedIssueIds &&
+            this.props.completedIssueIds &&
             find(
-              props.completedIssueIds,
+              this.props.completedIssueIds,
               (issueId: string) => issue.slug === issueId
             ) !== undefined
           }
@@ -48,12 +55,12 @@ export const IssuesList: React.StatelessComponent<Props> = (props: Props) => {
     }
   };
 
-  return (
-    <ul className="issues-list" role="navigation">
-      {listItems()}
-      {listFooter()}
-    </ul>
-  );
-};
-
-export const IssuesListTranslatable = translate()(IssuesList);
+  render() {
+    return (
+      <ul className="issues-list" role="navigation">
+        {this.listItems()}
+        {this.listFooter()}
+      </ul>
+    );
+  }
+}

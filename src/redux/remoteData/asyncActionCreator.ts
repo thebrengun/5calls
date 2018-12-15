@@ -1,32 +1,16 @@
 import { Dispatch } from 'redux';
-import {
-  ApiData,
-  IpInfoData,
-  LocationFetchType,
-  CountData
-} from './../../common/model';
+import { CountData, Issue } from './../../common/model';
 import {
   getAllIssues,
   getCountData,
   postBackfillOutcomes,
-  getUserCallDetails
+  getUserCallDetails,
+  getContacts
 } from '../../services/apiServices';
-import {
-  setCachedCity,
-  setLocation,
-  setLocationFetchType,
-  setSplitDistrict,
-  setUiState
-} from '../location/index';
-import {
-  getLocationByIP,
-  getBrowserGeolocation,
-  GEOLOCATION_TIMEOUT
-} from '../../services/geolocationServices';
+import { setCachedCity } from '../location/index';
 import { issuesActionCreator, callCountActionCreator } from './index';
 import { clearContactIndexes } from '../callState/';
 import { ApplicationState } from '../root';
-import { LocationUiState } from '../../common/model';
 import { LoginService, UserProfile } from '@5calls/react-components';
 import { Auth0Config } from '../../common/constants';
 import { UserContactEvent } from '../userStats';
@@ -38,69 +22,45 @@ import {
 } from '../userState';
 import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
-
-/**
- * Timer for calling fetchLocationByIP() if
- * fetchBrowserGeolocation() fails or times out.
- */
-let setTimeoutHandle; //
+import { ContactList } from '../../common/contactList';
+import { contactsActionCreator } from './actionCreator';
 
 export const getIssuesIfNeeded = () => {
-  return (
-    dispatch: Dispatch<ApplicationState>,
-    getState: () => ApplicationState
-  ) => {
-    const state: ApplicationState = getState();
+  const state = store.getState();
 
-    // Only make the api call if it hasn't already been made
-    // This method is primarily for when a user has navigated
-    // directly to a route with an issue id
-    if (
-      !state.remoteDataState.issues ||
-      state.remoteDataState.issues.length === 0
-    ) {
-      const loc = state.locationState.address;
-      if (loc) {
-        // console.log('Using cached address');
-        // tslint:disable-next-line:no-any
-        dispatch<any>(fetchAllIssues(loc)).then(() => {
-          setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
-        });
-      }
-    }
-  };
-};
-
-export const fetchAllIssues = (address: string = '') => {
-  return (
-    dispatch: Dispatch<ApplicationState>,
-    getState: () => ApplicationState
-  ) => {
-    return getAllIssues(address)
-      .then((response: ApiData) => {
-        if (response.invalidAddress) {
-          dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          dispatch(setInvalidAddress(response.invalidAddress));
-        } else {
-          const normalizedAddress = response.normalizedLocation as string;
-          dispatch(setCachedCity(normalizedAddress));
-          dispatch(setLocation(address));
-          if (!address) {
-            dispatch(setUiState(LocationUiState.LOCATION_ERROR));
-          }
-          dispatch(setSplitDistrict(response.splitDistrict));
-          dispatch(setInvalidAddress(false));
-          dispatch(setLocationFetchType(LocationFetchType.CACHED_ADDRESS));
-          dispatch(issuesActionCreator(response.issues));
-        }
+  // Only make the api call if it hasn't already been made
+  if (
+    !state.remoteDataState.issues ||
+    state.remoteDataState.issues.length === 0
+  ) {
+    getAllIssues()
+      .then((response: Issue[]) => {
+        store.dispatch(issuesActionCreator(response));
       })
       .catch(error => {
-        // dispatch(apiErrorMessageActionCreator(error.message));
         // tslint:disable-next-line:no-console
-        console.error(`getIssue error: ${error.message}`, error);
-        // can't return promises from this dispatch bullshit
+        console.error(`error getting issues: ${error.message}`, error);
       });
-  };
+  }
+};
+
+export const getContactsIfNeeded = (force: boolean) => {
+  const state = store.getState();
+
+  // Senate should be the easiest to get, so let's do test that for validity
+  if (state.remoteDataState.contacts.senate.length === 0 || force) {
+    getContacts()
+      .then((contactList: ContactList) => {
+        store.dispatch(contactsActionCreator(contactList));
+        store.dispatch(setCachedCity(contactList.location));
+        store.dispatch(setInvalidAddress(false));
+      })
+      .catch(error => {
+        // tslint:disable-next-line:no-console
+        console.error('couldnt fetch contacts: ', error);
+        store.dispatch(setInvalidAddress(true));
+      });
+  }
 };
 
 export const fetchCallCount = () => {
@@ -132,88 +92,6 @@ export const fetchDonations = () => {
     //   })
     //   // tslint:disable-next-line:no-console
     //   .catch(e => console.error(`fetchDonations error: ${e.message}`, e));
-  };
-};
-
-export const fetchLocationByIP = () => {
-  return (
-    dispatch: Dispatch<ApplicationState>,
-    getState: () => ApplicationState
-  ) => {
-    clearTimeout(setTimeoutHandle);
-    dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
-    return getLocationByIP()
-      .then((response: IpInfoData) => {
-        dispatch(setLocationFetchType(LocationFetchType.IP_INFO));
-        const location = response.loc;
-        // tslint:disable-next-line:no-any
-        dispatch<any>(fetchAllIssues(location)).then(() => {
-          // tslint:disable-next-line:no-any
-          dispatch<any>(setUiState(LocationUiState.LOCATION_FOUND));
-        });
-        // TODO: dispatch an error message
-      })
-      .catch(error => {
-        // tslint:disable-next-line:no-console
-        console.error(`fetchLocationByIP error: ${error.message}`, error);
-        // set location to empty string to trigger location error
-        // tslint:disable-next-line:no-any
-        dispatch<any>(fetchAllIssues(''));
-      });
-    // }
-  };
-};
-
-export const fetchBrowserGeolocation = () => {
-  return (
-    dispatch: Dispatch<ApplicationState>,
-    getState: () => ApplicationState
-  ) => {
-    // Sometimes, the user ignores the prompt or the browser does not
-    // provide a response when they do not permit browser location.
-    // After GEOLOCATION_TIMEOUT + 1 second, try IP-based location,
-    // but let browser-based continue. This timeout is cleared after
-    // either geolocation or ipinfo.io location succeeds.
-    dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
-    const state = getState();
-    const fetchType = state.locationState.locationFetchType;
-    // const useGeolocation = state.locationState.useGeolocation || null;
-
-    setTimeoutHandle = setTimeout(
-      // tslint:disable-next-line:no-shadowed-variable no-any
-      () => dispatch<any>(fetchLocationByIP()),
-      GEOLOCATION_TIMEOUT + 1000
-    );
-    // fetchType will be undefined at first
-    if (
-      fetchType === undefined ||
-      fetchType === LocationFetchType.BROWSER_GEOLOCATION
-    ) {
-      getBrowserGeolocation()
-        .then(location => {
-          if (location.latitude && location.longitude) {
-            dispatch(
-              setLocationFetchType(LocationFetchType.BROWSER_GEOLOCATION)
-            );
-            const loc = `${location.latitude},${location.longitude}`;
-            // tslint:disable-next-line:no-any
-            dispatch<any>(fetchAllIssues(loc));
-            clearTimeout(setTimeoutHandle);
-          } else {
-            // tslint:disable-next-line:no-any
-            dispatch<any>(fetchLocationByIP());
-          }
-        })
-        .catch(e => {
-          // tslint:disable-next-line:no-console
-          console.error('Problem getting browser geolocation', e);
-          // tslint:disable-next-line:no-any
-          dispatch<any>(fetchLocationByIP());
-        });
-    } else {
-      // tslint:disable-next-line:no-any
-      dispatch<any>(fetchLocationByIP());
-    }
   };
 };
 
@@ -284,7 +162,6 @@ export const getProfileInfo = async (): Promise<UserProfile> => {
 export const startup = () => {
   const state = store.getState();
 
-  store.dispatch(setUiState(LocationUiState.FETCHING_LOCATION));
   // clear contact indexes loaded from local storage
   store.dispatch(clearContactIndexes());
 
@@ -303,18 +180,4 @@ export const startup = () => {
         store.dispatch(clearProfileActionCreator());
       });
   }
-
-  const loc = state.locationState.address;
-
-  if (loc) {
-    // tslint:disable-next-line:no-any
-    store.dispatch<any>(fetchAllIssues(loc)).then(() => {
-      setLocationFetchType(LocationFetchType.CACHED_ADDRESS);
-    });
-  } else {
-    // tslint:disable-next-line:no-any
-    store.dispatch<any>(fetchBrowserGeolocation());
-  }
-  // tslint:disable-next-line:no-any
-  store.dispatch<any>(fetchCallCount());
 };

@@ -1,25 +1,17 @@
 import * as React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Helmet } from 'react-helmet';
-import { find } from 'lodash';
 
 import { LocationState } from '../redux/location/reducer';
-import { newLocationLookup, clearAddress } from '../redux/location';
 import { CallState } from '../redux/callState/reducer';
-import { selectIssueActionCreator } from '../redux/callState';
-import { ApplicationState } from '../redux/root';
 import { Issue } from '../common/model';
 
 import { SidebarHeader, Sidebar, Footer, Header } from './layout';
 
 import { callStateContext, remoteStateContext } from '../contexts';
 
-type AllProps = Props & DispatchProps;
-
-const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
+const NotFoundPage: React.StatelessComponent<Props> = (props: Props) => {
   return (
     <div>
       <Helmet>
@@ -52,7 +44,6 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
           className="layout__main"
         >
           <h1>There's nothing here 😢</h1>
-          {/*tslint:disable-next-line:max-line-length*/}
           <p>
             Looks like you visited a page that doesn't exist. Pick one of the
             issues on the sidebar or <Link to="/">go back to the homepage</Link>
@@ -65,10 +56,10 @@ const NotFoundPage: React.StatelessComponent<AllProps> = (props: AllProps) => {
   );
 };
 
-interface OwnProps {
-  readonly issueId?: string;
-  readonly issues?: Issue[];
-}
+// interface OwnProps {
+//   readonly issueId?: string;
+//   readonly issues?: Issue[];
+// }
 
 interface Props {
   readonly issues: Issue[];
@@ -78,51 +69,35 @@ interface Props {
   readonly locationState: LocationState;
 }
 
-interface DispatchProps {
-  readonly onSelectIssue: (issueId: string) => void;
-  readonly setLocation: (location: string) => void;
-  readonly clearLocation: () => void;
-}
+// interface DispatchProps {
+//   readonly onSelectIssue: (issueId: string) => void;
+//   readonly setLocation: (location: string) => void;
+//   readonly clearLocation: () => void;
+// }
 
-const mapStateToProps = (
-  state: ApplicationState,
-  ownProps: OwnProps
-): Props => {
-  let currentIssue: Issue | undefined = undefined;
-  if (state.remoteDataState.issues) {
-    currentIssue = find(
-      state.remoteDataState.issues,
-      i => i.id === ownProps.issueId
-    );
-  }
+// const mapStateToProps = (
+//   state: ApplicationState,
+//   ownProps: OwnProps
+// ): Props => {
+//   let currentIssue: Issue | undefined = undefined;
+//   if (state.remoteDataState.issues) {
+//     currentIssue = find(
+//       state.remoteDataState.issues,
+//       i => i.id.toString() === ownProps.issueId
+//     );
+//   }
 
-  let issues: Issue[] = [];
-  // overrise issues from above the layout container if needed
-  issues = ownProps.issues ? ownProps.issues : state.remoteDataState.issues;
+//   let issues: Issue[] = [];
+//   // overrise issues from above the layout container if needed
+//   issues = ownProps.issues ? ownProps.issues : state.remoteDataState.issues;
 
-  return {
-    issues: issues,
-    currentIssue: currentIssue,
-    completedIssueIds: state.callState.completedIssueIds,
-    callState: state.callState,
-    locationState: state.locationState
-  };
-};
+//   return {
+//     issues: issues,
+//     currentIssue: currentIssue,
+//     completedIssueIds: state.callState.completedIssueIds,
+//     callState: state.callState,
+//     locationState: state.locationState
+//   };
+// };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<ApplicationState>
-): DispatchProps => {
-  return bindActionCreators(
-    {
-      onSelectIssue: selectIssueActionCreator,
-      setLocation: newLocationLookup,
-      clearLocation: clearAddress
-    },
-    dispatch
-  );
-};
-
-export default connect<Props, DispatchProps, OwnProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotFoundPage);
+export default NotFoundPage;

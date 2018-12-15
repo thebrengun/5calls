@@ -11,7 +11,6 @@ import {
   setAuthTokenActionCreator
 } from '../../redux/userState/action';
 import { Auth0Config } from '../../common/constants';
-import { DonationContainer } from '../donation';
 import { postEmail } from '../../services/apiServices';
 import { eventContext } from '../../contexts/EventContext';
 import HeadMeta from '../shared/HeadMeta';
@@ -129,7 +128,6 @@ class HeaderImpl extends React.Component<Props, State> {
               )}
             </eventContext.Consumer>
           </div>
-          {!this.props.hideDonation && <DonationContainer />}
         </header>
       </>
     );

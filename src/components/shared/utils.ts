@@ -68,7 +68,7 @@ export const getIssue = (
   if (remoteDataState.issues) {
     const currentActiveIssue = find(
       remoteDataState.issues,
-      i => i.id === issueId || i.slug === issueId
+      i => i.id.toString() === issueId || i.slug === issueId
     );
     if (currentActiveIssue) {
       return currentActiveIssue;
@@ -78,7 +78,7 @@ export const getIssue = (
   if (remoteDataState.inactiveIssues) {
     const currentInactiveIssue = find(
       remoteDataState.inactiveIssues,
-      i => i.id === issueId || i.slug === issueId
+      i => i.id.toString() === issueId || i.slug === issueId
     );
     if (currentInactiveIssue) {
       return currentInactiveIssue;

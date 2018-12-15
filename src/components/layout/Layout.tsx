@@ -23,7 +23,8 @@ function currentIssue(
   if (issues) {
     issue = issues.find(eachIssue => {
       return (
-        eachIssue.id === currentIssueID || eachIssue.slug === currentIssueID
+        eachIssue.id.toString() === currentIssueID ||
+        eachIssue.slug === currentIssueID
       );
     });
   }
