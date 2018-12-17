@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TranslationFunction } from 'i18next';
 import { translate } from 'react-i18next';
 // import { find } from 'lodash';
-import { Issue, CategoryMap } from '../../common/model';
+import { Issue, CategoryMap } from '../../common/models';
 // import { IssuesListItem } from './index';
 // import { getIssuesIfNeeded } from '../../redux/remoteData';
 // import { store } from '../../redux/store';

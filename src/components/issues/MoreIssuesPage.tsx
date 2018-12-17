@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Layout } from '../layout';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { MoreIssuesTranslatable } from './index';
 import { remoteStateContext } from '../../contexts/RemoteStateContext';
 

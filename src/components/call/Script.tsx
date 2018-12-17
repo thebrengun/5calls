@@ -1,8 +1,10 @@
 import * as React from 'react';
 import * as ReactMarkdown from 'react-markdown';
 
-import { Contact, Issue } from '../../common/model';
 import { LocationState } from '../../redux/location/reducer';
+import { linkRefRenderer } from '../shared/markdown-utils';
+import { Contact } from '../../common/models/contact';
+import { Issue } from '../../common/models/issue';
 
 interface Props {
   readonly issue: Issue;
@@ -69,7 +71,11 @@ export const Script: React.StatelessComponent<Props> = ({
   return (
     <div className="call__script">
       <div className="call__script__body">
-        <ReactMarkdown source={formattedScript} />
+        <ReactMarkdown
+          source={formattedScript}
+          linkTarget="_blank"
+          renderers={{ linkReference: linkRefRenderer }}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { CountData, Issue } from './../../common/model';
+import { CountData, Issue, ContactList } from './../../common/models';
 import {
   getAllIssues,
   getCountData,
@@ -22,7 +22,6 @@ import {
 } from '../userState';
 import { setInvalidAddress } from '../location/actionCreator';
 import { store } from '../store';
-import { ContactList } from '../../common/contactList';
 import { contactsActionCreator } from './actionCreator';
 
 export const getIssuesIfNeeded = () => {

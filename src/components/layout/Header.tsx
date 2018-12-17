@@ -14,7 +14,7 @@ import { Auth0Config } from '../../common/constants';
 import { postEmail } from '../../services/apiServices';
 import { eventContext } from '../../contexts/EventContext';
 import HeadMeta from '../shared/HeadMeta';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { Mixpanel } from '../../services/mixpanel';
 
 interface Props {

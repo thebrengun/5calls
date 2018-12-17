@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { isEqual } from 'lodash';
 
-import { Issue, Contact } from '../../common/model';
+import { Issue, Contact, ContactList } from '../../common/models';
 import { CallHeader, ContactDetails, Outcomes, Script } from './index';
 import { CallState } from '../../redux/callState';
 import {
@@ -11,7 +11,6 @@ import {
 } from '../../contexts';
 import { eventContext } from '../../contexts/EventContext';
 import { Mixpanel } from '../../services/mixpanel';
-import { ContactList } from '../../common/contactList';
 import { ContactProgress } from './ContactProgress';
 import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
 

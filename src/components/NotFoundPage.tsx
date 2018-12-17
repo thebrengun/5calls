@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { LocationState } from '../redux/location/reducer';
 import { CallState } from '../redux/callState/reducer';
-import { Issue } from '../common/model';
+import { Issue } from '../common/models';
 
 import { SidebarHeader, Sidebar, Footer, Header } from './layout';
 

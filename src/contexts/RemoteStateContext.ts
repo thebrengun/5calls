@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RemoteDataState } from '../redux/remoteData';
-import { ContactList } from '../common/contactList';
+import { ContactList } from '../common/models';
 
 const defaultRemoteState = {
   issues: [],

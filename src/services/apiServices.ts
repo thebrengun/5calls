@@ -1,11 +1,10 @@
 import { OutcomeData } from './../redux/callState/asyncActionCreator';
 import axios from 'axios';
 import * as querystring from 'querystring';
-import { CountData, MidtermStats, Issue, Contact } from './../common/model';
+import { ContactList, CountData, Issue, Contact } from './../common/models';
 import * as Constants from '../common/constants';
 import { UserContactEvent } from '../redux/userStats';
 import { UserCallDetails } from '../redux/remoteData/asyncActionCreator';
-import { ContactList } from '../common/contactList';
 import { store } from '../redux/store';
 
 const prepareHeaders = (): Headers => {
@@ -175,14 +174,6 @@ export const postOutcomeData = (data: OutcomeData) => {
     .then(response => {
       return Promise.resolve(null);
     })
-    .catch(e => Promise.reject(e));
-};
-
-export const getMidterms = (): Promise<MidtermStats> => {
-  const midtermsURL = `${Constants.MIDTERMS_API_URL}`;
-  return axios
-    .get(`${midtermsURL}`)
-    .then(response => Promise.resolve(response.data))
     .catch(e => Promise.reject(e));
 };
 

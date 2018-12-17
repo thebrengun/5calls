@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { selectIssueActionCreator } from '../../redux/callState';
 
 interface Props {

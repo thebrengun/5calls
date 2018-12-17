@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { LocationAction } from './action';
-import { LocationFetchType } from '../../common/model';
+import { LocationFetchType } from '../../common/models';
 
 export enum LocationActionType {
   LOCATION_CLEAR = 'LOCATION_CLEAR',

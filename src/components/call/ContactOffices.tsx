@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Issue, Contact } from '../../common/model';
+import { Issue, Contact } from '../../common/models';
 import { makePhoneLink, cityFormat } from '../shared/jsxUtils';
 
 interface Props {
@@ -32,8 +32,8 @@ export class ContactOffices extends React.Component<Props, State> {
 
   render() {
     if (
-      this.props.currentContact.field_offices == null ||
-      this.props.currentContact.field_offices.length === 0
+      this.props.currentContact.fieldOffices == null ||
+      this.props.currentContact.fieldOffices.length === 0
     ) {
       return <span />;
     }
@@ -45,8 +45,8 @@ export class ContactOffices extends React.Component<Props, State> {
             Local office numbers:
           </h3>
           <ul className="call__contact__field-office-list">
-            {this.props.currentContact.field_offices ? (
-              this.props.currentContact.field_offices.map(office => (
+            {this.props.currentContact.fieldOffices ? (
+              this.props.currentContact.fieldOffices.map(office => (
                 <li key={office.phone}>
                   {makePhoneLink(office.phone)}
                   {cityFormat(office, this.props.currentContact)}

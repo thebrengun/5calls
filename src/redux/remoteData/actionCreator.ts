@@ -1,6 +1,5 @@
 import { CallCountAction, IssuesAction, RemoteDataActionType } from './index';
-import { Issue } from '../../common/model';
-import { ContactList } from '../../common/contactList';
+import { Issue, ContactList } from '../../common/models';
 import { ContactsAction } from './action';
 
 export const issuesActionCreator = (issues: Issue[]): IssuesAction => {

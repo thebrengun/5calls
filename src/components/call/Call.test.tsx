@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+
 import { Call } from './index';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { CallState } from '../../redux/callState';
 
 test('Call component should be rendered if passed a valid object', () => {

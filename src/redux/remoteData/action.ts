@@ -1,7 +1,6 @@
 import { RemoteDataAction } from './action';
 import { Action } from 'redux';
-import { Issue } from '../../common/model';
-import { ContactList } from '../../common/contactList';
+import { Issue, ContactList } from '../../common/models';
 
 export enum RemoteDataActionType {
   GET_ISSUES = 'GET_ISSUES',

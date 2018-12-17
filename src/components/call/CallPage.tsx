@@ -6,7 +6,7 @@ import { getIssue } from '../shared/utils';
 import i18n from '../../services/i18n';
 import { Call } from './index';
 import { Layout } from '../layout';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 
 import { CallState, selectIssueActionCreator } from '../../redux/callState';
 import { RemoteDataState } from '../../redux/remoteData';

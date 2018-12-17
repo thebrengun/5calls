@@ -5,7 +5,7 @@ import {
   SetLocationFetchTypeAction,
   SetSplitDistrictAction
 } from './index';
-import { LocationFetchType } from '../../common/model';
+import { LocationFetchType } from '../../common/models';
 import { SetInvalidAddressAction } from './action';
 
 export function setLocation(address: string): LocationSetAction {

@@ -1,4 +1,4 @@
-import { Contact } from './model';
+import { Contact } from './';
 
 export class ContactList {
   public location: string;

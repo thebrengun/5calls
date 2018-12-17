@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { LocationAction, LocationActionType } from './index';
-import { LocationFetchType } from '../../common/model';
+import { LocationFetchType } from '../../common/models';
 
 export interface LocationState {
   address: string;

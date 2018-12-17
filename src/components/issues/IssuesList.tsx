@@ -3,7 +3,7 @@ import i18n from '../../services/i18n';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
 
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { IssuesListItem } from './index';
 import { getIssuesIfNeeded } from '../../redux/remoteData';
 

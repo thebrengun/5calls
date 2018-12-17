@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+
 import { IssuesList } from './index';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 
 test('should show IssuesListItem elements', () => {
   const issues = [

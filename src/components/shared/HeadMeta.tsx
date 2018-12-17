@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 
 import * as Constants from '../../common/constants';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 
 interface Props {
   issue?: Issue;

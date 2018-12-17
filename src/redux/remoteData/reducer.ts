@@ -1,7 +1,6 @@
 import { Reducer } from 'redux';
-import { Issue } from '../../common/model';
+import { Issue, ContactList } from '../../common/models';
 import { RemoteDataAction, RemoteDataActionType } from './index';
-import { ContactList } from '../../common/contactList';
 
 export const defaultRemoteDataState: RemoteDataState = {
   issues: [],
@@ -34,7 +33,7 @@ export const remoteDataReducer: Reducer<RemoteDataState> = (
           .filter(item => {
             return item.active === true;
           })
-          .map(item => new Issue(item));
+          .map(item => Object.assign(new Issue(), item));
         inactiveIssues = issues.filter(item => {
           return item.active === false;
         });

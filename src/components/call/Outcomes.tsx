@@ -5,7 +5,7 @@ import EventEmitter = require('wolfy87-eventemitter');
 
 import { submitOutcome } from '../../redux/callState';
 import { store } from '../../redux/store';
-import { Issue } from '../../common/model';
+import { Issue } from '../../common/models';
 import { UserState } from '../../redux/userState';
 import { Mixpanel } from '../../services/mixpanel';
 

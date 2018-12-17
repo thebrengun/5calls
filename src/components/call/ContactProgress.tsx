@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { Contact, Issue } from '../../common/model';
+import { Contact, ContactList, Issue } from '../../common/models';
 import { CallState } from '../../redux/callState';
-import { ContactList } from '../../common/contactList';
 import { UserStatsState } from '../../redux/userStats';
 
 interface Props {

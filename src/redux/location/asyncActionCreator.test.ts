@@ -3,7 +3,7 @@ import * as moxios from 'moxios';
 import configureStore from 'redux-mock-store';
 
 import { ApplicationState } from './../root';
-import { Issue, LocationFetchType } from './../../common/model';
+import { Issue, LocationFetchType } from './../../common/models';
 import { setAddress, LocationActionType } from './index';
 import * as Constants from '../../common/constants';
 

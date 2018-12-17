@@ -1,4 +1,4 @@
-import { GeolocationPosition } from '../common/model';
+import { GeolocationPosition } from '../common/models';
 
 // Geolocation PositionOptions properties
 // Browser geolocation timeout in milliseconds
