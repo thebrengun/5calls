@@ -16,6 +16,7 @@ import { eventContext } from '../../contexts/EventContext';
 import HeadMeta from '../shared/HeadMeta';
 import { Issue } from '../../common/models';
 import { Mixpanel } from '../../services/mixpanel';
+import { Donation } from '../donation';
 
 interface Props {
   readonly postcards?: boolean;
@@ -128,6 +129,7 @@ class HeaderImpl extends React.Component<Props, State> {
               )}
             </eventContext.Consumer>
           </div>
+          <Donation />
         </header>
       </>
     );
