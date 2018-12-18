@@ -12,13 +12,13 @@ import {
 import { eventContext } from '../../contexts/EventContext';
 import { Mixpanel } from '../../services/mixpanel';
 import { ContactProgress } from './ContactProgress';
-import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
 
 // This defines the props that we must pass into this component.
 export interface Props {
   issue: Issue;
   contacts: ContactList;
   callState: CallState;
+  getContactsIfNeeded: (force: boolean) => void;
 }
 
 export interface State {
@@ -35,7 +35,7 @@ export default class Call extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    getContactsIfNeeded(false);
+    this.props.getContactsIfNeeded(false);
     Mixpanel.track('Topic', { IssueID: this.props.issue.id });
   }
 

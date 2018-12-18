@@ -4,20 +4,7 @@ import i18n from '../../services/i18n';
 import { Location } from './index';
 import { LocationState } from '../../redux/location';
 import { LocationFetchType } from '../../common/models';
-
-test('Location component should show location prop value if locationState.address is defined', () => {
-  const locationState: LocationState = {
-    address: '1234',
-    cachedCity: '',
-    splitDistrict: false,
-    invalidAddress: false,
-    locationFetchType: LocationFetchType.BROWSER_GEOLOCATION
-  };
-
-  const component = shallow(<Location locationState={locationState} />);
-  const node = component.find('#locationMessage span');
-  expect(node.text()).toEqual(locationState.address);
-});
+import { LocationUIState } from './Location';
 
 test('Location component should show location prop value if locationState.cachedCity is defined', () => {
   const locationState: LocationState = {
@@ -29,6 +16,7 @@ test('Location component should show location prop value if locationState.cached
   };
 
   const component = shallow(<Location locationState={locationState} />);
+  component.setState({ uiState: LocationUIState.LOCATION_FOUND });
   const node = component.find('#locationMessage span');
   expect(node.text()).toEqual(locationState.cachedCity);
 });

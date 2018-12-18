@@ -48,7 +48,7 @@ describe('when the script text is shown', () => {
     expect(
       wrapper.contains(
         <ReactMarkdown
-          source="script_text"
+          source="issue *mock script*"
           linkTarget="_blank"
           renderers={{ linkReference: linkRefRenderer }}
         />

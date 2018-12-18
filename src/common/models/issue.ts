@@ -98,7 +98,7 @@ export const mockIssue = Object.assign(new Issue(), {
   contactType: 'REPS',
   contactAreas: [],
   reason: 'reason',
-  script: 'script',
+  script: 'issue *mock script*',
   active: true,
   createdAt: '',
   slug: 'issue-name',

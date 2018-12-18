@@ -65,6 +65,7 @@ export class Location extends React.Component<Props, State> {
         break;
     }
   }
+
   fetchLocation() {
     this.setState({ uiState: LocationUIState.FETCHING_LOCATION });
 
@@ -154,7 +155,7 @@ export class Location extends React.Component<Props, State> {
   locationFound() {
     return (
       <>
-        <p>
+        <p id="locationMessage">
           Your location: <span>{this.props.locationState.cachedCity}</span>
         </p>
         <button onClick={e => this.enterLocation(e)}>Change Location</button>

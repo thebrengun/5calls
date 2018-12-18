@@ -19,7 +19,7 @@ exports[`Script component should be rendered if passed a valid object 1`] = `
         }
       }
       skipHtml={false}
-      source="script"
+      source="issue *mock script*"
       sourcePos={false}
       transformLinkUri={[Function]}
     />

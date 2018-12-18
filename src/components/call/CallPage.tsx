@@ -13,6 +13,7 @@ import { RemoteDataState } from '../../redux/remoteData';
 import { store } from '../../redux/store';
 
 import { remoteStateContext, callStateContext } from '../../contexts';
+import { getContactsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
 
 interface RouteProps {
   readonly groupid: string;
@@ -91,6 +92,7 @@ class CallPageView extends React.Component<Props, State> {
             issue={this.state.currentIssue}
             contacts={this.props.remoteState.contacts}
             callState={this.props.callState}
+            getContactsIfNeeded={getContactsIfNeeded}
           />
         </Layout>
       );

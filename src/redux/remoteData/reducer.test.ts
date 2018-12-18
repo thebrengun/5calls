@@ -17,7 +17,10 @@ beforeEach(() => {
 });
 
 test('Remote Data reducer processes GET_ISSUES action correctly', () => {
-  const issues = [new Issue(), new Issue()];
+  const issues = [
+    Object.assign({}, new Issue(), { id: '1', active: true }),
+    Object.assign({}, new Issue(), { id: '2', active: true })
+  ];
   const state: RemoteDataState = Object.assign({}, defaultState, issues);
   const action: IssuesAction = {
     type: RemoteDataActionType.GET_ISSUES,

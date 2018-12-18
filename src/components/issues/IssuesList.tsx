@@ -5,17 +5,17 @@ import { find } from 'lodash';
 
 import { Issue } from '../../common/models';
 import { IssuesListItem } from './index';
-import { getIssuesIfNeeded } from '../../redux/remoteData';
 
 interface Props {
   issues: Issue[];
   currentIssue?: Issue;
   completedIssueIds: string[];
+  getIssuesIfNeeded: () => void;
 }
 
 export class IssuesList extends React.Component<Props> {
   componentDidMount() {
-    getIssuesIfNeeded();
+    this.props.getIssuesIfNeeded();
   }
 
   listFooter = () => {
