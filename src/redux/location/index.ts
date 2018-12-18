@@ -16,4 +16,3 @@ export {
   setSplitDistrict
 } from './actionCreator';
 export { LocationState, locationStateReducer } from './reducer';
-export { setAddress } from './asyncActionCreator';
