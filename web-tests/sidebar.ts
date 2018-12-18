@@ -1,20 +1,11 @@
-import {
-  ClientFunction,
-  t,
-  Selector,
-} from 'testcafe';
-import {
-  waitForReact,
-  ReactSelector,
-} from 'testcafe-react-selectors';
+import { ClientFunction, t, Selector } from 'testcafe';
+import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
-fixture`Sidebar`
-  .page`http://localhost:3000`
-  .beforeEach(async () => {
-    await waitForReact(15000);
-  });
+fixture`Sidebar`.page`http://localhost:3000`.beforeEach(async () => {
+  await waitForReact(15000);
+});
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Sidebar Header exists and user may set location', async t => {
@@ -24,10 +15,14 @@ test('Sidebar Header exists and user may set location', async t => {
   const Location = await ReactSelector('Location');
   await t.expect(Location).ok('Location component is not displayed');
 
-  const locationMessage = await Selector('#locationMessage');
-  await t.expect(locationMessage.exists).ok('Location message is not displayed');
+  const setLocationMessage = await Selector('#setLocationMessage');
+  await t
+    .expect(setLocationMessage.exists)
+    .ok('Set location message is not displayed');
 
-  let locationSetMessage = await Selector('#locationMessage').withText('Your location: ');
+  let locationSetMessage = await Selector('#locationMessage').withText(
+    'Set your location'
+  );
 
   if (await locationSetMessage.exists) {
     const locationButton = await Location.findReact('button');
@@ -35,17 +30,24 @@ test('Sidebar Header exists and user may set location', async t => {
     await t.click(locationButton);
 
     const addressField = Selector('#address');
-    await t.expect(addressField.getAttribute('placeholder'))
+    await t
+      .expect(addressField.getAttribute('placeholder'))
       .eql('Enter an address or zip code');
     const submitButton = Location.findReact('button');
     await t.expect(submitButton.innerText).eql('GO');
 
-    await t.typeText(addressField, '80123')
-      .expect(addressField.value).eql('80123');
+    await t
+      .typeText(addressField, '80123')
+      .expect(addressField.value)
+      .eql('80123');
     await t.click(submitButton);
 
-    locationSetMessage = await Selector('#locationMessage').withText('Your location: ');
-    await t.expect(locationSetMessage.innerText).eql('Your location: Littleton');
+    locationSetMessage = await Selector('#locationMessage').withText(
+      'Your location: '
+    );
+    await t
+      .expect(locationSetMessage.innerText)
+      .eql('Your location: Littleton');
   }
 });
 

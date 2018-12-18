@@ -115,7 +115,7 @@ export class Location extends React.Component<Props, State> {
   noLocation() {
     return (
       <>
-        <p>Set your location</p>
+        <p id="setLocationMessage">Set your location</p>
         <button onClick={e => this.enterLocation(e)}>Set Location</button>
       </>
     );

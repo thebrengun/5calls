@@ -1,4 +1,6 @@
 import { Dispatch } from 'redux';
+import * as querystring from 'querystring';
+
 import { CountData, Issue, ContactList } from './../../common/models';
 import {
   getAllIssues,
@@ -20,9 +22,10 @@ import {
   setAuthTokenActionCreator,
   setProfileActionCreator
 } from '../userState';
-import { setInvalidAddress } from '../location/actionCreator';
+import { setInvalidAddress, setLocation } from '../location/actionCreator';
 import { store } from '../store';
 import { contactsActionCreator } from './actionCreator';
+import { removeURLParameter } from '../../components/shared/utils';
 
 export const getIssuesIfNeeded = () => {
   const state = store.getState();
@@ -178,5 +181,22 @@ export const startup = () => {
         // clear the session
         store.dispatch(clearProfileActionCreator());
       });
+  }
+
+  // set location automatically if it comes in via query string
+  let replacedLocation = false;
+  let q = querystring.parse(location.search.substr(1));
+  const newLocation = q['setLocation']; // tslint:disable-line:no-string-literal
+  if (newLocation !== undefined && newLocation.length > 0) {
+    store.dispatch(setLocation(newLocation));
+    replacedLocation = true;
+  }
+  // remove query string param so we don't set it again
+  if (replacedLocation) {
+    window.history.replaceState(
+      {},
+      document.title,
+      removeURLParameter(location.href, 'setLocation')
+    );
   }
 };
