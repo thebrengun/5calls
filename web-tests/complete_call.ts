@@ -41,14 +41,15 @@ skipOnCi('Call buttons navigate to done page when clicked through', async t => {
 
   const callButtons = await Selector('.call__outcomes__items');
   const buttons = await callButtons.find('button');
-  const firstButton = buttons.nth(0);
+  const lastButton = buttons.nth(-1);
 
   let clicks = 0;
   while (!windowLocation.includes('/done/')) {
     await t
       .expect(clicks)
       .lt(5, 'Number of contacts have exceeded before reaching the done page');
-    await t.click(firstButton);
+
+    await t.click(lastButton);
     clicks = clicks + 1;
     windowLocation = await getWindowLocation();
   }

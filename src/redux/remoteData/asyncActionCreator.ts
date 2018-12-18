@@ -66,19 +66,14 @@ export const getContactsIfNeeded = (force: boolean) => {
 };
 
 export const fetchCallCount = () => {
-  return (
-    dispatch: Dispatch<ApplicationState>,
-    getState: () => ApplicationState
-  ) => {
-    return getCountData()
-      .then((response: CountData) => {
-        dispatch(callCountActionCreator(response.count));
-      })
-      .catch(error =>
-        // tslint:disable-next-line:no-console
-        console.error(`fetchCallCount error: ${error.message}`, error)
-      );
-  };
+  return getCountData()
+    .then((response: CountData) => {
+      store.dispatch(callCountActionCreator(response.count));
+    })
+    .catch(error =>
+      // tslint:disable-next-line:no-console
+      console.error(`fetchCallCount error: ${error.message}`, error)
+    );
 };
 
 export const fetchDonations = () => {
@@ -182,6 +177,8 @@ export const startup = () => {
         store.dispatch(clearProfileActionCreator());
       });
   }
+
+  fetchCallCount();
 
   // set location automatically if it comes in via query string
   let replacedLocation = false;
