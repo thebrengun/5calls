@@ -5,10 +5,8 @@ import * as moxios from 'moxios';
 import { RemoteDataActionType } from './action';
 import { fetchCallCount } from './index';
 import { ApplicationState } from './../root';
-import { Issue, LocationFetchType } from './../../common/models';
-import * as Constants from '../../common/constants';
+import { Issue } from './../../common/models';
 import { IssueData } from '../../common/models/model';
-import { getAllIssues } from '../../services/apiServices';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -45,14 +43,14 @@ afterEach(() => {
 //   });
 // });
 
-const getApiDataResponse = (issueName): IssueData => {
-  const mockIssue = Object.assign({}, new Issue(), { name: issueName });
+// const getApiDataResponse = (issueName): IssueData => {
+//   const mockIssue = Object.assign({}, new Issue(), { name: issueName });
 
-  const mockResponse: IssueData = {
-    issues: [mockIssue]
-  };
-  return mockResponse;
-};
+//   const mockResponse: IssueData = {
+//     issues: [mockIssue]
+//   };
+//   return mockResponse;
+// };
 
 test('fetchCallCount() action creator dispatches proper action', () => {
   const count = 999999;
@@ -60,8 +58,7 @@ test('fetchCallCount() action creator dispatches proper action', () => {
   moxios.stubRequest(/counts/, { response: { count } });
   const initialState = {} as ApplicationState;
   const store = mockStore(initialState);
-  // tslint:disable-next-line:no-any
-  store.dispatch<any>(fetchCallCount()).then(() => {
+  fetchCallCount().then(() => {
     const actions = store.getActions();
     expect(actions[0].type).toEqual(expectedType);
     expect(actions[0].payload).toEqual(count);
