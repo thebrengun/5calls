@@ -52,7 +52,7 @@ test('Sidebar Header exists and user may set location', async t => {
 });
 
 // tslint:disable-next-line:no-shadowed-variable
-test('Sidebar body contains a list of 10 issues and the footer', async t => {
+test('Sidebar body contains a list of issues and a footer to more issues', async t => {
   const Sidebar = await ReactSelector('Sidebar');
   await t.expect(Sidebar).ok('Sidebar is displayed on the page');
 
@@ -66,11 +66,9 @@ test('Sidebar body contains a list of 10 issues and the footer', async t => {
     const Link = await Issue.findReact('a');
     const url = await Link.getAttribute('href');
 
-    // ensure footer is correct
-    if (i === 10) {
+    // ensure last item links to /more
+    if (i === count - 1) {
       await t.expect(url).eql('/more');
-      const footerText = await Link.findReact('span');
-      await t.expect(footerText.innerText).eql('View all active issues');
     }
   }
 });
