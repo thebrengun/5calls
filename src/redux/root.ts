@@ -9,6 +9,7 @@ import { UserStatsState, userStatsReducer } from './userStats';
 import { UserState, userStateReducer } from './userState';
 import { persistCombineReducers } from 'redux-persist';
 import { defaultRemoteDataState } from './remoteData/reducer';
+import { defaultUserStatsState } from './userStats/reducer';
 
 export enum OutcomeType {
   UNAVAILABLE = 'unavailable',
@@ -29,7 +30,7 @@ export const DefaultApplicationState: ApplicationState = {
   remoteDataState: defaultRemoteDataState,
   callState: {} as CallState,
   locationState: {} as LocationState,
-  userStatsState: {} as UserStatsState,
+  userStatsState: defaultUserStatsState,
   userState: {} as UserState
 };
 
