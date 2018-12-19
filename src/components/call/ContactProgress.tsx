@@ -67,18 +67,26 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
   ) => {
     return (
       <li key={index} className={active ? 'active' : ''}>
-        <a href="#" onClick={e => selectIndirect(e, index)}>
-          <img alt="" src={repPhoto(areaContact)} />
-        </a>
-        <h4>
-          {areaContact ? (
+        {areaContact ? (
+          <>
             <a href="#" onClick={e => selectIndirect(e, index)}>
-              {areaContact.name}
+              <img
+                alt={areaContact.name}
+                src={repPhoto(areaContact)}
+                onError={e => {
+                  e.currentTarget.src = '/img/no-rep.png';
+                }}
+              />
             </a>
-          ) : (
-            area
-          )}
-        </h4>
+            <h4>
+              <a href="#" onClick={e => selectIndirect(e, index)}>
+                {areaContact.name}
+              </a>
+            </h4>
+          </>
+        ) : (
+          area
+        )}
         <p>
           {/* change this text if you've called too so we're extra clear */}
           {areaContact
@@ -120,6 +128,12 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
           break;
         case 'StateLower':
           contactsWanted.push([area, contactList.stateLower]);
+          break;
+        case 'SecretaryOfState':
+          contactsWanted.push([area, contactList.secState]);
+          break;
+        case 'AttorneyGeneral':
+          contactsWanted.push([area, contactList.attorneyGeneral]);
           break;
         default:
           break;

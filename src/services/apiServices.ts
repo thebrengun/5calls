@@ -66,6 +66,8 @@ export const getContacts = (): Promise<ContactList> => {
       contactList.stateUpper = result.data.state.find(
         contact => contact.area === 'StateUpper'
       );
+      contactList.secState = result.data.secState;
+      contactList.attorneyGeneral = result.data.attorneyGeneral;
       return Promise.resolve(contactList);
     })
     .catch(error => {
@@ -80,7 +82,10 @@ interface ContactResponse {
   senate: Contact[];
   governor?: Contact;
   state: Contact[];
+  secState?: Contact;
+  attorneyGeneral?: Contact;
 }
+
 export const getCountData = (): Promise<CountData> => {
   return axios
     .get(`${Constants.REPORT_API_URL}`)

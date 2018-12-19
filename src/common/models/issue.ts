@@ -55,6 +55,13 @@ export class Issue {
         contacts.push(contactList.stateUpper);
       } else if (contactArea === 'StateLower' && contactList.stateLower) {
         contacts.push(contactList.stateLower);
+      } else if (contactArea === 'SecretaryOfState' && contactList.secState) {
+        contacts.push(contactList.secState);
+      } else if (
+        contactArea === 'AttorneyGeneral' &&
+        contactList.attorneyGeneral
+      ) {
+        contacts.push(contactList.attorneyGeneral);
       }
     }
 

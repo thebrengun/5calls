@@ -36,8 +36,10 @@
         img {
           margin: 3px 6px 0 3px;
           width: 36px;
+          height: 36px;
           border-radius: 18px;
           float: left;
+          object-fit: cover;
         }
 
         a {

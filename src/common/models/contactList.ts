@@ -7,6 +7,8 @@ export class ContactList {
   public governor?: Contact;
   public stateUpper?: Contact;
   public stateLower?: Contact;
+  public secState?: Contact;
+  public attorneyGeneral?: Contact;
 
   constructor() {
     this.location = '';
