@@ -115,6 +115,12 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
         case 'Governor':
           contactsWanted.push([area, contactList.governor]);
           break;
+        case 'StateUpper':
+          contactsWanted.push([area, contactList.stateUpper]);
+          break;
+        case 'StateLower':
+          contactsWanted.push([area, contactList.stateLower]);
+          break;
         default:
           break;
       }

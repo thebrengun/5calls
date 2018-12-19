@@ -28,6 +28,7 @@ import './components/bundle.css';
 import bugsnagClient from './services/bugsnag';
 
 ReactGA.initialize('UA-90915119-1');
+ReactGA.set({ branch: 'split-issues-contacts' });
 const trackPageView = location => {
   ReactGA.set({
     page: location.pathname
