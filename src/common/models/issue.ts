@@ -7,6 +7,7 @@ export class Issue {
   public contactAreas: string[];
   public reason: string;
   public script: string;
+  public categories: Category[];
   public active: boolean;
   public createdAt: string;
   public slug: string;
@@ -90,6 +91,10 @@ export class Issue {
 export interface IssueStats {
   completion: number;
   calls: number;
+}
+
+export interface Category {
+  name: string;
 }
 
 export const mockIssue = Object.assign(new Issue(), {

@@ -1,4 +1,4 @@
-import { Issue } from './issue';
+import { Issue, Category } from './issue';
 
 export interface Outcome {
   label: string;
@@ -10,10 +10,6 @@ export interface VoterContact {
   name: string;
   location: string;
   phone: string;
-}
-
-export interface Category {
-  name: string;
 }
 
 export class CategoryMap {

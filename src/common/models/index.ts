@@ -1,4 +1,4 @@
-import { Issue } from './issue';
+import { Issue, Category } from './issue';
 import { Contact } from './contact';
 import { ContactList } from './contactList';
 import {
@@ -13,6 +13,7 @@ import {
 
 export {
   Issue,
+  Category,
   Contact,
   ContactList,
   Outcome,

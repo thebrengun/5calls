@@ -34,9 +34,11 @@ export const remoteDataReducer: Reducer<RemoteDataState> = (
             return item.active === true;
           })
           .map(item => Object.assign(new Issue(), item));
-        inactiveIssues = issues.filter(item => {
-          return item.active === false;
-        });
+        inactiveIssues = issues
+          .filter(item => {
+            return item.active === false;
+          })
+          .map(item => Object.assign(new Issue(), item));
       }
 
       const issuesState = Object.assign({}, state, {
