@@ -30,7 +30,8 @@ import bugsnagClient from './services/bugsnag';
 ReactGA.initialize('UA-90915119-1');
 const trackPageView = location => {
   ReactGA.set({
-    page: location.pathname
+    page: location.pathname,
+    dimension4: 'split-test'
   });
   ReactGA.pageview(location.pathname);
 };
