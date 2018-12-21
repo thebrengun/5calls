@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { Issue, ContactList } from '../../common/models';
+import { Issue, ContactList, Contact } from '../../common/models';
 import { RemoteDataAction, RemoteDataActionType } from './index';
 
 export const defaultRemoteDataState: RemoteDataState = {
@@ -47,8 +47,13 @@ export const remoteDataReducer: Reducer<RemoteDataState> = (
       });
       return issuesState;
     case RemoteDataActionType.GET_CONTACTS:
-      const contacts = action.payload as ContactList;
-      return Object.assign({}, state, { contacts });
+      const contactList = action.payload as ContactList;
+      contactList.representatives = contactList.representatives.map(contact =>
+        Object.assign(new Contact(), contact)
+      );
+      return Object.assign({}, state, {
+        contacts: contactList
+      });
     case RemoteDataActionType.GET_CALL_TOTAL:
       return Object.assign({}, state, { callTotal: action.payload });
     default:

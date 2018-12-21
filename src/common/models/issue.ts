@@ -41,27 +41,27 @@ export class Issue {
     return undefined;
   }
 
+  // why do we need filtered contacts if we already have an array of contacts?
+  // a) ensuring consistent ordering
+  // b) sometimes we get back multiple house reps in split areas
   public filteredContacts(contactList: ContactList): Contact[] {
     const contacts: Contact[] = [];
 
     for (const contactArea of this.contactAreas) {
       if (contactArea === 'US Senate') {
-        contacts.push(...contactList.senate);
+        contacts.push(...contactList.senateReps());
       } else if (contactArea === 'US House') {
-        contacts.push(...contactList.house);
-      } else if (contactArea === 'Governor' && contactList.governor) {
-        contacts.push(contactList.governor);
-      } else if (contactArea === 'StateUpper' && contactList.stateUpper) {
-        contacts.push(contactList.stateUpper);
-      } else if (contactArea === 'StateLower' && contactList.stateLower) {
-        contacts.push(contactList.stateLower);
-      } else if (contactArea === 'SecretaryOfState' && contactList.secState) {
-        contacts.push(contactList.secState);
-      } else if (
-        contactArea === 'AttorneyGeneral' &&
-        contactList.attorneyGeneral
-      ) {
-        contacts.push(contactList.attorneyGeneral);
+        contacts.push(...contactList.houseRep());
+      } else if (contactArea === 'Governor') {
+        contacts.push(...contactList.governor());
+      } else if (contactArea === 'StateUpper') {
+        contacts.push(...contactList.stateUpper());
+      } else if (contactArea === 'StateLower') {
+        contacts.push(...contactList.stateLower());
+      } else if (contactArea === 'SecretaryOfState') {
+        contacts.push(...contactList.secState());
+      } else if (contactArea === 'AttorneyGeneral') {
+        contacts.push(...contactList.attyGeneral());
       }
     }
 

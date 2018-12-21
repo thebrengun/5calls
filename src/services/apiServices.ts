@@ -56,18 +56,7 @@ export const getContacts = (): Promise<ContactList> => {
     .then(result => {
       const contactList = new ContactList();
       contactList.location = result.data.location;
-      contactList.house = result.data.house;
-      contactList.senate = result.data.senate;
-      contactList.governor = result.data.governor;
-      // maybe we want all the reps to be in the same array, then we can pick them out with area?
-      contactList.stateLower = result.data.state.find(
-        contact => contact.area === 'StateLower'
-      );
-      contactList.stateUpper = result.data.state.find(
-        contact => contact.area === 'StateUpper'
-      );
-      contactList.secState = result.data.secState;
-      contactList.attorneyGeneral = result.data.attorneyGeneral;
+      contactList.representatives = result.data.representatives;
       return Promise.resolve(contactList);
     })
     .catch(error => {
@@ -78,12 +67,7 @@ export const getContacts = (): Promise<ContactList> => {
 
 interface ContactResponse {
   location: string;
-  house: Contact[];
-  senate: Contact[];
-  governor?: Contact;
-  state: Contact[];
-  secState?: Contact;
-  attorneyGeneral?: Contact;
+  representatives: Contact[];
 }
 
 export const getCountData = (): Promise<CountData> => {

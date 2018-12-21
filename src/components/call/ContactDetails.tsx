@@ -9,13 +9,6 @@ interface Props {
   readonly currentContact: Contact;
 }
 
-const contactDisplay = (contact: Contact): String => {
-  return (
-    contact.name +
-    (contact.party ? `${contact.party.substring(0, 1)}-${contact.state}` : '')
-  );
-};
-
 const ContactDetails: React.StatelessComponent<Props> = ({
   currentIssue,
   currentContact
@@ -25,7 +18,7 @@ const ContactDetails: React.StatelessComponent<Props> = ({
       <div className="call__contact__image">
         <img alt="" src={currentContact.photoURL} />
       </div>
-      <h3 className="call__contact__name">{contactDisplay(currentContact)}</h3>
+      <h3 className="call__contact__name">{currentContact.contactDisplay()}</h3>
       <p className="call__contact__phone">
         {makePhoneLink(currentContact.phone)}
       </p>

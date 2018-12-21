@@ -17,7 +17,7 @@ export class CategoryMap {
   issues: Issue[];
 }
 
-export type Party = 'Democrat' | 'Republican' | 'Independent' | '';
+export type Party = 'democrat' | 'republican' | 'independent' | '';
 
 export interface FieldOffice {
   city: string;

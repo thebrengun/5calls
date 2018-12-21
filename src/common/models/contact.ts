@@ -10,6 +10,23 @@ export class Contact {
   reason: string;
   area?: string;
   fieldOffices?: FieldOffice[];
+
+  public contactDisplay(): string {
+    if (this.partyStateAbbr() !== '') {
+      return this.name + ' (' + this.partyStateAbbr() + ')';
+    }
+
+    return this.name;
+  }
+
+  public partyStateAbbr(): string {
+    if (this.party && this.state !== '') {
+      const partyLetter = this.party.substring(0, 1);
+      return partyLetter.toUpperCase() + '-' + this.state.toUpperCase();
+    }
+
+    return '';
+  }
 }
 
 export const mockContact = Object.assign(new Contact(), {

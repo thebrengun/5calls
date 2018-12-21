@@ -80,18 +80,25 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
             </a>
             <h4>
               <a href="#" onClick={e => selectIndirect(e, index)}>
-                {areaContact.name}
+                {areaContact.contactDisplay()}
               </a>
             </h4>
           </>
         ) : (
-          area
+          <>
+            <img alt="No contact available" src="/img/no-rep.png" />
+            <h4>{area}</h4>
+          </>
         )}
         <p>
-          {/* change this text if you've called too so we're extra clear */}
-          {areaContact
-            ? areaContact.reason
-            : 'Location not accurate enough to find this representative'}
+          {areaContact ? (
+            areaContact.reason
+          ) : (
+            <>
+              Location not accurate enough to find this representative.{' '}
+              <a href="#">Set your location</a>
+            </>
+          )}
         </p>
       </li>
     );
@@ -106,34 +113,65 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
         case 'US Senate':
           contactsWanted.push([
             area,
-            contactList.senate.length > 0 ? contactList.senate[0] : undefined
+            contactList.senateReps().length > 0
+              ? contactList.senateReps()[0]
+              : undefined
           ]);
           contactsWanted.push([
             area,
-            contactList.senate.length > 1 ? contactList.senate[1] : undefined
+            contactList.senateReps().length > 1
+              ? contactList.senateReps()[1]
+              : undefined
           ]);
           break;
         case 'US House':
           // deal with this: multiple house reps might return if we don't know which district
           contactsWanted.push([
             area,
-            contactList.house.length > 0 ? contactList.house[0] : undefined
+            contactList.houseRep().length > 0
+              ? contactList.houseRep()[0]
+              : undefined
           ]);
           break;
         case 'Governor':
-          contactsWanted.push([area, contactList.governor]);
+          contactsWanted.push([
+            area,
+            contactList.governor().length > 0
+              ? contactList.governor()[0]
+              : undefined
+          ]);
           break;
         case 'StateUpper':
-          contactsWanted.push([area, contactList.stateUpper]);
+          contactsWanted.push([
+            area,
+            contactList.stateUpper().length > 0
+              ? contactList.stateUpper()[0]
+              : undefined
+          ]);
           break;
         case 'StateLower':
-          contactsWanted.push([area, contactList.stateLower]);
+          contactsWanted.push([
+            area,
+            contactList.stateLower().length > 0
+              ? contactList.stateLower()[0]
+              : undefined
+          ]);
           break;
         case 'SecretaryOfState':
-          contactsWanted.push([area, contactList.secState]);
+          contactsWanted.push([
+            area,
+            contactList.secState().length > 0
+              ? contactList.secState()[0]
+              : undefined
+          ]);
           break;
         case 'AttorneyGeneral':
-          contactsWanted.push([area, contactList.attorneyGeneral]);
+          contactsWanted.push([
+            area,
+            contactList.attyGeneral().length > 0
+              ? contactList.attyGeneral()[0]
+              : undefined
+          ]);
           break;
         default:
           break;
