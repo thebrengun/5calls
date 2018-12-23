@@ -3,6 +3,10 @@ import * as React from 'react';
 import { Contact, ContactList, Issue } from '../../common/models';
 import { CallState } from '../../redux/callState';
 import { UserStatsState } from '../../redux/userStats';
+import {
+  HELP_SET_LOCATION,
+  HELP_OTHER_REPRESENTATIVES
+} from '../../common/constants';
 
 interface Props {
   readonly currentIssue: Issue;
@@ -96,7 +100,9 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
           ) : (
             <>
               Location not accurate enough to find this representative.{' '}
-              <a href="#">Set your location</a>
+              <a href={HELP_SET_LOCATION} target="_blank">
+                Set your location
+              </a>
             </>
           )}
         </p>
@@ -195,7 +201,9 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
         })}
       </ul>
       <p className="help">
-        <a href="#">Where are the rest of my representatives?</a>
+        <a href={HELP_OTHER_REPRESENTATIVES} target="_blank">
+          Where are the rest of my representatives?
+        </a>
       </p>
     </div>
   );
