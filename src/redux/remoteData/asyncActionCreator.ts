@@ -7,7 +7,8 @@ import {
   getCountData,
   postBackfillOutcomes,
   getUserCallDetails,
-  getContacts
+  getContacts,
+  noLocationError
 } from '../../services/apiServices';
 import { setCachedCity } from '../location/index';
 import { issuesActionCreator, callCountActionCreator } from './index';
@@ -58,12 +59,16 @@ export const getContactsIfNeeded = (force: boolean) => {
         store.dispatch(setInvalidAddress(false));
       })
       .catch(error => {
-        // tslint:disable-next-line:no-console
-        console.error('couldnt fetch contacts: ', error);
-        bugsnagClient.notify(
-          Error('reps error with location ' + state.locationState.address)
-        );
-        store.dispatch(setInvalidAddress(true));
+        if (error === noLocationError) {
+          // normal case for when we don't yet have a location
+        } else {
+          // tslint:disable-next-line:no-console
+          console.error('couldnt fetch contacts: ', error);
+          bugsnagClient.notify(
+            Error('reps error with location ' + state.locationState.address)
+          );
+          store.dispatch(setInvalidAddress(true));
+        }
       });
   }
 };

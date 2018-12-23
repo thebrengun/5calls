@@ -34,13 +34,14 @@ export const getAllIssues = (): Promise<Issue[]> => {
     .catch(e => Promise.reject(e));
 };
 
+export const noLocationError = Error('no location entered');
+
 export const getContacts = (): Promise<ContactList> => {
   const state = store.getState();
   const location = state.locationState.address;
 
   if (location === '' || location === undefined) {
-    // console.log("not fetching location because it's",location);
-    return Promise.reject('no location entered');
+    return Promise.reject(noLocationError);
   }
 
   const headers = prepareHeaders();
