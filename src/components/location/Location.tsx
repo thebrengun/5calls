@@ -79,6 +79,12 @@ export class Location extends React.Component<Props, State> {
       });
   }
 
+  manuallySetLocation(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+
+    this.setState({ uiState: LocationUIState.ENTERING_LOCATION });
+  }
+
   enterLocation(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     store.dispatch(clearAddress());
@@ -107,6 +113,7 @@ export class Location extends React.Component<Props, State> {
       window.location.reload();
     } else {
       store.dispatch(setLocation(newLocation));
+      this.setState({ uiState: LocationUIState.LOCATION_FOUND });
     }
   }
 
@@ -128,7 +135,9 @@ export class Location extends React.Component<Props, State> {
           Getting your location automatically...
         </p>
         <p className="help">
-          <a href="#">Or enter an address manually</a>
+          <a href="#" onClick={e => this.manuallySetLocation(e)}>
+            Or enter an address manually
+          </a>
         </p>
       </>
     );
@@ -138,7 +147,7 @@ export class Location extends React.Component<Props, State> {
     return (
       <>
         <p>Set your location</p>
-        <form onSubmit={this.submitLocation}>
+        <form onSubmit={e => this.submitLocation(e)}>
           <input
             type="text"
             autoFocus={true}

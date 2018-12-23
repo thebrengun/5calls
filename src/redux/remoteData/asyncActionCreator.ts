@@ -26,6 +26,7 @@ import { setInvalidAddress, setLocation } from '../location/actionCreator';
 import { store } from '../store';
 import { contactsActionCreator } from './actionCreator';
 import { removeURLParameter } from '../../components/shared/utils';
+import bugsnagClient from '../../services/bugsnag';
 
 export const getIssuesIfNeeded = () => {
   const state = store.getState();
@@ -59,6 +60,9 @@ export const getContactsIfNeeded = (force: boolean) => {
       .catch(error => {
         // tslint:disable-next-line:no-console
         console.error('couldnt fetch contacts: ', error);
+        bugsnagClient.notify(
+          Error('reps error with location ' + state.locationState.address)
+        );
         store.dispatch(setInvalidAddress(true));
       });
   }
