@@ -309,7 +309,8 @@ module.exports = {
     // upload new source maps to bugsnag because they have trouble detecting them automatically
     // uses an environment variable set in the netlify deploy process
     new BugsnagSourceMapUploaderPlugin({
-      apiKey: process.env.BUGSNAG_API_KEY
+      apiKey: process.env.BUGSNAG_API_KEY,
+      overwrite: true
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
