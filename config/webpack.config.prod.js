@@ -305,6 +305,11 @@ module.exports = {
       // https://github.com/facebookincubator/create-react-app/issues/2235
       stripPrefix: paths.appBuild.replace(/\\/g, '/') + '/'
     }),
+    // upload new source maps to bugsnag because they have trouble detecting them automatically
+    // uses an environment variable set in the netlify deploy process
+    new BugsnagSourceMapUploaderPlugin({
+      apiKey: process.env.BUGSNAG_API_KEY
+    }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
     // solution that requires the user to opt into importing specific locales.
