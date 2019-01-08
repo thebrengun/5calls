@@ -200,11 +200,13 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
           return listItem(areaMap[0], areaMap[1], isActiveContact, index);
         })}
       </ul>
-      <p className="help">
-        <a href={HELP_OTHER_REPRESENTATIVES} target="_blank">
-          Where are the rest of my representatives?
-        </a>
-      </p>
+      {contactList.representatives.length > 0 && (
+        <p className="help">
+          <a href={HELP_OTHER_REPRESENTATIVES} target="_blank">
+            Where are the rest of my representatives?
+          </a>
+        </p>
+      )}
     </div>
   );
 };
