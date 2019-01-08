@@ -3,7 +3,7 @@ const createTestCafe = require('testcafe');
 let testcafe = null;
 
 const browsers = [
-  ['browserstack:edge@17.0:Windows 10', 'browserstack:internet_explorer@11'],
+  ['browserstack:ie@11.0:Windows 10', 'browserstack:edge@16.0:Windows 10'],
   [
     'browserstack:chrome@69.0:Windows 10',
     'browserstack:firefox@61.0:Windows 10'
