@@ -1,8 +1,6 @@
 # 5calls
 
 ## Quicknav
-### Projects to start / in progress:
-[![Stories in Ready](https://badge.waffle.io/5calls/5calls.png?label=ready&title=Ready)](http://waffle.io/5calls/5calls)
 ### Automated testing
 [![CircleCI](https://circleci.com/gh/5calls/5calls.svg?style=svg)](https://circleci.com/gh/5calls/5calls)
 ### Cross-browser testing
