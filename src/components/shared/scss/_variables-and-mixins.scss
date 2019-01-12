@@ -23,19 +23,23 @@ $blue: #1875d1;
 $blue-light: #baddfa;
 $green: #0f9d58;
 $gray: #666;
+$dark-gray: #505050;
+$darkest-gray: #404040;
 $grey: #ebebeb; // yes, we went there
 $gray-lesslight: #e5e5e5;
 $gray-light: #eeeeee;
 $gray-xlight: #f5f5f5;
 
 $color-bg: $white;
-$color-text: $blue;
-$color-link: $red;
+$color-text: $dark-gray;
+$color-headings: $darkest-gray;
+$color-link: $blue;
 $color-success: $green;
 
 // FONTS
-$font-sans: 'Roboto Condensed', sans-serif;
-$font-sans-normal: 'Roboto', sans-serif;
+$font-headings: 'Roboto', sans-serif;
+$font-base: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+  'Helvetica Neue', Arial, sans-serif;
 $font-tiny: 12px;
 $font-small: 16px;
 $font-normal: 18px;

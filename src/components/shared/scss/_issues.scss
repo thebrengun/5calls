@@ -16,6 +16,9 @@
       text-align: center;
       background-color: $gray-xlight;
     }
+    h2 {
+      font-size: 20px;
+    }
   }
 
   &__title {
@@ -92,8 +95,10 @@
 
     &__title {
       display: block;
-      font-size: $font-large;
+      font-size: $font-normal;
       margin: 12px;
+      font-family: $font-headings;
+      line-height: 1.3;
     }
 
     &__summary {

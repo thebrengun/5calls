@@ -45,7 +45,6 @@
     h2 {
       margin: 0 0 4px 0;
       font-size: 22px;
-      font-family: $font-sans-normal;
 
       a {
         color: $blue;
@@ -61,9 +60,6 @@
 
 .logo__header {
   min-height: 12px;
-  // this one is for non-donationbar
-  // border-bottom: solid 8px $red;
-  border-bottom: solid 2px $red;
 
   @include bp(small) {
     border-bottom: solid 2px $red;
@@ -199,6 +195,12 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    // otherwise small white text on bright red background
+    // is hard to read in firefox
+    font-weight: 500;
 
     @include bp(medium) {
       display: inline-block;
@@ -209,6 +211,7 @@
   &__donatebutton {
     width: 230px;
     margin-right: 10px;
+    height: 100%;
 
     @include bp(medium) {
       width: 90%;
@@ -216,17 +219,19 @@
     }
 
     a {
+      min-height: 2rem;
       float: left;
       width: 120px;
       background-color: #fff;
-      margin: 6px 5px 0 0;
-      padding: 8px 0;
-      // border: 2px solid $blue;
+      margin-right: 5px;
       border-radius: 5px;
       color: $blue;
-      text-align: center;
       font-size: $font-normal;
       font-weight: bold;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       @include bp(medium) {
         width: 100%;
@@ -234,7 +239,7 @@
     }
 
     p {
-      margin: 5px 0 0 0;
+      margin: 0;
       color: #fff;
       font-size: 14px;
     }
@@ -253,12 +258,12 @@
   }
 
   &__donatetext {
-    // width: 250px;
     line-height: inherit;
-    margin: 5px 20px 0 20px;
-    font-size: 36px;
-    font-weight: 600;
+    margin: 0 1.2rem;
+    font-size: $font-xlarge;
+    font-weight: 500;
     color: #fff;
+    font-family: $font-headings;
 
     @include bp(medium) {
       width: 100%;
@@ -452,17 +457,20 @@ button {
 
 .progress {
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 20px;
   margin: 0 20px 10px 0;
   background-color: white;
+  font-family: $font-headings;
 
   p.totaltext {
     z-index: 3;
     position: absolute;
     margin: 1px 8px;
 
-    font-size: 28px;
+    font-size: $font-large;
     color: #fff;
   }
 
@@ -519,7 +527,7 @@ button {
   }
 
   .progress__goal {
-    font-size: 28px;
+    font-size: $font-large;
     height: 40px;
     line-height: 40px;
   }
