@@ -53,7 +53,7 @@ const Navigation: React.StatelessComponent = () => {
         </ul>
         <div className="colophon__center">
           <p>
-            © 2018 5 Calls Civic Action is a 501(c)4 non-profit that helps
+            © 2019 5 Calls Civic Action is a 501(c)4 non-profit that helps
             citizens make their voices heard.
           </p>
         </div>

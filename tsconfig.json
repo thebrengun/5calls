@@ -21,18 +21,21 @@
   "exclude": [
     "node_modules",
     "build",
+    "public",
     "scripts",
     "acceptance-tests",
     "webpack",
     "jest",
-    "config/env.js",
-    "config/testSetup.ts",
+    "config",
     "e2e-tests",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "web-tests"
+    "web-tests",
+    "__mocks__",
+    "karma.ci.conf.js",
+    "karma.conf.js",
+    "runner.js",
+    "gulpfile.js"
   ],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }
