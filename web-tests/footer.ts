@@ -83,7 +83,7 @@ test('Footer center copyright and link is shown', async t => {
   const centerContainer = await colophon.find('.colophon__center');
   const centerItems = await centerContainer.find('p');
 
-  let expectedText = '© 2018 5 Calls Civic Action is a 501(c)4 non-profit ';
+  let expectedText = '© 2019 5 Calls Civic Action is a 501(c)4 non-profit ';
   expectedText += 'that helps citizens make their voices heard.';
   const copyright = centerItems.nth(0);
   await t.expect(copyright.innerText).eql(expectedText);
