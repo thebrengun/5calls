@@ -43,7 +43,7 @@ export class ContactOffices extends React.Component<Props, State> {
       return (
         <div>
           <h3 className="call__contact__field-offices__header">
-            Local office numberzzz:
+            Local office numbers:
           </h3>
           <ul className="call__contact__field-office-list">
             {this.props.currentContact.field_offices ? (
