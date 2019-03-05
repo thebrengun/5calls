@@ -1,5 +1,5 @@
 import { ClientFunction, t, Selector } from 'testcafe';
-import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
+import { waitForReact } from 'testcafe-react-selectors';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
@@ -9,7 +9,7 @@ fixture`Footer`.page`http://localhost:3000`.beforeEach(async () => {
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Footer displays left links', async t => {
-  const Footer = await ReactSelector('Footer');
+  const Footer = await Selector('#root footer');
   await t.expect(Footer).ok('Footer is displayed');
   const colophon = await Selector('.colophon');
   const leftContainer = await colophon.find('.colophon__left');
@@ -51,7 +51,7 @@ test('Footer displays left links', async t => {
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Footer displays right links', async t => {
-  const Footer = await ReactSelector('Footer');
+  const Footer = await Selector('#root footer');
   await t.expect(Footer).ok('Footer is displayed');
   const colophon = await Selector('.colophon');
   const rightContainer = await colophon.find('.colophon__right');
@@ -77,7 +77,7 @@ test('Footer displays right links', async t => {
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Footer center copyright and link is shown', async t => {
-  const Footer = await ReactSelector('Footer');
+  const Footer = await Selector('#root footer');
   await t.expect(Footer).ok('Footer is displayed');
   const colophon = await Selector('.colophon');
   const centerContainer = await colophon.find('.colophon__center');
