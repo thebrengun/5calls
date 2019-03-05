@@ -1,5 +1,5 @@
 import { ClientFunction, t, Selector } from 'testcafe';
-import { waitForReact, ReactSelector } from 'testcafe-react-selectors';
+import { waitForReact } from 'testcafe-react-selectors';
 
 const getWindowLocation = ClientFunction(() => window.location.href);
 
@@ -12,7 +12,7 @@ test('Sidebar Header exists and user may set location', async t => {
   const sidebarComponent = await Selector('.issues__header');
   await t.expect(sidebarComponent.exists).ok();
 
-  const Location = await ReactSelector('Location');
+  const Location = await Selector('#nav .issues .location');
   await t.expect(Location).ok('Location component is not displayed');
 
   const setLocationMessage = await Selector('#setLocationMessage');
@@ -53,7 +53,7 @@ test('Sidebar Header exists and user may set location', async t => {
 
 // tslint:disable-next-line:no-shadowed-variable
 test('Sidebar body contains a list of issues and a footer to more issues', async t => {
-  const Sidebar = await ReactSelector('Sidebar');
+  const Sidebar = await Selector('#nav');
   await t.expect(Sidebar).ok('Sidebar is displayed on the page');
 
   const IssueItems = await Sidebar.findReact('li');
