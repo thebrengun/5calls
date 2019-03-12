@@ -13,16 +13,11 @@ export class ContactList {
     return this.representatives.filter(contact => contact.area === 'US Senate');
   }
 
-  // there may be multiple house reps returned here, only return one for now
-  public houseRep(): Contact[] {
-    const contacts: Contact[] = [];
-    const houseRep = this.representatives.find(
+  public houseReps(): Contact[] {
+    const houseReps = this.representatives.filter(
       contact => contact.area === 'US House'
     );
-    if (houseRep) {
-      contacts.push(houseRep);
-    }
-    return contacts;
+    return houseReps;
   }
 
   public governor(): Contact[] {

@@ -51,7 +51,7 @@ export class Issue {
       if (contactArea === 'US Senate') {
         contacts.push(...contactList.senateReps());
       } else if (contactArea === 'US House') {
-        contacts.push(...contactList.houseRep());
+        contacts.push(...contactList.houseReps());
       } else if (contactArea === 'Governor') {
         contacts.push(...contactList.governor());
       } else if (contactArea === 'StateUpper') {

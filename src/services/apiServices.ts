@@ -48,8 +48,8 @@ export const getContacts = (): Promise<ContactList> => {
 
   return axios
     .get<ContactResponse>(
-      `${Constants.REPS_API_URL}?location=${location}`,
-      // `http://localhost:8090/v1/reps?location=${location}`,
+      // `${Constants.REPS_API_URL}?location=${location}`,
+      `http://localhost:8090/v1/reps?location=${location}`,
       {
         headers: headers
       }

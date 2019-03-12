@@ -25,11 +25,15 @@
       li {
         margin-bottom: 2px;
         padding: 4px;
-        height: 50px;
+        // height: 50px;
         background-color: $gray-xlight;
         border-left: 3px solid $gray-xlight;
         font-family: $font-base;
         overflow: hidden;
+
+        &.optional img {
+          margin-left: 20px;
+        }
 
         &.active {
           border-left-color: $blue;
@@ -57,6 +61,7 @@
 
         p {
           font-size: 15px;
+          margin: 0;
           a {
             text-decoration: underline;
           }

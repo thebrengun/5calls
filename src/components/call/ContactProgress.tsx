@@ -58,10 +58,25 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
     area: string,
     areaContact: Contact | undefined,
     active: boolean,
-    index: number
+    index: number,
+    multihouse: boolean,
+    firstmultihouse: boolean
   ) => {
+    let itemClass = active ? 'active' : '';
+    if (multihouse) {
+      itemClass = itemClass + ' optional';
+    }
+    let multiHouseInfo = firstmultihouse ? (
+      <p>
+        Your location is near multiple House districts, pick the district you
+        live in:
+      </p>
+    ) : (
+      <></>
+    );
     return (
-      <li key={index} className={active ? 'active' : ''}>
+      <li key={index} className={itemClass}>
+        {multiHouseInfo}
         {areaContact ? (
           <>
             <img
@@ -116,13 +131,10 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
           ]);
           break;
         case 'US House':
-          // deal with this: multiple house reps might return if we don't know which district
-          contactsWanted.push([
-            area,
-            contactList.houseRep().length > 0
-              ? contactList.houseRep()[0]
-              : undefined
-          ]);
+          let reps = contactList.houseReps();
+          for (let rep of reps) {
+            contactsWanted.push([area, rep]);
+          }
           break;
         case 'Governor':
           contactsWanted.push([
@@ -182,7 +194,14 @@ export const ContactProgress: React.StatelessComponent<Props> = ({
       <ul>
         {contactsForArea(currentIssue.contactAreas).map((areaMap, index) => {
           const isActiveContact = areaMap[1] === currentContact;
-          return listItem(areaMap[0], areaMap[1], isActiveContact, index);
+          return listItem(
+            areaMap[0],
+            areaMap[1],
+            isActiveContact,
+            index,
+            index === 2 || index === 3,
+            index === 2
+          );
         })}
       </ul>
       {contactList.representatives.length > 0 && (
