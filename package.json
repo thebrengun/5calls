@@ -187,6 +187,5 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "react-snap": {},
   "postcss": {}
 }

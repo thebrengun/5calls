@@ -16,7 +16,7 @@ const childProcess = require('child_process');
 // It requires a trailing slash, or the file assets will get an incorrect path.
 // react-snap note: forcing this to be 5calls.org breaks any local production build preview
 // because it'll look for hashchunked JS URLs (main.1234abcd.js) that don't exist on prod
-const publicPath = '/'; //paths.servedPath;
+const publicPath = '/';
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
 const shouldUseRelativeAssetPaths = publicPath === './';
